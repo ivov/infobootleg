@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "280761968772",
+    "firebase_url": "https://infobootleg-ivov.firebaseio.com",
+    "project_id": "infobootleg-ivov",
+    "storage_bucket": "infobootleg-ivov.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:280761968772:android:6a11ac39fb38d629e03ad1",
+        "android_client_info": {
+          "package_name": "dev.ivov.infobootleg"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "280761968772-ghq54didslovpln1ht94js6me9qrioei.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dev.ivov.infobootleg",
+            "certificate_hash": "bd1c78b08d63e025c983cba8aa82498259f21dd7"
+          }
+        },
+        {
+          "client_id": "280761968772-cc0itho9vtt52sab3pn4s1pa937jkvq6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBq9FRGxSAtGSZ9j4iU1Tyf5YeZ35Z73Kg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "280761968772-cc0itho9vtt52sab3pn4s1pa937jkvq6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
