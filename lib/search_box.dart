@@ -6,7 +6,7 @@ import 'helpers/Law.dart';
 import 'helpers/state_model.dart';
 
 class Searchbox extends StatelessWidget {
-  final TextEditingController myController = TextEditingController();
+  final TextEditingController _myTextController = TextEditingController();
 
   String leftPad(userInput) {
     while (userInput.length < 5) {
@@ -25,7 +25,7 @@ class Searchbox extends StatelessWidget {
       child: Consumer<StateModel>(
         builder: (context, stateModel, child) {
           return TextField(
-            controller: myController,
+            controller: _myTextController,
             onSubmitted: (userInput) async {
               Law law;
               try {

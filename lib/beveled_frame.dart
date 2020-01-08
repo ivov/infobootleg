@@ -10,6 +10,7 @@ class BeveledFrame extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget column;
 
+    // pending: jump to previous page on tap upwards
     final nonScrollableColumn = Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
