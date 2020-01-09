@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:infobootleg/screens/sign_in_with_email_screen.dart';
 import 'package:infobootleg/services/auth.dart';
 import 'package:infobootleg/shared_widgets/sign_in_button.dart';
 
@@ -6,14 +7,6 @@ class SignInScreen extends StatelessWidget {
   SignInScreen({@required this.auth});
 
   final AuthBase auth;
-
-  Future<void> _signInAnonymously() async {
-    try {
-      await auth.signInAnonymously();
-    } catch (e) {
-      print(e.toString());
-    }
-  }
 
   Future<void> _signInWithGoogle() async {
     try {
@@ -31,17 +24,33 @@ class SignInScreen extends StatelessWidget {
     }
   }
 
+  _signInWithEmail(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (context) => SignInWithEmailScreen(auth: auth),
+      ),
+    );
+  }
+
+  Future<void> _signInAnonymously() async {
+    try {
+      await auth.signInAnonymously();
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: Text("Infobootleg"),
         ),
-        body: _buildBody(),
+        body: _buildBody(context),
         backgroundColor: Colors.green[200]);
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(16.0),
       child: Column(
@@ -80,7 +89,7 @@ class SignInScreen extends StatelessWidget {
               height: 30.0,
               width: 30.0,
             ),
-            onPressed: () {},
+            onPressed: () => _signInWithEmail(context),
           ),
           SizedBox(height: 14.0),
           Text(
