@@ -3,17 +3,14 @@ import 'package:infobootleg/services/auth.dart';
 
 class HomeScreen extends StatelessWidget {
   final AuthBase auth;
-  final VoidCallback onSignOut;
 
   HomeScreen({
-    @required this.onSignOut,
     @required this.auth,
   });
 
   Future<void> _signOut() async {
     try {
       await auth.signOut();
-      onSignOut();
     } catch (e) {
       print(e.toString());
     }

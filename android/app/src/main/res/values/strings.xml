@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Infobootleg</string>
+    <string name="facebook_app_id">750307785479572</string>
+    <string name="fb_login_protocol_scheme">fb750307785479572</string>
+</resources>

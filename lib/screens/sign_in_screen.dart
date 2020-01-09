@@ -3,15 +3,21 @@ import 'package:infobootleg/services/auth.dart';
 import 'package:infobootleg/shared_widgets/sign_in_button.dart';
 
 class SignInScreen extends StatelessWidget {
-  SignInScreen({@required this.auth, @required this.onSignIn});
+  SignInScreen({@required this.auth});
 
-  final Function(User) onSignIn;
   final AuthBase auth;
 
   Future<void> _signInAnonymously() async {
     try {
-      final User user = await auth.signInAnonymously();
-      onSignIn(user);
+      await auth.signInAnonymously();
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<void> _signInWithGoogle() async {
+    try {
+      await auth.signInWithGoogle();
     } catch (e) {
       print(e.toString());
     }
@@ -46,7 +52,7 @@ class SignInScreen extends StatelessWidget {
           SignInButton(
             text: "Ingresar con Google",
             asset: Image.asset("assets/images/google.png"),
-            onPressed: () {},
+            onPressed: _signInWithGoogle,
           ),
           SizedBox(height: 14.0),
           SignInButton(
