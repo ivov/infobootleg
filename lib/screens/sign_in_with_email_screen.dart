@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:infobootleg/helpers/validators.dart';
 import 'package:infobootleg/services/auth.dart';
+import 'package:infobootleg/shared_widgets/platform_alert_dialog.dart';
 
 enum SignInWithEmailFormType { signIn, register }
 
@@ -68,7 +69,10 @@ class _SignInWithEmailFormState extends State<SignInWithEmailForm> {
       }
       Navigator.of(context).pop();
     } catch (error) {
-      print(error.toString());
+      PlatformAlertDialog(
+        title: "Error en ingreso",
+        content: error.toString(),
+      ).show(context);
     } finally {
       setState(() {
         _formIsLoading = false;

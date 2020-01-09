@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:infobootleg/services/auth.dart';
+import 'package:infobootleg/shared_widgets/platform_alert_dialog.dart';
 
 class HomeScreen extends StatelessWidget {
   final AuthBase auth;
@@ -13,6 +14,16 @@ class HomeScreen extends StatelessWidget {
       await auth.signOut();
     } catch (e) {
       print(e.toString());
+    }
+  }
+
+  Future<void> _confirmSignOut(BuildContext context) async {
+    final signOutConfirmed = await PlatformAlertDialog(
+      title: "Salir",
+      content: "¿Confirmar cerrar sesión?",
+    ).show(context);
+    if (signOutConfirmed) {
+      _signOut();
     }
   }
 
@@ -30,7 +41,7 @@ class HomeScreen extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            onPressed: _signOut,
+            onPressed: () => _confirmSignOut(context),
           )
         ],
       ),
