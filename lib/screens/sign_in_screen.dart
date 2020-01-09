@@ -1,7 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:infobootleg/services/auth.dart';
 import 'package:infobootleg/shared_widgets/sign_in_button.dart';
 
 class SignInScreen extends StatelessWidget {
+  SignInScreen({@required this.auth, @required this.onSignIn});
+
+  final Function(User) onSignIn;
+  final AuthBase auth;
+
+  Future<void> _signInAnonymously() async {
+    try {
+      final User user = await auth.signInAnonymously();
+      onSignIn(user);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,7 +86,7 @@ class SignInScreen extends StatelessWidget {
               height: 30.0,
               width: 30.0,
             ),
-            onPressed: () {},
+            onPressed: _signInAnonymously,
           ),
         ],
       ),

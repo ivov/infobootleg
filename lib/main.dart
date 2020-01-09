@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:infobootleg/services/auth.dart';
 import 'package:provider/provider.dart';
 
 import 'helpers/state_model.dart';
@@ -6,7 +7,7 @@ import 'helpers/state_model.dart';
 
 // import 'screens/result_screen.dart';
 // import 'screens/search_screen.dart';
-import 'screens/sign_in_screen.dart';
+import 'screens/landing_screen.dart';
 
 void main() => runApp(Infobootleg());
 
@@ -27,7 +28,7 @@ class Infobootleg extends StatelessWidget {
       child: MaterialApp(
         title: 'Infobootleg',
         theme: ThemeData(primarySwatch: Colors.indigo),
-        home: SignInScreen(),
+        home: LandingScreen(auth: Auth()),
       ),
     );
   }

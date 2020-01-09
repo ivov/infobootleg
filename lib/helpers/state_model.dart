@@ -6,7 +6,7 @@ class StateModel extends ChangeNotifier {
 
   void setCurrentLaw(Law chosenLaw) {
     currentLaw = chosenLaw;
-    print(chosenLaw);
+    // print(chosenLaw);
     notifyListeners();
   }
 }

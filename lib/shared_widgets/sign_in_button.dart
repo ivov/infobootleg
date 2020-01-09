@@ -29,10 +29,7 @@ class SignInButton extends StatelessWidget {
             asset,
             Text(
               text,
-              style: TextStyle(
-                color: fontColor,
-                fontSize: 18.0,
-              ),
+              style: TextStyle(color: fontColor, fontSize: 18.0),
             ),
             Opacity(opacity: 0.0, child: asset),
           ],
@@ -43,7 +40,7 @@ class SignInButton extends StatelessWidget {
             Radius.circular(8.0),
           ),
         ),
-        onPressed: () {},
+        onPressed: onPressed,
       ),
     );
   }
