@@ -1,26 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:infobootleg/screens/sign_in_with_email_screen.dart';
 import 'package:infobootleg/services/auth.dart';
+import 'package:flutter/services.dart';
+import 'package:infobootleg/shared_widgets/platform_exception_alert_dialog.dart';
 
 import 'package:infobootleg/shared_widgets/sign_in_button.dart';
 import 'package:provider/provider.dart';
 
-class SignInScreen extends StatelessWidget {
+class SignInScreen extends StatefulWidget {
+  @override
+  _SignInScreenState createState() => _SignInScreenState();
+}
+
+class _SignInScreenState extends State<SignInScreen> {
+  bool _isLoading = false;
+
+  void _showSignInError(BuildContext context, PlatformException exception) {
+    PlatformExceptionAlertDialog(
+      title: "Error en ingreso",
+      exception: exception,
+    );
+  }
+
   Future<void> _signInWithGoogle(BuildContext context) async {
     try {
+      setState(() => _isLoading = true);
       final auth = Provider.of<AuthBase>(context);
       await auth.signInWithGoogle();
-    } catch (e) {
-      print(e.toString());
+    } on PlatformException catch (error) {
+      if (error.code != "ERROR_ABORTED_BY_USER") {
+        _showSignInError(context, error);
+      }
+    } finally {
+      setState(() => _isLoading = false);
     }
   }
 
   Future<void> _signInWithFacebook(BuildContext context) async {
     try {
+      setState(() => _isLoading = true);
       final auth = Provider.of<AuthBase>(context);
       await auth.signInWithFacebook();
-    } catch (e) {
-      print(e.toString());
+    } on PlatformException catch (error) {
+      if (error.code != "ERROR_ABORTED_BY_USER") {
+        _showSignInError(context, error);
+      }
+    } finally {
+      setState(() => _isLoading = false);
     }
   }
 
@@ -34,10 +60,13 @@ class SignInScreen extends StatelessWidget {
 
   Future<void> _signInAnonymously(BuildContext context) async {
     try {
+      setState(() => _isLoading = true);
       final auth = Provider.of<AuthBase>(context);
       await auth.signInAnonymously();
-    } catch (e) {
-      print(e.toString());
+    } catch (error) {
+      _showSignInError(context, error);
+    } finally {
+      setState(() => _isLoading = false);
     }
   }
 
@@ -58,19 +87,12 @@ class SignInScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text(
-            "Ingresar",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 32.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          _buildHeader(),
           SizedBox(height: 42.0),
           SignInButton(
             text: "Ingresar con Google",
             asset: Image.asset("assets/images/google.png"),
-            onPressed: () => _signInWithGoogle(context),
+            onPressed: _isLoading ? null : () => _signInWithGoogle(context),
           ),
           SizedBox(height: 14.0),
           SignInButton(
@@ -78,7 +100,7 @@ class SignInScreen extends StatelessWidget {
             fontColor: Colors.white,
             buttonColor: Color(0xFF334D92),
             asset: Image.asset("assets/images/facebook.png"),
-            onPressed: () => _signInWithFacebook(context),
+            onPressed: _isLoading ? null : () => _signInWithFacebook(context),
           ),
           SizedBox(height: 14.0),
           SignInButton(
@@ -90,7 +112,7 @@ class SignInScreen extends StatelessWidget {
               height: 30.0,
               width: 30.0,
             ),
-            onPressed: () => _signInWithEmail(context),
+            onPressed: _isLoading ? null : () => _signInWithEmail(context),
           ),
           SizedBox(height: 14.0),
           Text(
@@ -110,9 +132,23 @@ class SignInScreen extends StatelessWidget {
               height: 30.0,
               width: 30.0,
             ),
-            onPressed: () => _signInAnonymously(context),
+            onPressed: _isLoading ? null : () => _signInAnonymously(context),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildHeader() {
+    if (_isLoading) {
+      return Center(child: CircularProgressIndicator());
+    }
+    return Text(
+      "Ingresar",
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        fontSize: 32.0,
+        fontWeight: FontWeight.bold,
       ),
     );
   }

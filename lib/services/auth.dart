@@ -34,26 +34,25 @@ class Auth implements AuthBase {
   @override
   Future<User> signInWithGoogle() async {
     final GoogleSignIn googleSignIn = GoogleSignIn();
-    final GoogleSignInAccount googleAccount = await googleSignIn.signIn();
-    if (googleAccount != null) {
-      final GoogleSignInAuthentication googleAuth =
-          await googleAccount.authentication;
-      if (googleAuth.accessToken != null && googleAuth.idToken != null) {
-        final authResult = await FirebaseAuth.instance.signInWithCredential(
-          GoogleAuthProvider.getCredential(
-              idToken: googleAuth.idToken, accessToken: googleAuth.accessToken),
-        );
-        return _userFromFirebase(authResult.user);
-      } else {
-        throw PlatformException(
-          code: "ERROR_MISSING_AUTH_TOKEN",
-          message: "Missing Google auth token",
-        );
-      }
-    } else {
+    GoogleSignInAccount googleAccount = await googleSignIn.signIn();
+
+    if (googleAccount == null) {
       throw PlatformException(
         code: "ERROR_ABORTED_BY_USER",
-        message: "Sign in aborted by user",
+      );
+    }
+
+    try {
+      final GoogleSignInAuthentication googleAuth =
+          await googleAccount.authentication;
+      final authResult = await FirebaseAuth.instance.signInWithCredential(
+        GoogleAuthProvider.getCredential(
+            idToken: googleAuth.idToken, accessToken: googleAuth.accessToken),
+      );
+      return _userFromFirebase(authResult.user);
+    } catch (error) {
+      throw PlatformException(
+        code: "ERROR_MISSING_AUTH_TOKEN",
       );
     }
   }
@@ -63,7 +62,8 @@ class Auth implements AuthBase {
     final FacebookLogin facebookLogin = FacebookLogin();
     final FacebookLoginResult facebookLoginResult =
         await facebookLogin.logIn(["public_profile"]);
-    if (facebookLoginResult != null) {
+    if (facebookLoginResult != null &&
+        facebookLoginResult.accessToken != null) {
       final authResult = await FirebaseAuth.instance.signInWithCredential(
         FacebookAuthProvider.getCredential(
           accessToken: facebookLoginResult.accessToken.token,

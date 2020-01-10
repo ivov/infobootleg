@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:infobootleg/helpers/validators.dart';
 import 'package:infobootleg/services/auth.dart';
-import 'package:infobootleg/shared_widgets/platform_alert_dialog.dart';
+import 'package:infobootleg/shared_widgets/platform_exception_alert_dialog.dart';
 import 'package:provider/provider.dart';
 
 enum SignInWithEmailFormType { signIn, register }
@@ -46,6 +46,15 @@ class _SignInWithEmailFormState extends State<SignInWithEmailForm> {
   bool _formHasBeenSubmitted = false;
   bool _formIsLoading = false;
 
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _emailFocusNode.dispose();
+    _passwordFocusNode.dispose();
+    super.dispose();
+  }
+
   void _emailEditingComplete() {
     final newFocus = widget.emailValidator.isValid(_email)
         ? _passwordFocusNode
@@ -66,10 +75,10 @@ class _SignInWithEmailFormState extends State<SignInWithEmailForm> {
         await auth.createUserInWithEmailAndPassword(_email, _password);
       }
       Navigator.of(context).pop();
-    } catch (error) {
-      PlatformAlertDialog(
+    } on PlatformException catch (error) {
+      PlatformExceptionAlertDialog(
         title: "Error en ingreso",
-        content: error.toString(),
+        exception: error,
       ).show(context);
     } finally {
       setState(() {

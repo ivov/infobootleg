@@ -8,8 +8,7 @@ class SignInButton extends StatelessWidget {
     @required this.asset,
     @required this.onPressed,
   })  : assert(text != null),
-        assert(asset != null),
-        assert(onPressed != null);
+        assert(asset != null);
 
   final String text;
   final Color buttonColor;
@@ -35,6 +34,7 @@ class SignInButton extends StatelessWidget {
           ],
         ),
         color: buttonColor,
+        disabledColor: buttonColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(8.0),
