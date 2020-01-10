@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:infobootleg/helpers/email_sign_in_model.dart';
 
 import 'package:infobootleg/helpers/validators.dart';
-import 'package:infobootleg/screens/sign_in_with_email_form_bloc_based.dart';
+import 'package:infobootleg/screens/sign_in_with_email_form_change_notifier.dart';
 
 import 'package:infobootleg/services/auth.dart';
 import 'package:infobootleg/shared_widgets/platform_exception_alert_dialog.dart';
@@ -21,7 +21,8 @@ class SignInWithEmailScreen extends StatelessWidget {
           child: Center(
             child: SingleChildScrollView(
               child: Card(
-                child: SignInWithEmailFormBlocBased.create(context),
+                // or alternative version: SignInWithEmailFormBlocBased
+                child: SignInWithEmailFormChangeNotifier.create(context),
               ),
             ),
           ),

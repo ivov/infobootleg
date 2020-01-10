@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:infobootleg/blocs/sign_in_bloc.dart';
+import 'package:infobootleg/blocs/sign_in_manager.dart';
 import 'package:infobootleg/screens/sign_in_with_email_screen.dart';
 import 'package:infobootleg/services/auth.dart';
 import 'package:flutter/services.dart';
@@ -9,17 +9,25 @@ import 'package:infobootleg/shared_widgets/sign_in_button.dart';
 import 'package:provider/provider.dart';
 
 class SignInScreen extends StatelessWidget {
-  SignInScreen({@required this.bloc});
-  final SignInBloc bloc;
+  SignInScreen({@required this.manager, @required this.isLoading});
+  final SignInManager manager;
+  final bool isLoading;
 
 // create SignInPage with Provder of type SignInBloc as parent
   static Widget create(BuildContext context) {
     final auth = Provider.of<AuthBase>(context);
-    return Provider<SignInBloc>(
-      builder: (context) => SignInBloc(auth: auth),
-      dispose: (context, bloc) => bloc.dispose(),
-      child: Consumer<SignInBloc>(
-        builder: (context, bloc, child) => SignInScreen(bloc: bloc),
+    return ChangeNotifierProvider<ValueNotifier<bool>>(
+      builder: (context) => ValueNotifier<bool>(false),
+      child: Consumer<ValueNotifier<bool>>(
+        builder: (context, isLoading, child) => Provider<SignInManager>(
+          builder: (context) => SignInManager(auth: auth, isLoading: isLoading),
+          child: Consumer<SignInManager>(
+            builder: (context, manager, child) => SignInScreen(
+              manager: manager,
+              isLoading: isLoading.value,
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -33,7 +41,7 @@ class SignInScreen extends StatelessWidget {
 
   Future<void> _signInWithGoogle(BuildContext context) async {
     try {
-      await bloc.signInWithGoogle();
+      await manager.signInWithGoogle();
     } on PlatformException catch (error) {
       if (error.code != "ERROR_ABORTED_BY_USER") {
         _showSignInError(context, error);
@@ -43,7 +51,7 @@ class SignInScreen extends StatelessWidget {
 
   Future<void> _signInWithFacebook(BuildContext context) async {
     try {
-      await bloc.signInWithFacebook();
+      await manager.signInWithFacebook();
     } on PlatformException catch (error) {
       if (error.code != "ERROR_ABORTED_BY_USER") {
         _showSignInError(context, error);
@@ -61,7 +69,7 @@ class SignInScreen extends StatelessWidget {
 
   Future<void> _signInAnonymously(BuildContext context) async {
     try {
-      await bloc.signInAnonymously();
+      await manager.signInAnonymously();
     } catch (error) {
       _showSignInError(context, error);
     }
@@ -73,23 +81,18 @@ class SignInScreen extends StatelessWidget {
         appBar: AppBar(
           title: Text("Infobootleg"),
         ),
-        body: StreamBuilder<bool>(
-            stream: bloc.isLoadingStream,
-            initialData: false,
-            builder: (context, snapshot) {
-              return _buildBody(context, snapshot.data);
-            }),
+        body: _buildBody(context),
         backgroundColor: Colors.green[200]);
   }
 
-  Widget _buildBody(BuildContext context, bool isLoading) {
+  Widget _buildBody(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          _buildHeader(isLoading),
+          _buildHeader(),
           SizedBox(height: 42.0),
           SignInButton(
             text: "Ingresar con Google",
@@ -141,7 +144,7 @@ class SignInScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(bool isLoading) {
+  Widget _buildHeader() {
     if (isLoading) {
       return Center(child: CircularProgressIndicator());
     }

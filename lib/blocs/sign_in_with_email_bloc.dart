@@ -20,7 +20,7 @@ class SignInWithEmailBloc {
   void updatePassword(String password) => updateWith(password: password);
 
   Future<void> submitForm() async {
-    updateWith(formhasBeenSubmitted: true, formIsLoading: true);
+    updateWith(formHasBeenSubmitted: true, formIsLoading: true);
     try {
       if (_model.formType == SignInWithEmailFormType.signIn) {
         await auth.signInWithEmailAndPassword(_model.email, _model.password);
@@ -43,7 +43,7 @@ class SignInWithEmailBloc {
       password: "",
       formType: formType,
       formIsLoading: false,
-      formhasBeenSubmitted: false,
+      formHasBeenSubmitted: false,
     );
   }
 
@@ -52,7 +52,7 @@ class SignInWithEmailBloc {
     String password,
     SignInWithEmailFormType formType,
     bool formIsLoading,
-    bool formhasBeenSubmitted,
+    bool formHasBeenSubmitted,
   }) {
     // update model
     _model = _model.copyWith(
@@ -60,7 +60,7 @@ class SignInWithEmailBloc {
         password: password,
         formType: formType,
         formIsLoading: formIsLoading,
-        formHasBeenSubmitted: formhasBeenSubmitted);
+        formHasBeenSubmitted: formHasBeenSubmitted);
 
     // add updated model to stream
     _modelController.add(_model);

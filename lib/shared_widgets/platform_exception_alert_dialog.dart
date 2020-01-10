@@ -17,6 +17,7 @@ class PlatformExceptionAlertDialog extends PlatformAlertDialog {
   static Map<String, String> _errors = {
     "ERROR_WEAK_PASSWORD": "La contraseña es demasiado sencilla.",
     "ERROR_INVALID_CREDENTIAL": "Correo o contraseña inválidos.",
+    "ERROR_INVALID_EMAIL": "Correo en formato inválido.",
     "ERROR_EMAIL_ALREADY_IN_USE": "Correo ya registrado.",
     "ERROR_WRONG_PASSWORD": "Contraseña inválida.",
     "ERROR_USER_NOT_FOUND": "Usuario inexistente.",
