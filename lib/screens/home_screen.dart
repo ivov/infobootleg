@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:infobootleg/services/auth.dart';
+
 import 'package:infobootleg/shared_widgets/platform_alert_dialog.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
-  final AuthBase auth;
-
-  HomeScreen({
-    @required this.auth,
-  });
-
-  Future<void> _signOut() async {
+  Future<void> _signOut(BuildContext context) async {
     try {
+      final auth = Provider.of<AuthBase>(context);
       await auth.signOut();
     } catch (e) {
       print(e.toString());
@@ -23,7 +20,7 @@ class HomeScreen extends StatelessWidget {
       content: "¿Confirmar cerrar sesión?",
     ).show(context);
     if (signOutConfirmed) {
-      _signOut();
+      _signOut(context);
     }
   }
 
@@ -48,5 +45,3 @@ class HomeScreen extends StatelessWidget {
     );
   }
 }
-
-class Authbase {}

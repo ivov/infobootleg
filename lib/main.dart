@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:infobootleg/services/auth.dart';
-import 'package:infobootleg/services/auth_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'helpers/state_model.dart';
@@ -26,12 +25,12 @@ class Infobootleg extends StatelessWidget {
           builder: (context) => StateModel(),
         )
       ],
-      child: AuthProvider(
-        auth: Auth(),
+      child: Provider<AuthBase>(
+        builder: (context) => Auth(),
         child: MaterialApp(
           title: 'Infobootleg',
           theme: ThemeData(primarySwatch: Colors.indigo),
-          home: LandingScreen(auth: Auth()),
+          home: LandingScreen(),
         ),
       ),
     );

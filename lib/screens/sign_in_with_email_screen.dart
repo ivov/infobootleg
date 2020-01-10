@@ -3,12 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:infobootleg/helpers/validators.dart';
 import 'package:infobootleg/services/auth.dart';
 import 'package:infobootleg/shared_widgets/platform_alert_dialog.dart';
+import 'package:provider/provider.dart';
 
 enum SignInWithEmailFormType { signIn, register }
 
 class SignInWithEmailScreen extends StatelessWidget {
-  SignInWithEmailScreen({@required this.auth});
-  final AuthBase auth;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +19,7 @@ class SignInWithEmailScreen extends StatelessWidget {
           child: Center(
             child: SingleChildScrollView(
               child: Card(
-                child: SignInWithEmailForm(auth: auth),
+                child: SignInWithEmailForm(),
               ),
             ),
           ),
@@ -31,8 +30,6 @@ class SignInWithEmailScreen extends StatelessWidget {
 
 class SignInWithEmailForm extends StatefulWidget
     with EmailAndPasswordValidators {
-  SignInWithEmailForm({@required this.auth});
-  final AuthBase auth;
   @override
   _SignInWithEmailFormState createState() => _SignInWithEmailFormState();
 }
@@ -62,10 +59,11 @@ class _SignInWithEmailFormState extends State<SignInWithEmailForm> {
       _formIsLoading = true;
     });
     try {
+      final auth = Provider.of<AuthBase>(context);
       if (_formType == SignInWithEmailFormType.signIn) {
-        await widget.auth.signInWithEmailAndPassword(_email, _password);
+        await auth.signInWithEmailAndPassword(_email, _password);
       } else {
-        await widget.auth.createUserInWithEmailAndPassword(_email, _password);
+        await auth.createUserInWithEmailAndPassword(_email, _password);
       }
       Navigator.of(context).pop();
     } catch (error) {

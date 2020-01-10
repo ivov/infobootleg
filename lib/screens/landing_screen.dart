@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:infobootleg/screens/home_screen.dart';
 import 'package:infobootleg/screens/sign_in_screen.dart';
 import 'package:infobootleg/services/auth.dart';
+import 'package:provider/provider.dart';
 
 class LandingScreen extends StatelessWidget {
-  final AuthBase auth;
-  LandingScreen({this.auth});
-
   @override
   Widget build(BuildContext context) {
+    final auth = Provider.of<AuthBase>(context);
     return StreamBuilder<User>(
       stream: auth.onAuthStateChanged,
       builder: (context, snapshot) {
@@ -16,9 +15,9 @@ class LandingScreen extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.active) {
           User user = snapshot.data;
           // if value null, have them sign in
-          if (user == null) return SignInScreen(auth: auth);
+          if (user == null) return SignInScreen();
           // if value is user, welcome!
-          return HomeScreen(auth: auth);
+          return HomeScreen();
         } else {
           return Scaffold(
             body: Center(
