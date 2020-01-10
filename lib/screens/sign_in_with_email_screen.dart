@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:infobootleg/helpers/email_sign_in_model.dart';
+
 import 'package:infobootleg/helpers/validators.dart';
+import 'package:infobootleg/screens/sign_in_with_email_form_bloc_based.dart';
+
 import 'package:infobootleg/services/auth.dart';
 import 'package:infobootleg/shared_widgets/platform_exception_alert_dialog.dart';
 import 'package:provider/provider.dart';
-
-enum SignInWithEmailFormType { signIn, register }
 
 class SignInWithEmailScreen extends StatelessWidget {
   @override
@@ -19,7 +21,7 @@ class SignInWithEmailScreen extends StatelessWidget {
           child: Center(
             child: SingleChildScrollView(
               child: Card(
-                child: SignInWithEmailForm(),
+                child: SignInWithEmailFormBlocBased.create(context),
               ),
             ),
           ),
@@ -28,13 +30,15 @@ class SignInWithEmailScreen extends StatelessWidget {
   }
 }
 
-class SignInWithEmailForm extends StatefulWidget
+class SignInWithEmailFormStateful extends StatefulWidget
     with EmailAndPasswordValidators {
   @override
-  _SignInWithEmailFormState createState() => _SignInWithEmailFormState();
+  _SignInWithEmailFormStatefulState createState() =>
+      _SignInWithEmailFormStatefulState();
 }
 
-class _SignInWithEmailFormState extends State<SignInWithEmailForm> {
+class _SignInWithEmailFormStatefulState
+    extends State<SignInWithEmailFormStateful> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final FocusNode _emailFocusNode = FocusNode();
@@ -62,7 +66,7 @@ class _SignInWithEmailFormState extends State<SignInWithEmailForm> {
     FocusScope.of(context).requestFocus(newFocus);
   }
 
-  void _submitForm() async {
+  Future<void> _submitForm() async {
     setState(() {
       _formHasBeenSubmitted = true;
       _formIsLoading = true;

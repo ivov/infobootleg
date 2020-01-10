@@ -10,10 +10,10 @@ class User {
 }
 
 abstract class AuthBase {
-  Future<User> signInAnonymously();
   Stream<User> get onAuthStateChanged;
+  Future<User> signInAnonymously();
   Future<User> signInWithGoogle();
-  Future<void> signInWithFacebook();
+  Future<User> signInWithFacebook();
   Future<User> signInWithEmailAndPassword(String email, String password);
   Future<User> createUserInWithEmailAndPassword(String email, String password);
   Future<User> getCurrentUser();
@@ -58,7 +58,7 @@ class Auth implements AuthBase {
   }
 
   @override
-  Future<void> signInWithFacebook() async {
+  Future<User> signInWithFacebook() async {
     final FacebookLogin facebookLogin = FacebookLogin();
     final FacebookLoginResult facebookLoginResult =
         await facebookLogin.logIn(["public_profile"]);

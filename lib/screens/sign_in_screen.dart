@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:infobootleg/blocs/sign_in_bloc.dart';
 import 'package:infobootleg/screens/sign_in_with_email_screen.dart';
 import 'package:infobootleg/services/auth.dart';
 import 'package:flutter/services.dart';
@@ -7,13 +8,21 @@ import 'package:infobootleg/shared_widgets/platform_exception_alert_dialog.dart'
 import 'package:infobootleg/shared_widgets/sign_in_button.dart';
 import 'package:provider/provider.dart';
 
-class SignInScreen extends StatefulWidget {
-  @override
-  _SignInScreenState createState() => _SignInScreenState();
-}
+class SignInScreen extends StatelessWidget {
+  SignInScreen({@required this.bloc});
+  final SignInBloc bloc;
 
-class _SignInScreenState extends State<SignInScreen> {
-  bool _isLoading = false;
+// create SignInPage with Provder of type SignInBloc as parent
+  static Widget create(BuildContext context) {
+    final auth = Provider.of<AuthBase>(context);
+    return Provider<SignInBloc>(
+      builder: (context) => SignInBloc(auth: auth),
+      dispose: (context, bloc) => bloc.dispose(),
+      child: Consumer<SignInBloc>(
+        builder: (context, bloc, child) => SignInScreen(bloc: bloc),
+      ),
+    );
+  }
 
   void _showSignInError(BuildContext context, PlatformException exception) {
     PlatformExceptionAlertDialog(
@@ -24,29 +33,21 @@ class _SignInScreenState extends State<SignInScreen> {
 
   Future<void> _signInWithGoogle(BuildContext context) async {
     try {
-      setState(() => _isLoading = true);
-      final auth = Provider.of<AuthBase>(context);
-      await auth.signInWithGoogle();
+      await bloc.signInWithGoogle();
     } on PlatformException catch (error) {
       if (error.code != "ERROR_ABORTED_BY_USER") {
         _showSignInError(context, error);
       }
-    } finally {
-      setState(() => _isLoading = false);
     }
   }
 
   Future<void> _signInWithFacebook(BuildContext context) async {
     try {
-      setState(() => _isLoading = true);
-      final auth = Provider.of<AuthBase>(context);
-      await auth.signInWithFacebook();
+      await bloc.signInWithFacebook();
     } on PlatformException catch (error) {
       if (error.code != "ERROR_ABORTED_BY_USER") {
         _showSignInError(context, error);
       }
-    } finally {
-      setState(() => _isLoading = false);
     }
   }
 
@@ -60,13 +61,9 @@ class _SignInScreenState extends State<SignInScreen> {
 
   Future<void> _signInAnonymously(BuildContext context) async {
     try {
-      setState(() => _isLoading = true);
-      final auth = Provider.of<AuthBase>(context);
-      await auth.signInAnonymously();
+      await bloc.signInAnonymously();
     } catch (error) {
       _showSignInError(context, error);
-    } finally {
-      setState(() => _isLoading = false);
     }
   }
 
@@ -76,23 +73,28 @@ class _SignInScreenState extends State<SignInScreen> {
         appBar: AppBar(
           title: Text("Infobootleg"),
         ),
-        body: _buildBody(context),
+        body: StreamBuilder<bool>(
+            stream: bloc.isLoadingStream,
+            initialData: false,
+            builder: (context, snapshot) {
+              return _buildBody(context, snapshot.data);
+            }),
         backgroundColor: Colors.green[200]);
   }
 
-  Widget _buildBody(BuildContext context) {
+  Widget _buildBody(BuildContext context, bool isLoading) {
     return Padding(
       padding: EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          _buildHeader(),
+          _buildHeader(isLoading),
           SizedBox(height: 42.0),
           SignInButton(
             text: "Ingresar con Google",
             asset: Image.asset("assets/images/google.png"),
-            onPressed: _isLoading ? null : () => _signInWithGoogle(context),
+            onPressed: isLoading ? null : () => _signInWithGoogle(context),
           ),
           SizedBox(height: 14.0),
           SignInButton(
@@ -100,7 +102,7 @@ class _SignInScreenState extends State<SignInScreen> {
             fontColor: Colors.white,
             buttonColor: Color(0xFF334D92),
             asset: Image.asset("assets/images/facebook.png"),
-            onPressed: _isLoading ? null : () => _signInWithFacebook(context),
+            onPressed: isLoading ? null : () => _signInWithFacebook(context),
           ),
           SizedBox(height: 14.0),
           SignInButton(
@@ -112,7 +114,7 @@ class _SignInScreenState extends State<SignInScreen> {
               height: 30.0,
               width: 30.0,
             ),
-            onPressed: _isLoading ? null : () => _signInWithEmail(context),
+            onPressed: isLoading ? null : () => _signInWithEmail(context),
           ),
           SizedBox(height: 14.0),
           Text(
@@ -132,15 +134,15 @@ class _SignInScreenState extends State<SignInScreen> {
               height: 30.0,
               width: 30.0,
             ),
-            onPressed: _isLoading ? null : () => _signInAnonymously(context),
+            onPressed: isLoading ? null : () => _signInAnonymously(context),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildHeader() {
-    if (_isLoading) {
+  Widget _buildHeader(bool isLoading) {
+    if (isLoading) {
       return Center(child: CircularProgressIndicator());
     }
     return Text(
