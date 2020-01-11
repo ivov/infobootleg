@@ -24,12 +24,16 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/images/google.png
-    - assets/images/facebook.png
-    - assets/images/email.png
-    - assets/images/user.png
+    - assets/images/google.svg
+    - assets/images/facebook.svg
+    - assets/images/email.svg
+    - assets/images/user.svg
   fonts:
     - family: CrimsonText
       fonts:
         - asset: assets/fonts/CrimsonText-Regular.ttf
         - asset: assets/fonts/CrimsonText-Bold.ttf
+    - family: Lusitana
+      fonts:
+        - asset: assets/fonts/Lusitana/Lusitana-Bold.ttf
+        - asset: assets/fonts/Lusitana/Lusitana-Regular.ttf

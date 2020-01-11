@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:infobootleg/services/auth.dart';
 import 'package:provider/provider.dart';
 
+import 'SecondLandingScreen.dart';
 import 'helpers/state_model.dart';
-// import 'helpers/theme_data.dart';
+import 'helpers/theme_data.dart';
 
 // import 'screens/result_screen.dart';
 // import 'screens/search_screen.dart';
@@ -28,9 +29,11 @@ class Infobootleg extends StatelessWidget {
       child: Provider<AuthBase>(
         builder: (context) => Auth(),
         child: MaterialApp(
+          debugShowCheckedModeBanner: false,
           title: 'Infobootleg',
-          theme: ThemeData(primarySwatch: Colors.indigo),
-          home: LandingScreen(),
+          // theme: ThemeData(primarySwatch: Colors.indigo),
+          theme: themeData,
+          home: SecondLandingScreen(),
         ),
       ),
     );

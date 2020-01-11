@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 final themeData = new ThemeData(
   primaryColor: Colors.white,
   accentColor: Colors.black,
-  fontFamily: "CrimsonText",
+  fontFamily: "Lusitana",
   textTheme: TextTheme(
     title: TextStyle(
       fontSize: 50.0,

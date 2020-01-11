@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'auth.dart';
 
+// WARNING: Currently NOT in use. Only for testing and learning about InheritedWidget with scoped access.
+
 class AuthProvider extends InheritedWidget {
   AuthProvider({
     @required this.auth,

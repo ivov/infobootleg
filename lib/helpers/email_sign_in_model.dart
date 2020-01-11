@@ -1,7 +1,5 @@
 import 'package:infobootleg/helpers/validators.dart';
 
-// WARNING: This is an alternative version NOT currently in use. It is intended for use with SignInWithEmailFormBlocBased, but currently SignInWithEmailChangeModel is in use.
-
 enum SignInWithEmailFormType { signIn, register }
 
 class SignInWithEmailModel with EmailAndPasswordValidators {
