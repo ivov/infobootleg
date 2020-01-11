@@ -1,0 +1,19 @@
+{
+    "files.exclude": {
+        ".flutter-plugins": true,
+        ".idea": true,
+        ".metadata": true,
+        ".packages": true,
+        "*.docm": true,
+        "*.docx": true,
+        "*.iml": true,
+        "**/.babelrc": true,
+        "**/.vscode": true,
+        "**/build": true,
+        "**/package-lock.json": true,
+        "**/pubspec.lock": true,
+        "**/react-app-env.d.ts": true,
+        "**/shrinkwrap.yaml": true,
+        "ios": true
+    }
+}

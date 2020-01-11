@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:infobootleg/screens/job.dart';
 import 'package:infobootleg/services/auth.dart';
+import 'package:infobootleg/services/databaseService.dart';
 
 import 'package:infobootleg/shared_widgets/platform_alert_dialog.dart';
+import 'package:infobootleg/shared_widgets/platform_exception_alert_dialog.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -24,6 +28,20 @@ class HomeScreen extends StatelessWidget {
     }
   }
 
+  Future<void> _createJob(BuildContext context) async {
+    try {
+      final firestoreDatabaseService = Provider.of<DatabaseService>(context);
+      await firestoreDatabaseService.createJob(
+        Job(name: "blogging", rate: 10),
+      );
+    } on PlatformException catch (error) {
+      PlatformExceptionAlertDialog(
+        title: "Operation failed",
+        exception: error,
+      ).show(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,6 +60,29 @@ class HomeScreen extends StatelessWidget {
           )
         ],
       ),
+      body: _buildBody(context),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _createJob(context),
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+
+  Widget _buildBody(BuildContext context) {
+    final database = Provider.of<FirestoreDatabaseService>(context);
+    return StreamBuilder<List<Job>>(
+      stream: database.jobsStream(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final jobs = snapshot.data;
+          final children = jobs.map((job) => Text(job.name)).toList();
+          return ListView(children: children);
+        }
+        if (snapshot.hasError) {
+          return Center(child: Text("Some error occurred!"));
+        }
+        return Center(child: CircularProgressIndicator());
+      },
     );
   }
 }

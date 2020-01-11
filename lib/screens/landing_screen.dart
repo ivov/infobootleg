@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:infobootleg/screens/home_screen.dart';
 import 'package:infobootleg/screens/sign_in_screen.dart';
 import 'package:infobootleg/services/auth.dart';
+import 'package:infobootleg/services/databaseService.dart';
 import 'package:provider/provider.dart';
 
 class LandingScreen extends StatelessWidget {
@@ -17,7 +18,10 @@ class LandingScreen extends StatelessWidget {
           // if value null, have them sign in
           if (user == null) return SignInScreen.create(context);
           // if value is user, welcome!
-          return HomeScreen();
+          return Provider<DatabaseService>(
+            builder: (context) => FirestoreDatabaseService(uid: user.uid),
+            child: HomeScreen(),
+          );
         } else {
           return Scaffold(
             body: Center(
