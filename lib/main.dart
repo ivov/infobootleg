@@ -1,45 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:infobootleg/services/auth.dart';
+import 'package:infobootleg/screens/referral_screen.dart';
 import 'package:provider/provider.dart';
 
-import 'SecondLandingScreen.dart';
-import 'helpers/state_model.dart';
 import 'helpers/theme_data.dart';
-
-// import 'screens/result_screen.dart';
-// import 'screens/search_screen.dart';
-import 'screens/landing_screen.dart';
+import 'services/authService.dart';
 
 void main() => runApp(Infobootleg());
 
 class Infobootleg extends StatelessWidget {
-  final PageController _myPageController = PageController();
-
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ListenableProvider<PageController>(
-          builder: (context) => _myPageController,
-        ),
-        ChangeNotifierProvider<StateModel>(
-          builder: (context) => StateModel(),
-        )
-      ],
-      child: Provider<AuthBase>(
-        builder: (context) => Auth(),
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Infobootleg',
-          // theme: ThemeData(primarySwatch: Colors.indigo),
-          theme: themeData,
-          home: SecondLandingScreen(),
-        ),
+    return Provider(
+      builder: (context) => AuthService(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Infobootleg',
+        theme: themeData,
+        home: ReferralScreen(),
       ),
     );
   }
 }
-
 // original:
 // class Infobootleg extends StatelessWidget {
 //   final PageController _myPageController = PageController();

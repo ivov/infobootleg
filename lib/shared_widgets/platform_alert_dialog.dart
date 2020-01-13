@@ -34,7 +34,7 @@ class PlatformAlertDialog extends PlatformWidget {
   Widget buildCupertinoWidget(BuildContext context) {
     return CupertinoAlertDialog(
       title: Text(title),
-      content: Text(content),
+      content: Text(content, style: TextStyle(fontSize: 22.0)),
       actions: _buildActions(context),
     );
   }
@@ -43,7 +43,7 @@ class PlatformAlertDialog extends PlatformWidget {
   Widget buildMaterialWidget(BuildContext context) {
     return AlertDialog(
       title: Text(title),
-      content: Text(content),
+      content: Text(content, style: TextStyle(fontSize: 22.0)),
       actions: _buildActions(context),
     );
   }
@@ -53,14 +53,14 @@ class PlatformAlertDialog extends PlatformWidget {
     if (cancelActionText != null) {
       actions.add(
         PlatformAlertDialogAction(
-          child: Text(cancelActionText),
+          child: Text(cancelActionText, style: TextStyle(fontSize: 20.0)),
           onPressed: () => Navigator.of(context).pop(false),
         ),
       );
     }
     actions.add(
       PlatformAlertDialogAction(
-        child: Text(confirmActionText),
+        child: Text(confirmActionText, style: TextStyle(fontSize: 20.0)),
         onPressed: () => Navigator.of(context).pop(true),
       ),
     );

@@ -29,11 +29,8 @@ class BeveledFrame extends StatelessWidget {
       child: Scaffold(
         body: Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).accentColor,
-            border: Border.all(
-              color: Theme.of(context).accentColor,
-              width: 15,
-            ),
+            color: Colors.black,
+            border: Border.all(color: Colors.black, width: 15),
           ),
           child: ClipPath(
             clipper: ShapeBorderClipper(

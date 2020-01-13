@@ -1,45 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:infobootleg/helpers/email_sign_in_model.dart';
+import 'package:infobootleg/helpers/hex_color.dart';
+import 'package:provider/provider.dart';
 
 import 'package:infobootleg/helpers/validators.dart';
-import 'package:infobootleg/shared_widgets/sign_in_with_email_form_change_notifier.dart';
-
-import 'package:infobootleg/services/auth.dart';
+import 'package:infobootleg/services/authService.dart';
 import 'package:infobootleg/shared_widgets/platform_exception_alert_dialog.dart';
-import 'package:provider/provider.dart';
+
+enum EmailSignInFormType { signIn, register }
 
 class SignInWithEmailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Ingresar con e-mail"),
-        ),
+        appBar: AppBar(title: Text("Ingresar con correo electrónico")),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Center(
-            child: SingleChildScrollView(
-              child: Card(
-                // or alternative version: SignInWithEmailFormBlocBased
-                child: SignInWithEmailFormChangeNotifier.create(context),
-              ),
-            ),
-          ),
+          child: SignInWithEmailForm(),
         ),
-        backgroundColor: Colors.green[200]);
+        backgroundColor: hexColor("f5eaea"));
   }
 }
 
-class SignInWithEmailFormStateful extends StatefulWidget
+class SignInWithEmailForm extends StatefulWidget
     with EmailAndPasswordValidators {
   @override
-  _SignInWithEmailFormStatefulState createState() =>
-      _SignInWithEmailFormStatefulState();
+  _SignInWithEmailFormState createState() => _SignInWithEmailFormState();
 }
 
-class _SignInWithEmailFormStatefulState
-    extends State<SignInWithEmailFormStateful> {
+class _SignInWithEmailFormState extends State<SignInWithEmailForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final FocusNode _emailFocusNode = FocusNode();
@@ -47,7 +36,7 @@ class _SignInWithEmailFormStatefulState
 
   String get _email => _emailController.text;
   String get _password => _passwordController.text;
-  SignInWithEmailFormType _formType = SignInWithEmailFormType.signIn;
+  EmailSignInFormType _formType = EmailSignInFormType.signIn;
   bool _formHasBeenSubmitted = false;
   bool _formIsLoading = false;
 
@@ -67,17 +56,17 @@ class _SignInWithEmailFormStatefulState
     FocusScope.of(context).requestFocus(newFocus);
   }
 
-  Future<void> _submitForm() async {
+  void _submitForm() async {
     setState(() {
       _formHasBeenSubmitted = true;
       _formIsLoading = true;
     });
     try {
-      final auth = Provider.of<AuthBase>(context);
-      if (_formType == SignInWithEmailFormType.signIn) {
-        await auth.signInWithEmailAndPassword(_email, _password);
+      final authService = Provider.of<AuthService>(context);
+      if (_formType == EmailSignInFormType.signIn) {
+        await authService.signInWithEmailAndPassword(_email, _password);
       } else {
-        await auth.createUserInWithEmailAndPassword(_email, _password);
+        await authService.createUserInWithEmailAndPassword(_email, _password);
       }
       Navigator.of(context).pop();
     } on PlatformException catch (error) {
@@ -95,20 +84,34 @@ class _SignInWithEmailFormStatefulState
   void _toggleFormType() {
     setState(() {
       _formHasBeenSubmitted = false;
-      _formType = _formType == SignInWithEmailFormType.signIn
-          ? SignInWithEmailFormType.register
-          : SignInWithEmailFormType.signIn;
+      _formType = _formType == EmailSignInFormType.signIn
+          ? EmailSignInFormType.register
+          : EmailSignInFormType.signIn;
     });
     _emailController.clear();
     _passwordController.clear();
   }
 
-  List<Widget> _buildChildren() {
-    final raisedButtonText = _formType == SignInWithEmailFormType.signIn
-        ? "Ingresar"
-        : "Registrar una cuenta";
-    final flatButtonText = _formType == SignInWithEmailFormType.signIn
-        ? "O registrar una cuenta"
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Card(
+        elevation: 5.0,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: _buildTextFieldsAndButtons(),
+          ),
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _buildTextFieldsAndButtons() {
+    final submitButtonText =
+        _formType == EmailSignInFormType.signIn ? "Ingresar" : "Registrarse";
+    final toggleButtonText = _formType == EmailSignInFormType.signIn
+        ? "O registrarse"
         : "O ingresar";
     bool submitEnabled = widget.emailValidator.isValid(_email) &&
         widget.passwordValidator.isValid(_password) &&
@@ -116,31 +119,12 @@ class _SignInWithEmailFormStatefulState
 
     return [
       _buildEmailTextField(),
-      SizedBox(height: 12.0),
+      SizedBox(height: 30.0),
       _buildPasswordTextField(),
-      SizedBox(height: 26.0),
-      RaisedButton(
-        elevation: 5.0,
-        child: Text(
-          raisedButtonText,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 18.0,
-          ),
-        ),
-        color: Colors.indigo,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(8.0),
-          ),
-        ),
-        onPressed: submitEnabled ? _submitForm : null,
-      ),
+      SizedBox(height: 35.0),
+      _buildSubmitButton(submitButtonText, submitEnabled),
       SizedBox(height: 12.0),
-      FlatButton(
-        child: Text(flatButtonText),
-        onPressed: !_formIsLoading ? _toggleFormType : null,
-      ),
+      _buildToggleButton(toggleButtonText),
     ];
   }
 
@@ -148,16 +132,19 @@ class _SignInWithEmailFormStatefulState
     bool showErrorText =
         _formHasBeenSubmitted && !widget.emailValidator.isValid(_email);
     return TextField(
+      style: TextStyle(fontSize: 26.0),
       controller: _emailController,
       focusNode: _emailFocusNode,
       autocorrect: false,
       keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
-      // setState to rebuild, thus updating enabled/disabled color
-      onChanged: (email) => setState(() {}),
+      onChanged: (email) =>
+          setState(() {}), // rebuild based on enabled/disabled color
       onEditingComplete: _emailEditingComplete,
       decoration: InputDecoration(
           labelText: "Correo electrónico",
+          contentPadding: EdgeInsets.only(bottom: 0),
+          labelStyle: TextStyle(fontSize: 22.0),
           errorText: showErrorText ? widget.invalidEmailErrorText : null),
       enabled: _formIsLoading == false,
     );
@@ -167,31 +154,48 @@ class _SignInWithEmailFormStatefulState
     bool showErrorText =
         _formHasBeenSubmitted && !widget.passwordValidator.isValid(_password);
     return TextField(
+      style: TextStyle(fontSize: 26.0),
       controller: _passwordController,
       focusNode: _passwordFocusNode,
       autocorrect: false,
       textInputAction: TextInputAction.done,
       onEditingComplete: _submitForm,
-      // setState to rebuild, thus updating enabled/disabled color
-      onChanged: (password) => setState(() {}),
+      onChanged: (password) => setState(
+          () {}), // setState to rebuild, thus updating enabled/disabled color
       enabled: _formIsLoading == false,
       decoration: InputDecoration(
           labelText: "Contraseña",
+          contentPadding: EdgeInsets.only(bottom: 0),
+          labelStyle: TextStyle(fontSize: 22.0),
           errorText: showErrorText ? widget.invalidPasswordErrorText : null),
-
       obscureText: true,
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.min,
-        children: _buildChildren(),
+  RaisedButton _buildSubmitButton(String raisedButtonText, bool submitEnabled) {
+    return RaisedButton(
+      color: Theme.of(context).primaryColor,
+      elevation: 5.0,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        child: Text(
+          raisedButtonText,
+          style: TextStyle(color: Colors.white, fontSize: 25.0),
+        ),
       ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(8.0),
+        ),
+      ),
+      onPressed: submitEnabled ? _submitForm : null,
+    );
+  }
+
+  FlatButton _buildToggleButton(String toggleButtonText) {
+    return FlatButton(
+      child: Text(toggleButtonText, style: TextStyle(fontSize: 20.0)),
+      onPressed: !_formIsLoading ? _toggleFormType : null,
     );
   }
 }

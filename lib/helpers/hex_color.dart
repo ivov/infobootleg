@@ -1,10 +1,3 @@
-import 'package:flutter/material.dart';
+import 'dart:ui';
 
-class HexColor extends Color {
-  static int _getColorFromHex(String hexColor) {
-    hexColor = hexColor.replaceAll("#", "");
-    return int.parse("0xFF$hexColor");
-  }
-
-  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
-}
+hexColor(String hexColor) => Color(int.parse("0xFF$hexColor"));

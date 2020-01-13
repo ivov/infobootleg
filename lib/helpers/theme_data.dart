@@ -1,37 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:infobootleg/helpers/hex_color.dart';
 
-final themeData = new ThemeData(
-  primaryColor: Colors.white,
-  accentColor: Colors.black,
+final themeData = ThemeData(
+  primaryColor: hexColor("2c7873"),
+  scaffoldBackgroundColor: hexColor("2c7873"),
   fontFamily: "Lusitana",
   textTheme: TextTheme(
-    title: TextStyle(
-      fontSize: 50.0,
-      color: Colors.black,
-    ),
-    subtitle: TextStyle(
-      fontSize: 20.0,
-      color: Color(0xff5c8d89),
-    ),
-    headline: TextStyle(
-      fontSize: 35.0,
-      color: Colors.black,
-      fontWeight: FontWeight.bold,
-    ),
-    display1: TextStyle(
-      fontSize: 30.0,
-      color: Colors.black,
-      fontWeight: FontWeight.bold,
-    ),
-    display2: TextStyle(
-      fontSize: 25.0,
-      color: Colors.grey,
-      fontWeight: FontWeight.bold,
-    ),
-    body1: TextStyle(
-      fontSize: 20.0,
-      color: Colors.black,
-    ),
+    title: TextStyle(fontSize: 45.0, fontWeight: FontWeight.bold),
+    subtitle: TextStyle(fontSize: 20.0),
   ),
 );
 

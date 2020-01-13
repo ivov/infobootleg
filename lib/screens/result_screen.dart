@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:infobootleg/beveled_frame.dart';
-import 'package:infobootleg/helpers/Law.dart';
+import 'package:infobootleg/shared_widgets/beveled_frame.dart';
+import 'package:infobootleg/models/law_model.dart';
 
 class ResultScreen extends StatelessWidget {
   final Law currentLaw;
