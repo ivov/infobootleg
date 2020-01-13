@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:infobootleg/helpers/hex_color.dart';
-import 'package:infobootleg/shared_widgets/header.dart';
 import 'package:provider/provider.dart';
 
 import 'package:infobootleg/screens/sign_in_with_email_screen.dart';
 import 'package:infobootleg/services/authService.dart';
+import 'package:infobootleg/helpers/hex_color.dart';
+import 'package:infobootleg/shared_widgets/header.dart';
 import 'package:infobootleg/shared_widgets/platform_exception_alert_dialog.dart';
 
 enum SignInMethod { Google, Facebook, Email, Anonymous }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:infobootleg/screens/search_screen.dart';
-import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
 
+import 'package:infobootleg/screens/search_screen.dart';
 import 'package:infobootleg/screens/sign_in_screen.dart';
 import 'package:infobootleg/services/authService.dart';
 import 'package:infobootleg/services/databaseService.dart';

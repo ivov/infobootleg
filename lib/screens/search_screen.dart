@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:infobootleg/helpers/hex_color.dart';
 import 'package:infobootleg/helpers/left_pad.dart';
 import 'package:infobootleg/services/authService.dart';
 import 'package:infobootleg/shared_widgets/platform_alert_dialog.dart';
-import 'package:provider/provider.dart';
-
-import 'package:infobootleg/shared_widgets/beveled_frame.dart';
 import 'package:infobootleg/services/databaseService.dart';
 import 'package:infobootleg/models/law_model.dart';
 
@@ -36,6 +35,7 @@ class _SearchScreenState extends State<SearchScreen> {
           onLawSelected: _setActiveLaw,
         ),
         // SearchResultScreen(),
+        // TODO: Create SearchResultScreen
       ],
     );
   }
@@ -51,12 +51,8 @@ class SearchStartScreen extends StatelessWidget {
   final Function onLawSelected;
 
   Future<void> _signOut(BuildContext context) async {
-    try {
-      final authService = Provider.of<AuthService>(context);
-      await authService.signOut();
-    } catch (e) {
-      print(e.toString());
-    }
+    final authService = Provider.of<AuthService>(context);
+    await authService.signOut();
   }
 
   Future<void> _confirmSignOut(BuildContext context) async {
@@ -90,41 +86,39 @@ class SearchStartScreen extends StatelessWidget {
       appBar: AppBar(
           title: Text("Infobootleg",
               style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold)),
-          actions: _buildExitButton(context)),
+          actions: <Widget>[_buildExitButton(context)]),
       body: Container(
-        color: hexColor("f5eaea"),
-        child: Center(
-          child: Card(
-            elevation: 5.0,
-            child: Padding(
-              padding: const EdgeInsets.all(26.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text("Buscar ley por número o por título",
-                      style: Theme.of(context).textTheme.subtitle),
-                  SizedBox(height: 20),
-                  _buildSearchBox(context)
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
+          color: hexColor("f5eaea"), child: _buildSearchCard(context)),
     );
   }
 
-  _buildExitButton(BuildContext context) {
-    return <Widget>[
-      FlatButton.icon(
-        icon: Icon(Icons.exit_to_app),
-        textColor: Colors.white,
-        color: hexColor("5b5656"),
-        label: Text("Salir",
-            style: TextStyle(fontSize: 18.0, color: Colors.white)),
-        onPressed: () => _confirmSignOut(context),
-      )
-    ];
+  FlatButton _buildExitButton(BuildContext context) {
+    return FlatButton.icon(
+      icon: Icon(Icons.exit_to_app),
+      textColor: Colors.white,
+      color: hexColor("5b5656"),
+      label:
+          Text("Salir", style: TextStyle(fontSize: 18.0, color: Colors.white)),
+      onPressed: () => _confirmSignOut(context),
+    );
+  }
+
+  Card _buildSearchCard(BuildContext context) {
+    return Card(
+      elevation: 5.0,
+      child: Padding(
+        padding: EdgeInsets.all(26.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text("Buscar ley por número o por título",
+                style: Theme.of(context).textTheme.subtitle),
+            SizedBox(height: 20),
+            _buildSearchBox(context)
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _buildSearchBox(BuildContext context) {
@@ -139,11 +133,7 @@ class SearchStartScreen extends StatelessWidget {
         decoration: InputDecoration(
           hintText: 'Ley...',
           hintStyle: TextStyle(fontSize: 20.0),
-          prefixIcon: Icon(
-            Icons.search,
-            size: 40.0,
-            color: Colors.black,
-          ),
+          prefixIcon: Icon(Icons.search, size: 40.0, color: Colors.black),
           focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(color: Colors.black),
           ),

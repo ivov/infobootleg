@@ -1,8 +1,8 @@
 import 'dart:io';
-
-import 'package:infobootleg/shared_widgets/platform_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+
+import 'package:infobootleg/shared_widgets/platform_widget.dart';
 
 class PlatformAlertDialog extends PlatformWidget {
   PlatformAlertDialog({
