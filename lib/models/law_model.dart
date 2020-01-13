@@ -47,6 +47,6 @@ class Law {
   }
 
   String toString() {
-    return "---------\nLAW\nNUMBER: $number\nLINK: $link\nFECHA BO: $gazetteDate\n---------";
+    return "---------\nLAW\nNUMBER: $number\nLINK: $link\nGAZETTE DATE: $gazetteDate\n---------";
   }
 }
