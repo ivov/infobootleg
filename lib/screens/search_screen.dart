@@ -19,10 +19,13 @@ class _SearchScreenState extends State<SearchScreen> {
     setState(() => activeLaw = selectedLaw);
   }
 
+  // temporary method - delete
   @override
   initState() {
+    String url =
+        "http://servicios.infoleg.gob.ar/infolegInternet/anexos/190000-194999/194196/norma.htm";
     super.initState();
-    final retriever = LawTextRetriever();
+    final retriever = LawTextRetriever(url: url);
     retriever.retrieveLawText();
   }
 
