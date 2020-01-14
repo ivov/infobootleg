@@ -14,37 +14,37 @@ class DatabaseService {
         .get()
         .then((snapshot) => Law(snapshot.data));
   }
-
-  // @override
-  // Future<void> createJob(Job job) async => _setData(
-  //       path: APIPath.job(userId, "job_abc"),
-  //       data: job.toMap(),
-  //     );
-
-  // single entry point for all writes to Firestore
-  // Future<void> _setData({String path, Map<String, dynamic> data}) async {
-  //   final reference = Firestore.instance.document(path);
-  //   await reference.setData(data);
-  // }
-
-  // Stream<List<Job>> jobsStream() => _collectionStream(
-  //       path: APIPath.jobs(userId),
-  //       builder: (data) => Job.fromMap(data),
-  //     );
-
-  // Stream<List<T>> _collectionStream<T>({
-  //   @required String path,
-  //   @required T builder(Map<String, dynamic> data),
-  // }) {
-  //   final reference = Firestore.instance.collection(path);
-  //   final snapshots = reference.snapshots();
-
-  //   return snapshots.map(
-  //     (snapshot) =>
-  //         snapshot.documents.map((snapshot) => builder(snapshot.data)).toList(),
-  //   );
-  // }
 }
+
+// @override
+// Future<void> createJob(Job job) async => _setData(
+//       path: APIPath.job(userId, "job_abc"),
+//       data: job.toMap(),
+//     );
+
+// single entry point for all writes to Firestore
+// Future<void> _setData({String path, Map<String, dynamic> data}) async {
+//   final reference = Firestore.instance.document(path);
+//   await reference.setData(data);
+// }
+
+// Stream<List<Job>> jobsStream() => _collectionStream(
+//       path: APIPath.jobs(userId),
+//       builder: (data) => Job.fromMap(data),
+//     );
+
+// Stream<List<T>> _collectionStream<T>({
+//   @required String path,
+//   @required T builder(Map<String, dynamic> data),
+// }) {
+//   final reference = Firestore.instance.collection(path);
+//   final snapshots = reference.snapshots();
+
+//   return snapshots.map(
+//     (snapshot) =>
+//         snapshot.documents.map((snapshot) => builder(snapshot.data)).toList(),
+//   );
+// }
 
 // import 'package:cloud_firestore/cloud_firestore.dart';
 

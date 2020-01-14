@@ -1,26 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:infobootleg/shared_widgets/law_card.dart';
+import 'package:infobootleg/shared_widgets/law_title_card.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-
+import 'package:infobootleg/models/search_state_model.dart';
+import 'package:infobootleg/shared_widgets/law_frame.dart';
 import 'package:infobootleg/helpers/hex_color.dart';
-import 'package:infobootleg/models/law_model.dart';
 
-class SearchResultScreen extends StatelessWidget {
-  SearchResultScreen({@required this.activeLaw, @required this.pageController});
-  final PageController pageController;
-  final Law activeLaw;
+class LawSummaryScreen extends StatelessWidget {
+  LawSummaryScreen(this.searchState);
+
+  final SearchStateModel searchState;
 
   @override
   Widget build(BuildContext context) {
     return LawFrame(
-      pageController: pageController,
+      pageController: searchState.pageController,
+      returnLabelText: "buscador",
       frameContent: Column(
         children: [
           SizedBox(height: 15.0),
-          _buildLawTitleCard(context),
+          LawTitleCard(searchState),
           SizedBox(height: 30.0),
           _buildLawDates(),
           SizedBox(height: 30.0),
-          _buildLawAccessButton(context),
+          searchState.isLoading
+              ? CircularProgressIndicator()
+              : _buildLawAccessButton(context),
           SizedBox(height: 30.0),
           _buildSummaryText(context),
           SizedBox(height: 20.0),
@@ -34,48 +39,14 @@ class SearchResultScreen extends StatelessWidget {
     );
   }
 
-  LawCard _buildLawTitleCard(BuildContext context) {
-    return LawCard(
-      cardContent: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 20.0),
-            child: Text(
-              "Ley " + activeLaw.number,
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(bottom: 20.0),
-            child: Text(
-              activeLaw.summaryTitle,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(bottom: 20.0),
-            child: Text(
-              activeLaw.abstractTitle,
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 22),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
   Column _buildLawDates() {
     return Column(
       children: <Widget>[
         _buildDateRow(MdiIcons.scriptTextOutline,
-            "Publicada el día ${activeLaw.gazetteDate}\nen el Boletín Oficial ${activeLaw.gazetteNumber} (pág. ${activeLaw.gazettePage})"),
+            "Publicada el día ${searchState.activeLaw.gazetteDate}\nen el Boletín Oficial ${searchState.activeLaw.gazetteNumber} (pág. ${searchState.activeLaw.gazettePage})"),
         SizedBox(height: 10.0),
         _buildDateRow(MdiIcons.feather,
-            "Sancionada el día ${activeLaw.enactmentDate}\npor el ${activeLaw.originatingBody}"),
+            "Sancionada el día ${searchState.activeLaw.enactmentDate}\npor el ${searchState.activeLaw.originatingBody}"),
       ],
     );
   }
@@ -102,9 +73,12 @@ class SearchResultScreen extends StatelessWidget {
   RaisedButton _buildLawAccessButton(BuildContext context) {
     return RaisedButton(
       elevation: 10.0,
-      onPressed: () {
-        print("hello");
-      }, // TODO: Access full text of law
+      onPressed: () async {
+        searchState.toggleLoadingState();
+        await searchState.updateLawContents();
+        searchState.goToLawTextScreen();
+        searchState.toggleLoadingState();
+      },
       autofocus: true,
       color: hexColor("2c7873"),
       shape: RoundedRectangleBorder(
@@ -153,7 +127,7 @@ class SearchResultScreen extends StatelessWidget {
                     ),
                   ),
                   TextSpan(
-                    text: activeLaw.summaryText,
+                    text: searchState.activeLaw.summaryText,
                     style: TextStyle(fontSize: 16.0),
                   ),
                 ],
@@ -183,82 +157,29 @@ class SearchResultScreen extends StatelessWidget {
 
   String _getModifiesText() {
     String modifiesText;
-    if (activeLaw.modifies == "0") {
+    if (searchState.activeLaw.modifies == "0") {
       modifiesText = "Esta ley no modifica ni complementa\na ninguna norma.";
-    } else if (activeLaw.modifies == "1") {
+    } else if (searchState.activeLaw.modifies == "1") {
       modifiesText = "Esta ley modifica o complementa\na una norma.";
     } else {
       modifiesText =
-          "Esta ley modifica o complementa\na ${activeLaw.modifies} normas.";
+          "Esta ley modifica o complementa\na ${searchState.activeLaw.modifies} normas.";
     }
     return modifiesText;
   }
 
   String _getIsModifiedByText() {
     String isModifiedByText;
-    if (activeLaw.isModifiedBy == "0") {
+    if (searchState.activeLaw.isModifiedBy == "0") {
       isModifiedByText =
           "Esta ley no es modificada ni\ncomplementada por ninguna norma.";
-    } else if (activeLaw.isModifiedBy == "1") {
+    } else if (searchState.activeLaw.isModifiedBy == "1") {
       isModifiedByText =
           "Esta ley es modificada o complementada\npor una norma.";
     } else {
       isModifiedByText =
-          "Esta ley es modificada o complementada\npor ${activeLaw.isModifiedBy} normas.";
+          "Esta ley es modificada o complementada\npor ${searchState.activeLaw.isModifiedBy} normas.";
     }
     return isModifiedByText;
-  }
-}
-
-class LawFrame extends StatelessWidget {
-  LawFrame({@required this.frameContent, @required this.pageController});
-  final Widget frameContent;
-  final PageController pageController;
-
-  void _returnToSearchStartScreen() {
-    pageController.animateToPage(
-      0,
-      duration: Duration(milliseconds: 800),
-      curve: Curves.easeInOutQuint,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: GestureDetector(
-            child: Text("Volver al buscador"),
-            onTap: _returnToSearchStartScreen,
-          ),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_upward),
-            onPressed: _returnToSearchStartScreen,
-          ),
-        ),
-        body: Container(
-          color: hexColor("f5eaea"),
-          child: SingleChildScrollView(child: frameContent),
-        ),
-      ),
-    );
-  }
-}
-
-class LawCard extends StatelessWidget {
-  LawCard({@required this.cardContent});
-  final Widget cardContent;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 5.0,
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 15.0),
-        width: MediaQuery.of(context).size.width * 0.85,
-        child: cardContent,
-      ),
-    );
   }
 }

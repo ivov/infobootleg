@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:infobootleg/models/search_state_model.dart';
 import 'package:provider/provider.dart';
 
 import 'package:infobootleg/helpers/hex_color.dart';
@@ -7,14 +8,10 @@ import 'package:infobootleg/services/authService.dart';
 import 'package:infobootleg/services/databaseService.dart';
 import 'package:infobootleg/shared_widgets/platform_alert_dialog.dart';
 
-class SearchStartScreen extends StatelessWidget {
-  SearchStartScreen({
-    @required this.pageController,
-    @required this.onLawSelected,
-  });
-  final PageController pageController;
+class LawSearchScreen extends StatelessWidget {
+  LawSearchScreen(this.searchState);
+  final SearchStateModel searchState;
   final TextEditingController _myTextController = TextEditingController();
-  final Function onLawSelected;
 
   Future<void> _signOut(BuildContext context) async {
     final authService = Provider.of<AuthService>(context);
@@ -34,21 +31,12 @@ class SearchStartScreen extends StatelessWidget {
   _onSubmitted(BuildContext context, String userInput) async {
     final dbService = Provider.of<DatabaseService>(context);
     try {
-      final law = await dbService.retrieveLaw(leftPad(userInput));
-      onLawSelected(law);
-      print(law);
-      _goToSearchResultScreen();
+      final retrievedLaw = await dbService.retrieveLaw(leftPad(userInput));
+      searchState.updateActiveLaw(retrievedLaw);
+      searchState.goToLawSummaryScreen();
     } catch (e) {
       // TODO: Tell user no law found
     }
-  }
-
-  void _goToSearchResultScreen() {
-    pageController.animateToPage(
-      1,
-      duration: Duration(milliseconds: 800),
-      curve: Curves.easeInOutQuint,
-    );
   }
 
   @override
@@ -87,14 +75,14 @@ class SearchStartScreen extends StatelessWidget {
             Text("Buscar ley por número o título",
                 style: Theme.of(context).textTheme.subtitle),
             SizedBox(height: 20),
-            _buildSearchBox(context)
+            _buildSearchBar(context)
           ],
         ),
       ),
     );
   }
 
-  Widget _buildSearchBox(BuildContext context) {
+  Widget _buildSearchBar(BuildContext context) {
     return Container(
       width: 200,
       alignment: Alignment.center,
