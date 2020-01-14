@@ -4,6 +4,8 @@ import 'package:infobootleg/screens/search_result_screen.dart';
 import 'package:infobootleg/screens/search_start_screen.dart';
 import 'package:infobootleg/models/law_model.dart';
 
+import 'package:infobootleg/helpers/lawTextRetriever.dart';
+
 class SearchScreen extends StatefulWidget {
   @override
   _SearchScreenState createState() => _SearchScreenState();
@@ -15,6 +17,13 @@ class _SearchScreenState extends State<SearchScreen> {
 
   void _setActiveLaw(Law selectedLaw) {
     setState(() => activeLaw = selectedLaw);
+  }
+
+  @override
+  initState() {
+    super.initState();
+    final retriever = LawTextRetriever();
+    retriever.retrieveLawText();
   }
 
   @override

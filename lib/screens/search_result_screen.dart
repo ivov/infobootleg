@@ -28,6 +28,7 @@ class SearchResultScreen extends StatelessWidget {
           SizedBox(height: 10.0),
           _buildIsModifiedByLine(),
           SizedBox(height: 20.0),
+          // TODO: subdialog showing modifies/isModifiedBy relations
         ],
       ),
     );

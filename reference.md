@@ -21,8 +21,6 @@ SHA-1: BD:1C:78:B0:8D:63:E0:25:C9:83:CB:A8:AA:82:49:82:59:F2:1D:D7
 
 TASKS:
 
-- Move Law object up widget tree and pass it as argument to ResultScreen
-- Move ListenableProvider down to PageView?
 - Parse HTML and populate ResultScreen
 - Upload Laws with modification data (modifies, modifiedBy)
 - Autocomplete with law topic "traductores", etc.

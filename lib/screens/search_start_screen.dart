@@ -36,9 +36,10 @@ class SearchStartScreen extends StatelessWidget {
     try {
       final law = await dbService.retrieveLaw(leftPad(userInput));
       onLawSelected(law);
+      print(law);
       _goToSearchResultScreen();
     } catch (e) {
-      // TODO: tell user no law found
+      // TODO: Tell user no law found
     }
   }
 
@@ -82,6 +83,7 @@ class SearchStartScreen extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            // TODO: Search by title
             Text("Buscar ley por número o título",
                 style: Theme.of(context).textTheme.subtitle),
             SizedBox(height: 20),

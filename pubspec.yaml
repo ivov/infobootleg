@@ -17,6 +17,8 @@ dependencies:
   google_sign_in:
   flutter_facebook_login:
   material_design_icons_flutter:
+  http:
+  html:
 
 dev_dependencies:
   flutter_test:
@@ -30,10 +32,6 @@ flutter:
     - assets/images/email.svg
     - assets/images/user.svg
   fonts:
-    - family: CrimsonText
-      fonts:
-        - asset: assets/fonts/CrimsonText-Regular.ttf
-        - asset: assets/fonts/CrimsonText-Bold.ttf
     - family: Lusitana
       fonts:
         - asset: assets/fonts/Lusitana/Lusitana-Bold.ttf
