@@ -22,7 +22,7 @@ class LawTextRetriever {
     lawTextString = document.body.text.replaceAll("\n", " ");
   }
 
-  void _parseAllArticlesExceptLast() {
+  _parseAllArticlesExceptLast() {
     RegExp regExpForEachArticleExceptLast =
         RegExp(r"(Art(.|ículo)? (\d*).? -)(.+?)(?=  Art. )");
     Iterable<RegExpMatch> articleMatches =
@@ -47,9 +47,9 @@ class LawTextRetriever {
 
     String lastArticleNumber = lastArticleMatch.group(3);
 
-    String dityLastArticleText = lastArticleMatch.group(4);
+    String dirtyLastArticleText = lastArticleMatch.group(4);
     String lastArticleText =
-        RegExp(r"(.*\.)(\s\s+.*$)").firstMatch(dityLastArticleText).group(1);
+        RegExp(r"(.*\.)(\s\s+.*$)").firstMatch(dirtyLastArticleText).group(1);
 
     lawContents[lastArticleNumber] = lastArticleText;
   }
