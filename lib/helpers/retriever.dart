@@ -1,6 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' show parse;
 import 'package:html/dom.dart';
+import 'package:infobootleg/screens/law_summary_screen.dart';
 
 class Retriever {
   static String lawTextString;
@@ -13,30 +14,30 @@ class Retriever {
     return lawContents;
   }
 
+  /// Returns an object consisting of (key) row number and (value) object containing three entries for the three cells in the modifications table from Infoleg.
   static Future<Map<int, Map<String, String>>> retrieveModificationRelations(
-      {String fullTextUrl, String relationType}) async {
+      {String fullTextUrl, ModificationType modificationType}) async {
     // Example law: number 17319, ID 16078 -- DELETE LATER
     // Example law: number 11723, ID 42755 -- DELETE LATER
 
-    // 1. get lawId
+    // 1. build relationsUrl
     RegExp regExpForLawId = RegExp(r'/(\d*)/(norma|texact)');
     String lawId = regExpForLawId.firstMatch(fullTextUrl).group(1);
 
-    // 2. build relationsUrl
     String relationsUrl =
         "http://servicios.infoleg.gob.ar/infolegInternet/verVinculos.do?modo=";
-    if (relationType == "modifies") {
+    if (modificationType == ModificationType.modifies) {
       relationsUrl += "1&id=$lawId";
-    } else if (relationType == "isModifiedBy") {
+    } else if (modificationType == ModificationType.isModifiedBy) {
       relationsUrl += "2&id=$lawId";
     }
 
-    // 3. get table rows
+    // 2. get table rows
     http.Response response = await http.get(relationsUrl);
     Document document = parse(response.body);
     List<Element> tableRows = document.body.getElementsByTagName("tr");
 
-    // 4. filter out rows with useless cells (indices 0, 2, 4, etc.)
+    // 3. filter out rows containing useless cells (indices 0, 2, 4, etc.)
     Map<int, Element> cleanTableRowsObject = {};
     tableRows.asMap().entries.forEach((entry) {
       if (entry.key != 0 && entry.key % 2 != 0) {
@@ -44,14 +45,16 @@ class Retriever {
       }
     });
 
-    // 5. for each row, place cell text into object
-    // and then add each row object into an allRows object
+    // build object consisting of row number (key) and
+    // object containing three cells (value)
     List<Element> cleanTableRows = cleanTableRowsObject.values.toList();
+
     Map<int, Map<String, String>> allRows = {};
 
     // iterate over each row, with index for identification
     cleanTableRows.asMap().entries.forEach((entry) {
       int idx = entry.key;
+
       List<Element> threeCells = entry.value.getElementsByTagName("td");
 
       Map<String, String> singleRow = {};
@@ -65,6 +68,10 @@ class Retriever {
           cell.text = _addDividerInCellContents(cell, firstSegmentTag: "a");
         }
 
+        if (i == 1) {
+          cell.text = cell.text.trim();
+        }
+
         // at third cell of row, divide topic and description
         if (i == 2) {
           cell.text = _addDividerInCellContents(cell, firstSegmentTag: "b");
@@ -72,11 +79,11 @@ class Retriever {
 
         // populate each cell in row, use index for labels
         if (i == 0) {
-          singleRow["provisionAndOriginatingBody"] = cell.text;
+          singleRow["firstCell"] = cell.text; // provision and originatingBody
         } else if (i == 1) {
-          singleRow["publicationDate"] = cell.text;
+          singleRow["secondCell"] = cell.text; // publication date
         } else if (i == 2) {
-          singleRow["topicAndDescription"] = cell.text;
+          singleRow["thirdCell"] = cell.text; // topic and description
         }
       }
 

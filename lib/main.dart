@@ -21,35 +21,3 @@ class Infobootleg extends StatelessWidget {
     );
   }
 }
-// original:
-// class Infobootleg extends StatelessWidget {
-//   final PageController _myPageController = PageController();
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MultiProvider(
-//       providers: [
-//         ListenableProvider<PageController>(
-//             builder: (context) => _myPageController),
-//         ChangeNotifierProvider<StateModel>(
-//           builder: (context) => StateModel(),
-//         )
-//       ],
-//       child: MaterialApp(
-//         title: 'Infobootleg',
-//         theme: themeData,
-//         home: PageView(
-//           controller: _myPageController,
-//           scrollDirection: Axis.vertical,
-//           children: <Widget>[
-//             SearchScreen(),
-//             Consumer<StateModel>(
-//               builder: (context, stateModel, child) =>
-//                   ResultScreen(stateModel.currentLaw),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }

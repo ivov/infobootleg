@@ -33,39 +33,34 @@ class LawTextScreen extends StatelessWidget {
       width: MediaQuery.of(context).size.width * 0.92,
       child: Column(
         children: searchState.lawContents.keys
-            .map((articleNumber) => _buildSingleArticle(articleNumber, context))
+            .map((articleNumber) => _buildSingleArticle(articleNumber))
             .toList(),
       ),
     );
   }
 
-  Column _buildSingleArticle(String articleNumber, BuildContext context) {
+  Column _buildSingleArticle(String articleNumber) {
     return Column(
       children: [
-        GestureDetector(
-          onLongPress: () =>
-              print("hello!"), // TODO: Change color of card on long press.
-
-          child: Card(
-            elevation: 5.0,
-            child: Row(
-              children: [
-                Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
-                    child: Text("Art.\n" + articleNumber,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 20.0, fontWeight: FontWeight.bold))),
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.all(12.0),
-                    child: Text(searchState.lawContents[articleNumber],
-                        style: TextStyle(fontSize: 18.0)),
-                  ),
+        Card(
+          elevation: 5.0,
+          child: Row(
+            children: [
+              Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                  child: Text("Art.\n" + articleNumber,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 20.0, fontWeight: FontWeight.bold))),
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.all(12.0),
+                  child: Text(searchState.lawContents[articleNumber],
+                      style: TextStyle(fontSize: 18.0)),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
         SizedBox(height: 15.0)

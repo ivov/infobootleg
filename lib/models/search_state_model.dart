@@ -31,12 +31,6 @@ class SearchStateModel extends ChangeNotifier {
 
   void updateActiveLaw(Law newLaw) async {
     _activeLaw = newLaw;
-    // TODO: Move this call and its resulting object to appropriate button.
-    Map<int, Map<String, String>> allRows =
-        await Retriever.retrieveModificationRelations(
-      fullTextUrl: activeLaw.link,
-      relationType: "isModifiedBy",
-    );
     notifyListeners();
   }
 

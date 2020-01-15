@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 
 import 'package:infobootleg/shared_widgets/platform_widget.dart';
 
+// TODO: Rework this entire section (parents included)
+
 class PlatformAlertDialog extends PlatformWidget {
   PlatformAlertDialog({
     @required this.title,
