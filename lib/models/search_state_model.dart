@@ -29,10 +29,14 @@ class SearchStateModel extends ChangeNotifier {
     );
   }
 
-  void updateActiveLaw(Law newLaw) {
+  void updateActiveLaw(Law newLaw) async {
     _activeLaw = newLaw;
-    // temporary - DELETE later
-    Retriever.retrieveModificationRelations(url: activeLaw.link);
+    // TODO: Move this call and its resulting object to appropriate button.
+    Map<int, Map<String, String>> allRows =
+        await Retriever.retrieveModificationRelations(
+      fullTextUrl: activeLaw.link,
+      relationType: "isModifiedBy",
+    );
     notifyListeners();
   }
 

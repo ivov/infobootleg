@@ -13,34 +13,39 @@ class Retriever {
     return lawContents;
   }
 
-  static retrieveModificationRelations({String url}) async {
+  static Future<Map<int, Map<String, String>>> retrieveModificationRelations(
+      {String fullTextUrl, String relationType}) async {
     // Example law: number 17319, ID 16078 -- DELETE LATER
     // Example law: number 11723, ID 42755 -- DELETE LATER
 
-    // get lawId
+    // 1. get lawId
     RegExp regExpForLawId = RegExp(r'/(\d*)/(norma|texact)');
-    String lawId = regExpForLawId.firstMatch(url).group(1);
+    String lawId = regExpForLawId.firstMatch(fullTextUrl).group(1);
 
-    // get <tr> elements
-    // String modifiesUrl =
-    //     "http://servicios.infoleg.gob.ar/infolegInternet/verVinculos.do?modo=1&id=$lawId";
-    String isModifiedByUrl =
-        "http://servicios.infoleg.gob.ar/infolegInternet/verVinculos.do?modo=2&id=$lawId";
-    print(isModifiedByUrl);
-    http.Response response = await http.get(isModifiedByUrl);
+    // 2. build relationsUrl
+    String relationsUrl =
+        "http://servicios.infoleg.gob.ar/infolegInternet/verVinculos.do?modo=";
+    if (relationType == "modifies") {
+      relationsUrl += "1&id=$lawId";
+    } else if (relationType == "isModifiedBy") {
+      relationsUrl += "2&id=$lawId";
+    }
+
+    // 3. get table rows
+    http.Response response = await http.get(relationsUrl);
     Document document = parse(response.body);
     List<Element> tableRows = document.body.getElementsByTagName("tr");
 
-    // clean <tr> elements
+    // 4. filter out rows with useless cells (indices 0, 2, 4, etc.)
     Map<int, Element> cleanTableRowsObject = {};
     tableRows.asMap().entries.forEach((entry) {
       if (entry.key != 0 && entry.key % 2 != 0) {
-        // filter out useless <td>, having indices: 0, 2, 4, etc.
         cleanTableRowsObject[entry.key] = entry.value;
       }
     });
 
-    // for each <tr> element, get text of <td> elements (three <td> per <tr>)
+    // 5. for each row, place cell text into object
+    // and then add each row object into an allRows object
     List<Element> cleanTableRows = cleanTableRowsObject.values.toList();
     Map<int, Map<String, String>> allRows = {};
 
@@ -54,19 +59,24 @@ class Retriever {
       // iterate over each cell in row
       for (int i = 0; i < threeCells.length; i++) {
         Element cell = threeCells[i];
-        String cleanCellText = cell.text
-            .replaceAll("\t", "")
-            .replaceAll("\n", " ")
-            .replaceAll(RegExp(r"\s\s+"), " ")
-            .trim();
 
-        // populate each cells in row
+        // at first cell of row, divide provision and originating body
         if (i == 0) {
-          singleRow["norm"] = cleanCellText;
+          cell.text = _addDividerInCellContents(cell, firstSegmentTag: "a");
+        }
+
+        // at third cell of row, divide topic and description
+        if (i == 2) {
+          cell.text = _addDividerInCellContents(cell, firstSegmentTag: "b");
+        }
+
+        // populate each cell in row, use index for labels
+        if (i == 0) {
+          singleRow["provisionAndOriginatingBody"] = cell.text;
         } else if (i == 1) {
-          singleRow["publicationDate"] = cleanCellText;
+          singleRow["publicationDate"] = cell.text;
         } else if (i == 2) {
-          singleRow["description"] = cleanCellText;
+          singleRow["topicAndDescription"] = cell.text;
         }
       }
 
@@ -74,7 +84,33 @@ class Retriever {
       allRows[idx] = singleRow;
     });
 
-    print(allRows);
+    return allRows;
+  }
+
+  static String _addDividerInCellContents(Element cell,
+      {String firstSegmentTag}) {
+    // first segment
+    String firstSegment = cell
+        .getElementsByTagName(firstSegmentTag)[0]
+        .text
+        .replaceAll(RegExp(r"\s\s+"), " ")
+        .trim();
+
+    // second segment
+    String cellInnerHtml = cell.innerHtml.toString();
+    RegExp regexpForSecondSegment;
+    if (firstSegmentTag == "a") {
+      regexpForSecondSegment = RegExp(r"</a>([\S\s]*?)<br/?>");
+    } else if (firstSegmentTag == "b") {
+      regexpForSecondSegment = RegExp(r"<br/?>([\S\s]*)");
+    }
+    String secondSegment = regexpForSecondSegment
+        .firstMatch(cellInnerHtml)
+        .group(1)
+        .replaceAll(RegExp(r"\s\s+"), " ")
+        .trim();
+
+    return firstSegment + "__DIVIDER__" + secondSegment;
   }
 
   static Future<void> _getLawTextString(String url) async {
