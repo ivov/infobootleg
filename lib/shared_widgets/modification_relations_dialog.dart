@@ -23,6 +23,7 @@ class ModificationRelationsDialog extends Dialog {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           _buildDialogHeader(context),
           _buildDialogTable(),
@@ -66,12 +67,46 @@ class ModificationRelationsDialog extends Dialog {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Table(
+        border: TableBorder(
+          horizontalInside: BorderSide(
+            width: 1.2,
+            color: Theme.of(context).primaryColor,
+          ),
+        ),
         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-        children: allRows.keys
-            .map((rowNumber) => _buildSingleTableRow(allRows[rowNumber]))
-            .toList(),
+        children: _buildAllRows(),
       ),
     );
+  }
+
+  TableRow _buildHeaderRow() {
+    return TableRow(
+      children: [
+        _buildHeaderCell("Norma"),
+        _buildHeaderCell("Publicación"),
+        _buildHeaderCell("Descripción")
+      ],
+    );
+  }
+
+  TableCell _buildHeaderCell(String headerText) {
+    return TableCell(
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 8.0),
+        child: Text(
+          headerText,
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
+
+  List<TableRow> _buildAllRows() {
+    List<TableRow> allBuiltRows = allRows.keys
+        .map((rowNumber) => _buildSingleTableRow(allRows[rowNumber]))
+        .toList();
+    allBuiltRows.insert(0, _buildHeaderRow());
+    return allBuiltRows;
   }
 
   TableRow _buildSingleTableRow(Map<String, String> singleRow) {
@@ -117,20 +152,29 @@ class ModificationRelationsDialog extends Dialog {
 
   _buildCompoundCell(String cell) {
     List<String> cellParts = cell.split("__DIVIDER__");
-    return Column(
-      children: [
-        Text(
-          cellParts[0],
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 10.0),
+      child: Column(
+        children: [
+          Text(
+            cellParts[0],
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 14.0,
+              height: 1,
+            ),
           ),
-        ),
-        Text(
-          cellParts[1],
-          textAlign: TextAlign.center,
-        )
-      ],
+          SizedBox(height: 5.0),
+          Text(
+            cellParts[1],
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 14.0,
+            ),
+          )
+        ],
+      ),
     );
   }
 
