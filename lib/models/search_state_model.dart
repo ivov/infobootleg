@@ -31,6 +31,8 @@ class SearchStateModel extends ChangeNotifier {
 
   void updateActiveLaw(Law newLaw) {
     _activeLaw = newLaw;
+    // temporary - DELETE later
+    Retriever.retrieveModificationRelations(url: activeLaw.link);
     notifyListeners();
   }
 
@@ -38,6 +40,7 @@ class SearchStateModel extends ChangeNotifier {
     Map<String, String> retrievedlawContents =
         await Retriever.retrieveLawText(url: activeLaw.link);
     _lawContents = retrievedlawContents;
+
     notifyListeners();
   }
 

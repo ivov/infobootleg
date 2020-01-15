@@ -42,6 +42,7 @@ class SignInScreen extends StatelessWidget {
       child: Scaffold(
         body: Column(
           children: <Widget>[
+            // TODO: show CircularProgressIndicator if loading
             Header(context: context, subtitleText: "Elegir método de ingreso"),
             _buildButtons(context),
           ],

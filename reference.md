@@ -19,8 +19,15 @@ SHA-1: BD:1C:78:B0:8D:63:E0:25:C9:83:CB:A8:AA:82:49:82:59:F2:1D:D7
 
 ---
 
-TASKS:
+Ley 17319
 
-- Parse HTML and populate ResultScreen
-- Upload Laws with modification data (modifies, modifiedBy)
-- Autocomplete with law topic "traductores", etc.
+http://servicios.infoleg.gob.ar/infolegInternet/anexos/15000-19999/16078/norma.htm
+http://servicios.infoleg.gob.ar/infolegInternet/anexos/15000-19999/16078/texact.htm
+
+LAW_ID = 16078
+
+Normas modificadas o complementadas por (modo=1&id=LAW_ID)
+http://servicios.infoleg.gob.ar/infolegInternet/verVinculos.do?modo=1&id=16078
+
+Normas que modifican y/o complementan a
+http://servicios.infoleg.gob.ar/infolegInternet/verVinculos.do?modo=2&id=16078

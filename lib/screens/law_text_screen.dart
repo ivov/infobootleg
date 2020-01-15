@@ -42,34 +42,30 @@ class LawTextScreen extends StatelessWidget {
   Column _buildSingleArticle(String articleNumber, BuildContext context) {
     return Column(
       children: [
-        Card(
-          elevation: 5.0,
-          child: Row(
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: 12.0,
-                ),
-                child: Text(
-                  "Art.\n" + articleNumber,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
+        GestureDetector(
+          onLongPress: () =>
+              print("hello!"), // TODO: Change color of card on long press.
+
+          child: Card(
+            elevation: 5.0,
+            child: Row(
+              children: [
+                Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                    child: Text("Art.\n" + articleNumber,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            fontSize: 20.0, fontWeight: FontWeight.bold))),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.all(12.0),
+                    child: Text(searchState.lawContents[articleNumber],
+                        style: TextStyle(fontSize: 18.0)),
                   ),
                 ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.all(12.0),
-                  child: Text(
-                    searchState.lawContents[articleNumber],
-                    style: TextStyle(fontSize: 18.0),
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
         SizedBox(height: 15.0)
