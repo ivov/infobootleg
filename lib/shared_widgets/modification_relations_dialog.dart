@@ -22,11 +22,23 @@ class ModificationRelationsDialog extends Dialog {
         borderRadius: BorderRadius.circular(30.0),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
+        children: [
           _buildDialogHeader(context),
-          _buildDialogTable(),
+          Container(
+            height: 450,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  // ,
+                  _buildDialogTable(),
+                  // _buildCloseDialogButton(context),
+                ],
+              ),
+            ),
+          ),
           _buildCloseDialogButton(context),
         ],
       ),
