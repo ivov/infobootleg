@@ -1,17 +1,33 @@
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' show parse;
 import 'package:html/dom.dart';
 import 'package:infobootleg/screens/law_summary_screen.dart';
 
+/// Every law has a different format, so these are various templates for parsing laws.
+/// Each template has two regexes: for most articles (initial) and for final article (final).
+/// In both regexes, match group 3 is article number and match group 4 is article text.
+Map<String, Map<String, RegExp>> lawRegexes = {
+  "law20305": {
+    "initial": RegExp(r"(Art(\.|ículo)?\s(\d*)º?.?\s-\s)(.+?)(?=\s+Art.\s)"),
+    "final":
+        RegExp(r"(?!.* Art)(Art(\.|ículo)?\s(\d*)º?.?\s-\s)(.*\.)(?=\s{3})")
+  },
+  "law11723": {
+    "initial": RegExp(r"(Art(\.|ículo)?\s(\d*)°?.?\s\s)(.+?)(?=Art.\s)"),
+    "final": RegExp(r"(?!.*\s{2}Art)(Art(.|ículo)?\s(\d*).?\s)(.*?\.)")
+  },
+};
+
 class Retriever {
   static String lawTextString;
   static Map<String, String> lawContents = {};
+  static String lawPattern;
 
   static Future<Map<String, String>> retrieveLawText({String url}) async {
     await _getLawTextString(url);
-    _parseAllArticlesExceptLast();
-    // _parseLastArticle();
+    _selectLawPattern();
+    _parseMostArticles();
+    _parseFinalArticle();
     return lawContents;
   }
 
@@ -21,49 +37,37 @@ class Retriever {
     lawTextString = document.body.text.replaceAll("\n", " ");
   }
 
-  static _selectRelevantRegex() {
-    RegExp regexpFor20305 =
-        RegExp(r"(Art(\.|ículo)?\s(\d*)º?.?\s-\s)(.+?)(?=\s+Art.\s)");
-    RegExp regexpFor11723 =
-        RegExp(r"(Art(\.|ículo)?\s(\d*)°?.?\s\s)(.+?)(?=Art.\s)");
-
-    if (lawTextString.contains(regexpFor20305)) {
-      return regexpFor20305;
-    } else if (lawTextString.contains(regexpFor11723)) {
-      return regexpFor11723;
+  static void _selectLawPattern() {
+    if (lawTextString.contains(lawRegexes["law20305"]["initial"])) {
+      lawPattern = "law20305";
+    } else if (lawTextString.contains(lawRegexes["law11723"]["initial"])) {
+      lawPattern = "law11723";
     }
   }
 
-  static _parseAllArticlesExceptLast() {
-    RegExp relevantRegex = _selectRelevantRegex();
+  static _parseMostArticles() {
+    // i.e., parse all articles EXCEPT final article, using initial regex
+    RegExp initialRegex = lawRegexes[lawPattern]["initial"];
 
     Iterable<RegExpMatch> articleMatches =
-        relevantRegex.allMatches(lawTextString);
+        initialRegex.allMatches(lawTextString);
 
     articleMatches.forEach((articleMatch) {
       String articleNumber = articleMatch.group(3);
-      String articleText = articleMatch.group(4).trim();
+      String articleText = articleMatch.group(4);
+
       lawContents[articleNumber] = articleText;
     });
   }
 
-  static void _parseLastArticle() {
-    RegExp regExpForLastArticleAndTrailingExtras = RegExp(r"(?!.* Art)(.*)$");
-    String lastArticleAndTrailingExtras = regExpForLastArticleAndTrailingExtras
-        .firstMatch(lawTextString)
-        .group(0);
+  static void _parseFinalArticle() {
+    RegExp finalRegex = lawRegexes[lawPattern]["final"];
+    RegExpMatch finalArticleMatch = finalRegex.firstMatch(lawTextString);
 
-    RegExp regExpForLastArticle = RegExp(r"(Art(.|ículo)?\s(\d*).?\s-)(.*)");
-    RegExpMatch lastArticleMatch =
-        regExpForLastArticle.firstMatch(lastArticleAndTrailingExtras);
+    String finalArticleNumber = finalArticleMatch.group(3);
+    String finalArticleText = finalArticleMatch.group(4);
 
-    String lastArticleNumber = lastArticleMatch.group(3);
-
-    String dirtyLastArticleText = lastArticleMatch.group(4);
-    String lastArticleText =
-        RegExp(r"(.*\.)(\s\s+.*$)").firstMatch(dirtyLastArticleText).group(1);
-
-    lawContents[lastArticleNumber] = lastArticleText;
+    lawContents[finalArticleNumber] = finalArticleText;
   }
 
   /// Accepts the URL for the full text of a law and the selected type of modification (modifies or is modified by), retrieves the selected modification relations table of the law at InfoLeg, and returns an object consisting of rows containing object containing the cells of the row.
@@ -78,7 +82,7 @@ class Retriever {
   ///   2: { ... }
   /// }
   /// ```
-  /// The dunder "\_\_DIVIDER__" string is inserted to allow for proper division of the cell into two lines.
+  /// The "\_\_DIVIDER__" string is inserted to allow for proper division of the cell into two lines later on.
   static Future<Map<int, Map<String, String>>> retrieveModificationRelations(
       {String fullTextUrl, ModificationType modificationType}) async {
     // Example law: number 17319, ID 16078 -- DELETE LATER
