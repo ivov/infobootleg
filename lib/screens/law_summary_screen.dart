@@ -37,7 +37,6 @@ class LawSummaryScreen extends StatelessWidget {
           SizedBox(height: 20.0),
           _buildIsModifiedByRow(context),
           SizedBox(height: 20.0),
-          // TODO: subdialog showing modifies/isModifiedBy relations
         ],
       ),
     );

@@ -17,6 +17,13 @@ class ModificationRelationsDialog extends Dialog {
 
   @override
   Widget build(BuildContext context) {
+    double scrollContainerHeight = 450.0;
+    if (allRows.length < 4) {
+      scrollContainerHeight = 190.0;
+    }
+    // TODO: if low number of rows, return another widget
+    // that is NOT scrollable and fits tightly to 1-3 rows
+
     return Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(30.0),
@@ -26,7 +33,7 @@ class ModificationRelationsDialog extends Dialog {
         children: [
           _buildDialogHeader(context),
           Container(
-            height: 450,
+            height: scrollContainerHeight,
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
