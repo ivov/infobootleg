@@ -1,10 +1,10 @@
 import 'package:meta/meta.dart';
 import 'package:flutter/services.dart';
 
-import 'package:infobootleg/shared_widgets/platform_alert_dialog.dart';
+import 'package:infobootleg/shared_widgets/alert_box.dart';
 
-class PlatformExceptionAlertDialog extends PlatformAlertDialog {
-  PlatformExceptionAlertDialog({
+class SignInAlertBox extends AlertBox {
+  SignInAlertBox({
     @required this.title,
     @required this.exception,
   }) : super(

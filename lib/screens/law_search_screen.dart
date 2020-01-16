@@ -6,7 +6,7 @@ import 'package:infobootleg/helpers/hex_color.dart';
 import 'package:infobootleg/helpers/left_pad.dart';
 import 'package:infobootleg/services/authService.dart';
 import 'package:infobootleg/services/databaseService.dart';
-import 'package:infobootleg/shared_widgets/platform_alert_dialog.dart';
+import 'package:infobootleg/shared_widgets/alert_box.dart';
 
 class LawSearchScreen extends StatelessWidget {
   LawSearchScreen(this.searchState);
@@ -19,10 +19,13 @@ class LawSearchScreen extends StatelessWidget {
   }
 
   Future<void> _confirmSignOut(BuildContext context) async {
-    final signOutConfirmed = await PlatformAlertDialog(
+    final bool signOutConfirmed = await AlertBox(
       title: "Salir",
       content: "¿Cerrar sesión?",
+      confirmActionText: "Confirmar",
+      cancelActionText: "Cancelar",
     ).show(context);
+
     if (signOutConfirmed) {
       _signOut(context);
     }

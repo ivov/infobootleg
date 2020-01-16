@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:infobootleg/helpers/hex_color.dart';
 import 'package:infobootleg/helpers/validators.dart';
 import 'package:infobootleg/services/authService.dart';
-import 'package:infobootleg/shared_widgets/platform_exception_alert_dialog.dart';
+import 'package:infobootleg/shared_widgets/sign_in_alert_box.dart';
 
 enum EmailSignInFormType { signIn, register }
 
@@ -70,7 +70,7 @@ class _SignInWithEmailFormState extends State<SignInWithEmailForm> {
       }
       Navigator.of(context).pop();
     } on PlatformException catch (error) {
-      PlatformExceptionAlertDialog(
+      SignInAlertBox(
         title: "Error en ingreso",
         exception: error,
       ).show(context);

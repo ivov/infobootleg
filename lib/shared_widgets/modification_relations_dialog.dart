@@ -21,8 +21,7 @@ class ModificationRelationsDialog extends Dialog {
     if (allRows.length < 4) {
       scrollContainerHeight = 190.0;
     }
-    // TODO: if low number of rows, return another widget
-    // that is NOT scrollable and fits tightly to 1-3 rows
+    // TODO: if low number of rows, return another widget that is NOT scrollable and fits tightly to 1-3 rows
 
     return Dialog(
       shape: RoundedRectangleBorder(
@@ -39,9 +38,7 @@ class ModificationRelationsDialog extends Dialog {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  // ,
                   _buildDialogTable(),
-                  // _buildCloseDialogButton(context),
                 ],
               ),
             ),
