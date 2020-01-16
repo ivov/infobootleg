@@ -3,7 +3,7 @@ import 'package:infobootleg/screens/referral_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'helpers/theme_data.dart';
-import 'services/authService.dart';
+import 'services/auth_service.dart';
 
 void main() => runApp(Infobootleg());
 

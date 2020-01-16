@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import 'package:infobootleg/helpers/hex_color.dart';
 import 'package:infobootleg/helpers/validators.dart';
-import 'package:infobootleg/services/authService.dart';
+import 'package:infobootleg/services/auth_service.dart';
 import 'package:infobootleg/shared_widgets/sign_in_alert_box.dart';
 
 enum EmailSignInFormType { signIn, register }

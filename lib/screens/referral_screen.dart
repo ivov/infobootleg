@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 
 import 'package:infobootleg/screens/search_screen.dart';
 import 'package:infobootleg/screens/sign_in_screen.dart';
-import 'package:infobootleg/services/authService.dart';
-import 'package:infobootleg/services/databaseService.dart';
+import 'package:infobootleg/services/auth_service.dart';
+import 'package:infobootleg/services/database_service.dart';
 
 /// Refers user to HomeScreen if they have signed in, or to SecondSignInScreen if they have not signed in.
 class ReferralScreen extends StatelessWidget {

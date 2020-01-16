@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 
 import 'package:infobootleg/helpers/hex_color.dart';
 import 'package:infobootleg/helpers/left_pad.dart';
-import 'package:infobootleg/services/authService.dart';
-import 'package:infobootleg/services/databaseService.dart';
+import 'package:infobootleg/services/auth_service.dart';
+import 'package:infobootleg/services/database_service.dart';
 import 'package:infobootleg/shared_widgets/alert_box.dart';
 
 class LawSearchScreen extends StatelessWidget {
