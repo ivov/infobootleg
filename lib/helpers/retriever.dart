@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' show parse;
 import 'package:html/dom.dart';
@@ -14,7 +15,19 @@ class Retriever {
     return lawContents;
   }
 
-  /// Returns an object consisting of (key) row number and (value) object containing three entries for the three cells in the modifications table from Infoleg.
+  /// Accepts the URL for the full text of a law and the selected type of modification (modifies or is modified by), retrieves the selected modification relations table of the law at InfoLeg, and returns an object consisting of rows containing object containing the cells of the row.
+  /// Example return object:
+  /// ```
+  /// { 1:
+  ///   {
+  ///     "firstCell": "DISPOSICIÓN 1120/91__DIVIDER__PODER EJECUTIVO NACIONAL",
+  ///     "secondCell": "11-dec-1991",
+  ///     "thirdCell": "FONDO NACIONAL__DIVIDER__NORMAS REGLAMENTARIAS"
+  ///   },
+  ///   2: { ... }
+  /// }
+  /// ```
+  /// The dunder "\_\_DIVIDER__" string is inserted to allow for proper division of the cell into two lines.
   static Future<Map<int, Map<String, String>>> retrieveModificationRelations(
       {String fullTextUrl, ModificationType modificationType}) async {
     // Example law: number 17319, ID 16078 -- DELETE LATER
@@ -128,7 +141,7 @@ class Retriever {
 
   static _parseAllArticlesExceptLast() {
     RegExp regExpForEachArticleExceptLast =
-        RegExp(r"(Art(.|ículo)? (\d*).? -)(.+?)(?=  Art. )");
+        RegExp(r"(Art(.|ículo)? (\d*).? -)(.+?)(?=\s+Art.)");
     Iterable<RegExpMatch> articleMatches =
         regExpForEachArticleExceptLast.allMatches(lawTextString);
 
