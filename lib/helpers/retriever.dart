@@ -11,8 +11,59 @@ class Retriever {
   static Future<Map<String, String>> retrieveLawText({String url}) async {
     await _getLawTextString(url);
     _parseAllArticlesExceptLast();
-    _parseLastArticle();
+    // _parseLastArticle();
     return lawContents;
+  }
+
+  static Future<void> _getLawTextString(String url) async {
+    http.Response response = await http.get(url);
+    Document document = parse(response.body);
+    lawTextString = document.body.text.replaceAll("\n", " ");
+  }
+
+  static _selectRelevantRegex() {
+    RegExp regexpFor20305 =
+        RegExp(r"(Art(\.|ículo)?\s(\d*)º?.?\s-\s)(.+?)(?=\s+Art.\s)");
+    RegExp regexpFor11723 =
+        RegExp(r"(Art(\.|ículo)?\s(\d*)°?.?\s\s)(.+?)(?=Art.\s)");
+
+    if (lawTextString.contains(regexpFor20305)) {
+      return regexpFor20305;
+    } else if (lawTextString.contains(regexpFor11723)) {
+      return regexpFor11723;
+    }
+  }
+
+  static _parseAllArticlesExceptLast() {
+    RegExp relevantRegex = _selectRelevantRegex();
+
+    Iterable<RegExpMatch> articleMatches =
+        relevantRegex.allMatches(lawTextString);
+
+    articleMatches.forEach((articleMatch) {
+      String articleNumber = articleMatch.group(3);
+      String articleText = articleMatch.group(4).trim();
+      lawContents[articleNumber] = articleText;
+    });
+  }
+
+  static void _parseLastArticle() {
+    RegExp regExpForLastArticleAndTrailingExtras = RegExp(r"(?!.* Art)(.*)$");
+    String lastArticleAndTrailingExtras = regExpForLastArticleAndTrailingExtras
+        .firstMatch(lawTextString)
+        .group(0);
+
+    RegExp regExpForLastArticle = RegExp(r"(Art(.|ículo)?\s(\d*).?\s-)(.*)");
+    RegExpMatch lastArticleMatch =
+        regExpForLastArticle.firstMatch(lastArticleAndTrailingExtras);
+
+    String lastArticleNumber = lastArticleMatch.group(3);
+
+    String dirtyLastArticleText = lastArticleMatch.group(4);
+    String lastArticleText =
+        RegExp(r"(.*\.)(\s\s+.*$)").firstMatch(dirtyLastArticleText).group(1);
+
+    lawContents[lastArticleNumber] = lastArticleText;
   }
 
   /// Accepts the URL for the full text of a law and the selected type of modification (modifies or is modified by), retrieves the selected modification relations table of the law at InfoLeg, and returns an object consisting of rows containing object containing the cells of the row.
@@ -131,43 +182,5 @@ class Retriever {
         .trim();
 
     return firstSegment + "__DIVIDER__" + secondSegment;
-  }
-
-  static Future<void> _getLawTextString(String url) async {
-    http.Response response = await http.get(url);
-    Document document = parse(response.body);
-    lawTextString = document.body.text.replaceAll("\n", " ");
-  }
-
-  static _parseAllArticlesExceptLast() {
-    RegExp regExpForEachArticleExceptLast =
-        RegExp(r"(Art(.|ículo)? (\d*).? -)(.+?)(?=\s+Art.)");
-    Iterable<RegExpMatch> articleMatches =
-        regExpForEachArticleExceptLast.allMatches(lawTextString);
-
-    articleMatches.forEach((articleMatch) {
-      String articleNumber = articleMatch.group(3);
-      String articleText = articleMatch.group(4).trim();
-      lawContents[articleNumber] = articleText;
-    });
-  }
-
-  static void _parseLastArticle() {
-    RegExp regExpForLastArticleAndTrailingExtras = RegExp(r"(?!.* Art)(.*)$");
-    String lastArticleAndTrailingExtras = regExpForLastArticleAndTrailingExtras
-        .firstMatch(lawTextString)
-        .group(0);
-
-    RegExp regExpForLastArticle = RegExp(r"(Art(.|ículo)? (\d*).? -)(.*)");
-    RegExpMatch lastArticleMatch =
-        regExpForLastArticle.firstMatch(lastArticleAndTrailingExtras);
-
-    String lastArticleNumber = lastArticleMatch.group(3);
-
-    String dirtyLastArticleText = lastArticleMatch.group(4);
-    String lastArticleText =
-        RegExp(r"(.*\.)(\s\s+.*$)").firstMatch(dirtyLastArticleText).group(1);
-
-    lawContents[lastArticleNumber] = lastArticleText;
   }
 }
