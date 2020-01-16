@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
 import 'package:infobootleg/helpers/retriever.dart';
 import 'package:infobootleg/shared_widgets/law_card.dart';
 import 'package:infobootleg/shared_widgets/law_title_card.dart';
-import 'package:infobootleg/shared_widgets/modification_relations_dialog.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:infobootleg/shared_widgets/modif_relations_box.dart';
 import 'package:infobootleg/models/search_state_model.dart';
 import 'package:infobootleg/shared_widgets/law_frame.dart';
 import 'package:infobootleg/helpers/hex_color.dart';
@@ -257,7 +258,7 @@ class LawSummaryScreen extends StatelessWidget {
 
     showDialog(
       context: context,
-      builder: (_) => ModificationRelationsDialog(
+      builder: (_) => ModifRelationsBox(
         context: context,
         activeLaw: searchState.activeLaw,
         modificationType: modificationType,

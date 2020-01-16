@@ -3,8 +3,8 @@ import 'package:infobootleg/helpers/hex_color.dart';
 import 'package:infobootleg/models/law_model.dart';
 import 'package:infobootleg/screens/law_summary_screen.dart';
 
-class ModificationRelationsDialog extends Dialog {
-  ModificationRelationsDialog({
+class ModifRelationsBox extends StatelessWidget {
+  ModifRelationsBox({
     @required this.context,
     @required this.activeLaw,
     @required this.modificationType,
@@ -17,11 +17,29 @@ class ModificationRelationsDialog extends Dialog {
 
   @override
   Widget build(BuildContext context) {
-    double scrollContainerHeight = 450.0;
     if (allRows.length < 4) {
-      scrollContainerHeight = 190.0;
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildDialogHeader(context),
+            Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  _buildDialogTable(),
+                ],
+              ),
+            ),
+            _buildCloseDialogButton(context),
+          ],
+        ),
+      );
     }
-    // TODO: if low number of rows, return another widget that is NOT scrollable and fits tightly to 1-3 rows
 
     return Dialog(
       shape: RoundedRectangleBorder(
@@ -32,7 +50,7 @@ class ModificationRelationsDialog extends Dialog {
         children: [
           _buildDialogHeader(context),
           Container(
-            height: scrollContainerHeight,
+            height: 450.0,
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,

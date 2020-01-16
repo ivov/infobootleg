@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:infobootleg/helpers/retriever.dart';
 import 'package:infobootleg/models/law_model.dart';
 
+/// Consolidates all the state needed for the SearchScreen and its three children: LawSearchScreen, LawSummaryScreen and LawTextScreen.
 class SearchStateModel extends ChangeNotifier {
   final PageController _pageController = PageController();
   Law _activeLaw;

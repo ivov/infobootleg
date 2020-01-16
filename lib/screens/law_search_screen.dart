@@ -38,7 +38,11 @@ class LawSearchScreen extends StatelessWidget {
       searchState.updateActiveLaw(retrievedLaw);
       searchState.goToLawSummaryScreen();
     } catch (e) {
-      // TODO: Tell user no law found
+      AlertBox(
+        title: "Sin datos",
+        content: "La Ley $userInput no figura en la base de datos.",
+        confirmActionText: "Buscar otra ley",
+      ).show(context);
     }
   }
 
