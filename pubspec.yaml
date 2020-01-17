@@ -19,6 +19,7 @@ dependencies:
   material_design_icons_flutter:
   http:
   html:
+  flutter_widgets:
 
 dev_dependencies:
   flutter_test:

@@ -7,25 +7,8 @@ import 'package:provider/provider.dart';
 // https://api.flutter.dev/flutter/widgets/ScrollPosition-class.html
 // https://medium.com/flutter-community/scrolling-animation-in-flutter-6a6718b8e34f
 
-class TableOfContents extends StatefulWidget {
-  @override
-  _TableOfContentsState createState() => _TableOfContentsState();
-}
-
-class _TableOfContentsState extends State<TableOfContents> {
-  final ScrollController _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    // _scrollController.attach(??); // ScrollPosition
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
+class TableOfContents extends StatelessWidget {
+  // _scrollController.attach(??); // ScrollPosition
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +16,6 @@ class _TableOfContentsState extends State<TableOfContents> {
 
     return Drawer(
       child: ListView(
-        controller: _scrollController,
         padding: EdgeInsets.zero,
         children: _buildDrawerSections(searchState, context),
       ),
@@ -79,17 +61,17 @@ class _TableOfContentsState extends State<TableOfContents> {
                 EdgeInsets.symmetric(vertical: 6.0, horizontal: 15.0),
             title: Text(
               "Artículo $articleNumber",
-              style: TextStyle(fontSize: 16.0),
+              style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
             ),
             subtitle: Text(
               searchState.lawContents[articleNumber],
               overflow: TextOverflow.ellipsis,
               maxLines: 2,
+              style: TextStyle(fontSize: 16.0),
             ),
             onTap: () {
-              print(articleNumber + " pressed!");
-              print(_scrollController.positions);
-              // TODO: Scroll to article position
+              Navigator.of(context).pop();
+              searchState.goToArticle(); // TODO: Scroll to article position
             },
           ),
         )

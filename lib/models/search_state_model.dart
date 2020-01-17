@@ -5,14 +5,24 @@ import 'package:infobootleg/models/law_model.dart';
 /// Consolidates all the state needed for the SearchScreen and its three children: LawSearchScreen, LawSummaryScreen and LawTextScreen.
 class SearchStateModel extends ChangeNotifier {
   final PageController _pageController = PageController();
+  final ScrollController _scrollController = ScrollController();
   Law _activeLaw;
   Map<String, String> _lawContents = {};
   bool _isLoading = false;
 
   PageController get pageController => _pageController;
+  ScrollController get scrollController => _scrollController;
   Law get activeLaw => _activeLaw;
   Map<String, String> get lawContents => _lawContents;
   bool get isLoading => _isLoading;
+
+  void goToArticle() {
+    _scrollController.animateTo(
+      800,
+      duration: Duration(milliseconds: 800),
+      curve: Curves.easeInOutQuint,
+    );
+  }
 
   void goToLawSummaryScreen() {
     _pageController.animateToPage(
