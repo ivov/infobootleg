@@ -3,7 +3,7 @@ import 'package:html/parser.dart' show parse;
 import 'package:html/dom.dart';
 import 'package:infobootleg/screens/law_summary_screen.dart';
 
-/// Every law has a different format, so these are various templates for parsing laws.
+/// Various laws have different formatting, so these are various templates for parsing laws.
 /// Each template has two regexes: for most articles (initial) and for final article (final).
 /// In both regexes, match group 3 is article number and match group 4 is article text.
 Map<String, Map<String, RegExp>> lawRegexes = {
@@ -70,7 +70,7 @@ class Retriever {
     lawContents[finalArticleNumber] = finalArticleText;
   }
 
-  /// Accepts the URL for the full text of a law and the selected type of modification (modifies or is modified by), retrieves the selected modification relations table of the law at InfoLeg, and returns an object consisting of rows containing object containing the cells of the row.
+  /// Accepts the URL for the full text of a law and the selected type of modification (modifies or is modified by), retrieves the selected modification relations table of the law at InfoLeg, and returns an object consisting of rows containing an object containing the cells of the row.
   /// Example return object:
   /// ```
   /// { 1:

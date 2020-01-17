@@ -12,6 +12,7 @@ class LawTextScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LawFrame(
+      withDrawer: true,
       frameContent: Container(
         width: double.infinity,
         child: Column(

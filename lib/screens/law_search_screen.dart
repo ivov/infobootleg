@@ -78,7 +78,7 @@ class LawSearchScreen extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // TODO: Search by title
+            // TODO: Search by title using Bing
             Text("Buscar ley por número o título",
                 style: Theme.of(context).textTheme.subtitle),
             SizedBox(height: 20),
