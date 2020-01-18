@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:infobootleg/models/search_state_model.dart';
 import 'package:provider/provider.dart';
 
-// https://api.flutter.dev/flutter/widgets/ScrollController-class.html
-// https://api.flutter.dev/flutter/widgets/ScrollPosition-class.html
-// https://medium.com/flutter-community/scrolling-animation-in-flutter-6a6718b8e34f
-
 class TableOfContents extends StatelessWidget {
-  // _scrollController.attach(??); // ScrollPosition
+  TableOfContents({this.onArticleSelected});
+
+  final void Function(int) onArticleSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +69,9 @@ class TableOfContents extends StatelessWidget {
             ),
             onTap: () {
               Navigator.of(context).pop();
-              searchState.goToArticle(); // TODO: Scroll to article position
+              onArticleSelected(
+                int.parse(articleNumber),
+              );
             },
           ),
         )
@@ -80,20 +80,3 @@ class TableOfContents extends StatelessWidget {
     return [drawerHeader, ...drawerButtons];
   }
 }
-
-RichText x = RichText(
-  overflow: TextOverflow.ellipsis,
-  text: TextSpan(
-    children: [
-      TextSpan(
-        text: "Artículo: 2",
-        style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-      ),
-      TextSpan(
-        text:
-            "lsajn(sadkjfn(alskjdfnlkasjdfnlkasjdlkasjdfnladskjfnlaskjfnlaskdjfn",
-        style: TextStyle(fontSize: 16.0),
-      )
-    ],
-  ),
-);

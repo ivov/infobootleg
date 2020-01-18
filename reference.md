@@ -33,3 +33,7 @@ Normas que modifican y/o complementan a
 http://servicios.infoleg.gob.ar/infolegInternet/verVinculos.do?modo=2&id=16078
 
 https://stackoverflow.com/questions/49153087/flutter-scrolling-to-a-widget-in-listview
+
+// https://api.flutter.dev/flutter/widgets/ScrollController-class.html
+// https://api.flutter.dev/flutter/widgets/ScrollPosition-class.html
+// https://medium.com/flutter-community/scrolling-animation-in-flutter-6a6718b8e34f

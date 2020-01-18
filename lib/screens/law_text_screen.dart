@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_widgets/flutter_widgets.dart';
 
 import 'package:infobootleg/models/search_state_model.dart';
+import 'package:infobootleg/shared_widgets/article_card.dart';
 import 'package:infobootleg/shared_widgets/law_title_card.dart';
 import 'package:infobootleg/shared_widgets/table_of_contents.dart';
 
@@ -9,17 +10,23 @@ class LawTextScreen extends StatelessWidget {
   LawTextScreen(this.searchState);
 
   final SearchStateModel searchState;
+  final ItemScrollController _scrollController = ItemScrollController();
+
+  void scrollToArticle(int articlePosition) {
+    _scrollController.scrollTo(
+      index: articlePosition,
+      duration: Duration(milliseconds: 500),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        drawer: TableOfContents(),
+        drawer: TableOfContents(onArticleSelected: scrollToArticle),
         appBar: _buildAppBar(),
-        body: Container(
-          color: Theme.of(context).canvasColor,
-          child: buildContent(context),
-        ),
+        backgroundColor: Theme.of(context).canvasColor,
+        body: _buildScrollablePositionedList(context),
       ),
     );
   }
@@ -37,21 +44,7 @@ class LawTextScreen extends StatelessWidget {
     );
   }
 
-  Widget buildContent(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      child: Column(
-        children: <Widget>[
-          Expanded(child: _buildScrollablePositionedList(context)),
-        ],
-      ),
-    );
-  }
-
-  ScrollablePositionedList _buildScrollablePositionedList(
-      BuildContext context) {
-    ItemScrollController _scrollController = ItemScrollController();
-
+  _buildScrollablePositionedList(BuildContext context) {
     return ScrollablePositionedList.builder(
       itemScrollController: _scrollController,
       itemCount: searchState.lawContents.length,
@@ -63,56 +56,17 @@ class LawTextScreen extends StatelessWidget {
     );
   }
 
-  Column _buildListItem({String articleNumber}) {
+  Widget _buildListItem({String articleNumber}) {
     if (articleNumber == "0") {
-      return _buildHeader();
-    } else {
-      return Column(
-        children: [_buildArticleCard(articleNumber), SizedBox(height: 15.0)],
+      return Padding(
+        padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 30.0),
+        child: LawTitleCard(searchState),
       );
+      // return _buildHeader();
     }
-  }
-
-  Column _buildHeader() {
-    return Column(
-      children: [
-        SizedBox(height: 15.0),
-        LawTitleCard(searchState),
-        SizedBox(height: 15.0)
-      ],
-    );
-  }
-
-  Card _buildArticleCard(articleNumber) {
-    return Card(
-      elevation: 5.0,
-      child: Row(
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 12.0,
-            ),
-            child: Text(
-              "Art.\n" + articleNumber,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.all(12.0),
-              child: Text(
-                searchState.lawContents[articleNumber],
-                style: TextStyle(fontSize: 18.0),
-              ),
-            ),
-          ),
-        ],
-      ),
+    return Padding(
+      padding: EdgeInsets.only(bottom: 15.0, left: 10.0, right: 10.0),
+      child: ArticleCard(searchState.lawContents, articleNumber),
     );
   }
 }
