@@ -4,6 +4,7 @@ import 'package:infobootleg/helpers/hex_color.dart';
 final themeData = ThemeData(
   primaryColor: hexColor("2c7873"),
   scaffoldBackgroundColor: hexColor("2c7873"),
+  canvasColor: hexColor("f5eaea"),
   fontFamily: "Lusitana",
   textTheme: TextTheme(
     title: TextStyle(fontSize: 45.0, fontWeight: FontWeight.bold),
