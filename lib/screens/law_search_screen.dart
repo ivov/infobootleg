@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:infobootleg/models/search_state_model.dart';
 import 'package:provider/provider.dart';
 
+import 'package:infobootleg/models/search_state_model.dart';
 import 'package:infobootleg/helpers/hex_color.dart';
 import 'package:infobootleg/helpers/left_pad.dart';
 import 'package:infobootleg/services/auth_service.dart';
@@ -13,9 +13,44 @@ class LawSearchScreen extends StatelessWidget {
   final SearchStateModel searchState;
   final TextEditingController _myTextController = TextEditingController();
 
-  Future<void> _signOut(BuildContext context) async {
-    final authService = Provider.of<AuthService>(context);
-    await authService.signOut();
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Infobootleg",
+          style: TextStyle(
+            fontSize: 24.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        actions: <Widget>[
+          _buildExitButton(context),
+        ],
+      ),
+      backgroundColor: Theme.of(context).canvasColor,
+      body: Center(
+        child: _buildSearchCard(context),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () =>
+            searchState.transitionToScreenHorizontally(Screen.favorites),
+      ),
+    );
+  }
+
+  FlatButton _buildExitButton(BuildContext context) {
+    return FlatButton.icon(
+      icon: Icon(Icons.exit_to_app),
+      textColor: Colors.white,
+      color: hexColor("5b5656"),
+      label: Text("Salir",
+          style: TextStyle(
+            fontSize: 18.0,
+            color: Colors.white,
+          )),
+      onPressed: () => _confirmSignOut(context),
+    );
   }
 
   Future<void> _confirmSignOut(BuildContext context) async {
@@ -31,50 +66,12 @@ class LawSearchScreen extends StatelessWidget {
     }
   }
 
-  _onSubmitted(BuildContext context, String userInput) async {
-    final dbService = Provider.of<DatabaseService>(context);
-    try {
-      final retrievedLaw = await dbService.retrieveLaw(leftPad(userInput));
-      searchState.updateActiveLaw(retrievedLaw);
-      searchState.goToLawSummaryScreen();
-    } catch (e) {
-      AlertBox(
-        title: "Sin datos",
-        content: "La Ley $userInput no figura en la base de datos.",
-        confirmActionText: "Buscar otra ley",
-      ).show(context);
-    }
+  Future<void> _signOut(BuildContext context) async {
+    final authService = Provider.of<AuthService>(context);
+    await authService.signOut();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Infobootleg",
-            style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold)),
-        actions: <Widget>[
-          _buildExitButton(context),
-        ],
-      ),
-      backgroundColor: Theme.of(context).canvasColor,
-      body: Center(
-        child: _buildSearchBox(context),
-      ),
-    );
-  }
-
-  FlatButton _buildExitButton(BuildContext context) {
-    return FlatButton.icon(
-      icon: Icon(Icons.exit_to_app),
-      textColor: Colors.white,
-      color: hexColor("5b5656"),
-      label:
-          Text("Salir", style: TextStyle(fontSize: 18.0, color: Colors.white)),
-      onPressed: () => _confirmSignOut(context),
-    );
-  }
-
-  Card _buildSearchBox(BuildContext context) {
+  Card _buildSearchCard(BuildContext context) {
     return Card(
       elevation: 5.0,
       child: Padding(
@@ -86,14 +83,14 @@ class LawSearchScreen extends StatelessWidget {
             Text("Buscar ley por número o título",
                 style: Theme.of(context).textTheme.subtitle),
             SizedBox(height: 20),
-            _buildSearchBar(context)
+            _buildSearchInput(context)
           ],
         ),
       ),
     );
   }
 
-  Widget _buildSearchBar(BuildContext context) {
+  Widget _buildSearchInput(BuildContext context) {
     return Container(
       width: 200,
       alignment: Alignment.center,
@@ -112,5 +109,20 @@ class LawSearchScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _onSubmitted(BuildContext context, String userInput) async {
+    final dbService = Provider.of<DatabaseService>(context);
+    try {
+      final retrievedLaw = await dbService.retrieveLaw(leftPad(userInput));
+      searchState.updateActiveLaw(retrievedLaw);
+      searchState.transitionToScreenVertically(Screen.summary);
+    } catch (e) {
+      AlertBox(
+        title: "Sin datos",
+        content: "La Ley $userInput no figura en la base de datos.",
+        confirmActionText: "Buscar otra ley",
+      ).show(context);
+    }
   }
 }

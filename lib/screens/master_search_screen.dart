@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:infobootleg/screens/favorites_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'package:infobootleg/models/search_state_model.dart';
@@ -12,11 +13,21 @@ class MasterSearchScreen extends StatelessWidget {
     final searchState = Provider.of<SearchStateModel>(context);
 
     return PageView(
-      controller: searchState.pageController,
+      controller: searchState.verticalPageViewController,
       scrollDirection: Axis.vertical,
-      physics: NeverScrollableScrollPhysics(),
+      physics:
+          NeverScrollableScrollPhysics(), // prevents manual PageView transition
       children: <Widget>[
-        LawSearchScreen(searchState),
+        PageView(
+          controller: searchState.horizontalPageViewController,
+          scrollDirection: Axis.horizontal,
+          physics:
+              NeverScrollableScrollPhysics(), // prevents manual PageView transition
+          children: [
+            LawSearchScreen(searchState),
+            FavoritesScreen(),
+          ],
+        ),
         LawSummaryScreen(searchState),
         LawTextScreen(searchState),
       ],

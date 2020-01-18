@@ -3,7 +3,7 @@ import 'package:infobootleg/models/law_model.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import 'package:infobootleg/helpers/retriever.dart';
-import 'package:infobootleg/widgets/law_card.dart';
+import 'package:infobootleg/widgets/basic_card.dart';
 import 'package:infobootleg/widgets/law_title_card.dart';
 import 'package:infobootleg/widgets/modif_relations_box.dart';
 import 'package:infobootleg/models/search_state_model.dart';
@@ -31,11 +31,12 @@ class LawSummaryScreen extends StatelessWidget {
     return AppBar(
       title: GestureDetector(
         child: Text("Volver al buscador"),
-        onTap: searchState.goToLawSearchScreen,
+        onTap: () => searchState.transitionToScreenVertically(Screen.search),
       ),
       leading: IconButton(
         icon: Icon(Icons.arrow_upward),
-        onPressed: searchState.goToLawSearchScreen,
+        onPressed: () =>
+            searchState.transitionToScreenVertically(Screen.search),
       ),
     );
   }
@@ -46,7 +47,7 @@ class LawSummaryScreen extends StatelessWidget {
         children: [
           Padding(
             padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 30.0),
-            child: LawTitleCard(searchState),
+            child: LawTitleCard(searchState.activeLaw),
           ),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10.0),
@@ -114,7 +115,7 @@ class LawSummaryScreen extends StatelessWidget {
       onPressed: () async {
         searchState.toggleLoadingState();
         await searchState.updateLawContents();
-        searchState.goToLawTextScreen();
+        searchState.transitionToScreenVertically(Screen.text);
         searchState.toggleLoadingState();
       },
       autofocus: true,
@@ -150,7 +151,7 @@ class LawSummaryScreen extends StatelessWidget {
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        LawCard(
+        BasicCard(
           cardContent: Padding(
             padding: EdgeInsets.symmetric(vertical: 12.0),
             child: _buildSummaryText(context),

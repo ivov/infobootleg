@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:infobootleg/models/search_state_model.dart';
-
-import 'law_card.dart';
+import 'package:infobootleg/models/law_model.dart';
+import 'package:infobootleg/widgets/basic_card.dart';
 
 class LawTitleCard extends StatelessWidget {
-  LawTitleCard(this.searchState);
-  final SearchStateModel searchState;
+  LawTitleCard(this.activeLaw);
+  final Law activeLaw;
 
   @override
   Widget build(BuildContext context) {
-    return LawCard(
+    return BasicCard(
       cardContent: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
             padding: EdgeInsets.symmetric(vertical: 20.0),
             child: Text(
-              "Ley " + searchState.activeLaw.number,
+              "Ley " + activeLaw.number,
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
@@ -24,7 +23,7 @@ class LawTitleCard extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(bottom: 20.0),
             child: Text(
-              searchState.activeLaw.summaryTitle,
+              activeLaw.summaryTitle,
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
@@ -32,7 +31,7 @@ class LawTitleCard extends StatelessWidget {
           Padding(
             padding: EdgeInsets.only(bottom: 20.0),
             child: Text(
-              searchState.activeLaw.abstractTitle,
+              activeLaw.abstractTitle,
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 22),
             ),

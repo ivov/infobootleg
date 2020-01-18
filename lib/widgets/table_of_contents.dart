@@ -4,9 +4,9 @@ import 'package:infobootleg/models/search_state_model.dart';
 import 'package:provider/provider.dart';
 
 class TableOfContents extends StatelessWidget {
-  TableOfContents({this.onArticleSelected});
+  TableOfContents({this.onListItemSelected});
 
-  final void Function(int) onArticleSelected;
+  final void Function(int) onListItemSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -23,31 +23,37 @@ class TableOfContents extends StatelessWidget {
   List<Widget> _buildDrawerSections(SearchStateModel searchState, context) {
     Container drawerHeader = Container(
       height: 160.0,
-      child: DrawerHeader(
-        child: Column(
-          children: [
-            SizedBox(height: 15.0),
-            Text(
-              "Ley " + searchState.activeLaw.number,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 30.0,
-                fontWeight: FontWeight.bold,
+      child: GestureDetector(
+        onTap: () {
+          Navigator.of(context).pop();
+          onListItemSelected(0);
+        },
+        child: DrawerHeader(
+          child: Column(
+            children: [
+              SizedBox(height: 15.0),
+              Text(
+                "Ley " + searchState.activeLaw.number,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 30.0,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            SizedBox(height: 20.0),
-            Text(
-              "Índice de artículos",
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 25.0,
-                fontWeight: FontWeight.bold,
-              ),
-            )
-          ],
-        ),
-        decoration: BoxDecoration(
-          color: Theme.of(context).primaryColor,
+              SizedBox(height: 20.0),
+              Text(
+                "Índice de artículos",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 25.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              )
+            ],
+          ),
+          decoration: BoxDecoration(
+            color: Theme.of(context).primaryColor,
+          ),
         ),
       ),
     );
@@ -69,7 +75,7 @@ class TableOfContents extends StatelessWidget {
             ),
             onTap: () {
               Navigator.of(context).pop();
-              onArticleSelected(
+              onListItemSelected(
                 int.parse(articleNumber),
               );
             },

@@ -33,6 +33,7 @@ class ReferralScreen extends StatelessWidget {
   }
 
   _buildMasterSearchScreenWithMultiProvider(FirebaseUser user) {
+    // TODO: Turn into static method.
     return MultiProvider(
       providers: [
         Provider<DatabaseService>(

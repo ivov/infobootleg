@@ -12,9 +12,9 @@ class LawTextScreen extends StatelessWidget {
   final SearchStateModel searchState;
   final ItemScrollController _scrollController = ItemScrollController();
 
-  void scrollToArticle(int articlePosition) {
+  void scrollToListItem(int listItemPosition) {
     _scrollController.scrollTo(
-      index: articlePosition,
+      index: listItemPosition,
       duration: Duration(milliseconds: 500),
     );
   }
@@ -23,7 +23,7 @@ class LawTextScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        drawer: TableOfContents(onArticleSelected: scrollToArticle),
+        drawer: TableOfContents(onListItemSelected: scrollToListItem),
         appBar: _buildAppBar(),
         backgroundColor: Theme.of(context).canvasColor,
         body: _buildScrollablePositionedList(context),
@@ -35,11 +35,12 @@ class LawTextScreen extends StatelessWidget {
     return AppBar(
       title: GestureDetector(
         child: Text("Volver al resumen"),
-        onTap: searchState.goToLawSummaryScreen,
+        onTap: () => searchState.transitionToScreenVertically(Screen.summary),
       ),
       leading: IconButton(
         icon: Icon(Icons.arrow_upward),
-        onPressed: searchState.goToLawSummaryScreen,
+        onPressed: () =>
+            searchState.transitionToScreenVertically(Screen.summary),
       ),
     );
   }
@@ -60,7 +61,7 @@ class LawTextScreen extends StatelessWidget {
     if (articleNumber == "0") {
       return Padding(
         padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 30.0),
-        child: LawTitleCard(searchState),
+        child: LawTitleCard(searchState.activeLaw),
       );
     }
     return Padding(

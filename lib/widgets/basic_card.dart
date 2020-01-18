@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class LawCard extends StatelessWidget {
-  LawCard({@required this.cardContent});
+class BasicCard extends StatelessWidget {
+  BasicCard({@required this.cardContent});
   final Widget cardContent;
 
   @override
