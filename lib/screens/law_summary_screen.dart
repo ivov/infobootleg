@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:infobootleg/models/law_model.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import 'package:infobootleg/helpers/retriever.dart';
-import 'package:infobootleg/shared_widgets/law_card.dart';
-import 'package:infobootleg/shared_widgets/law_title_card.dart';
-import 'package:infobootleg/shared_widgets/modif_relations_box.dart';
+import 'package:infobootleg/widgets/law_card.dart';
+import 'package:infobootleg/widgets/law_title_card.dart';
+import 'package:infobootleg/widgets/modif_relations_box.dart';
 import 'package:infobootleg/models/search_state_model.dart';
-import 'package:infobootleg/shared_widgets/law_frame.dart';
 import 'package:infobootleg/helpers/hex_color.dart';
 
 enum ModificationType { modifies, isModifiedBy }
@@ -18,32 +18,62 @@ class LawSummaryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LawFrame(
-      pageController: searchState.pageController,
-      returnLabelText: "buscador",
-      frameContent: Column(
+    return SafeArea(
+      child: Scaffold(
+        appBar: _buildAppBar(),
+        backgroundColor: Theme.of(context).canvasColor,
+        body: _buildBody(context),
+      ),
+    );
+  }
+
+  _buildAppBar() {
+    return AppBar(
+      title: GestureDetector(
+        child: Text("Volver al buscador"),
+        onTap: searchState.goToLawSearchScreen,
+      ),
+      leading: IconButton(
+        icon: Icon(Icons.arrow_upward),
+        onPressed: searchState.goToLawSearchScreen,
+      ),
+    );
+  }
+
+  _buildBody(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
         children: [
-          SizedBox(height: 15.0),
-          LawTitleCard(searchState),
-          SizedBox(height: 30.0),
-          _buildLawDateRows(),
-          SizedBox(height: 30.0),
-          searchState.isLoading
-              ? CircularProgressIndicator()
-              : _buildLawAccessButton(context),
-          SizedBox(height: 30.0),
-          _buildSummaryText(context),
-          SizedBox(height: 20.0),
-          _buildModifiesRow(context),
-          SizedBox(height: 20.0),
-          _buildIsModifiedByRow(context),
-          SizedBox(height: 20.0),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 30.0),
+            child: LawTitleCard(searchState),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 10.0),
+            child: _buildLawDateRows(searchState.activeLaw),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 15.0),
+            child: _buildLawAccessButton(context, searchState.isLoading),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 10.0),
+            child: _buildSummaryRow(context),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 10.0),
+            child: _buildModifiesRow(context),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 10.0, bottom: 20.0),
+            child: _buildIsModifiedByRow(context),
+          ),
         ],
       ),
     );
   }
 
-  Column _buildLawDateRows() {
+  _buildLawDateRows(Law activeLaw) {
     _buildDateRow(IconData icon, String dateText) {
       return Row(
         mainAxisSize: MainAxisSize.max,
@@ -66,15 +96,19 @@ class LawSummaryScreen extends StatelessWidget {
     return Column(
       children: <Widget>[
         _buildDateRow(MdiIcons.scriptTextOutline,
-            "Publicada el día ${searchState.activeLaw.gazetteDate}\nen el Boletín Oficial ${searchState.activeLaw.gazetteNumber} (pág. ${searchState.activeLaw.gazettePage})"),
+            "Publicada el día ${activeLaw.gazetteDate}\nen el Boletín Oficial ${activeLaw.gazetteNumber} (pág. ${activeLaw.gazettePage})"),
         SizedBox(height: 10.0),
         _buildDateRow(MdiIcons.feather,
-            "Sancionada el día ${searchState.activeLaw.enactmentDate}\npor el ${searchState.activeLaw.originatingBody}"),
+            "Sancionada el día ${activeLaw.enactmentDate}\npor el ${activeLaw.originatingBody}"),
       ],
     );
   }
 
-  RaisedButton _buildLawAccessButton(BuildContext context) {
+  _buildLawAccessButton(BuildContext context, bool isLoading) {
+    if (isLoading == true) {
+      return CircularProgressIndicator();
+    }
+
     return RaisedButton(
       elevation: 10.0,
       onPressed: () async {
@@ -111,7 +145,7 @@ class LawSummaryScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSummaryText(BuildContext context) {
+  _buildSummaryRow(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -119,27 +153,28 @@ class LawSummaryScreen extends StatelessWidget {
         LawCard(
           cardContent: Padding(
             padding: EdgeInsets.symmetric(vertical: 12.0),
-            child: RichText(
-              text: TextSpan(
-                style: Theme.of(context).textTheme.body1,
-                children: <TextSpan>[
-                  TextSpan(
-                    text: "RESUMEN: ",
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  TextSpan(
-                    text: searchState.activeLaw.summaryText,
-                    style: TextStyle(fontSize: 16.0),
-                  ),
-                ],
-              ),
-            ),
+            child: _buildSummaryText(context),
           ),
         ),
       ],
+    );
+  }
+
+  _buildSummaryText(context) {
+    return RichText(
+      text: TextSpan(
+        style: Theme.of(context).textTheme.body1,
+        children: <TextSpan>[
+          TextSpan(
+            text: "RESUMEN: ",
+            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+          ),
+          TextSpan(
+            text: searchState.activeLaw.summaryText,
+            style: TextStyle(fontSize: 16.0),
+          ),
+        ],
+      ),
     );
   }
 

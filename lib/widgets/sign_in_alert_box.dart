@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 import 'package:flutter/services.dart';
 
-import 'package:infobootleg/shared_widgets/alert_box.dart';
+import 'package:infobootleg/widgets/alert_box.dart';
 
 class SignInAlertBox extends AlertBox {
   SignInAlertBox({

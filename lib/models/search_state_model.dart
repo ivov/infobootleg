@@ -15,9 +15,11 @@ class SearchStateModel extends ChangeNotifier {
   Map<String, String> get lawContents => _lawContents;
   bool get isLoading => _isLoading;
 
-  void goToArticle() {
-    _scrollController.animateTo(
-      800,
+  // navigation
+
+  void goToLawSearchScreen() {
+    _pageController.animateToPage(
+      0,
       duration: Duration(milliseconds: 800),
       curve: Curves.easeInOutQuint,
     );
@@ -39,6 +41,16 @@ class SearchStateModel extends ChangeNotifier {
     );
   }
 
+  void goToArticle() {
+    _scrollController.animateTo(
+      800,
+      duration: Duration(milliseconds: 800),
+      curve: Curves.easeInOutQuint,
+    );
+  }
+
+  // activeLaw and lawContents
+
   void updateActiveLaw(Law newLaw) async {
     _activeLaw = newLaw;
     notifyListeners();
@@ -51,6 +63,8 @@ class SearchStateModel extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  // loading state
 
   void toggleLoadingState() {
     _isLoading = !_isLoading;

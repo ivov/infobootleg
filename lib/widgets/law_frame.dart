@@ -1,20 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:infobootleg/helpers/hex_color.dart';
-import 'package:infobootleg/shared_widgets/table_of_contents.dart';
+import 'package:infobootleg/widgets/table_of_contents.dart';
 
-class LawTextFrame extends StatelessWidget {
-  LawTextFrame({
+class LawFrame extends StatelessWidget {
+  LawFrame({
     @required this.frameContent,
     @required this.pageController,
     @required this.returnLabelText,
+    this.withDrawer = false,
   });
   final Widget frameContent;
   final PageController pageController;
   final String returnLabelText;
+  final bool withDrawer;
 
   void _returnToPreviousScreen() {
+    int screenIndex;
+    if (returnLabelText == "buscador") {
+      screenIndex = 0;
+    } else if (returnLabelText == "resumen") {
+      screenIndex = 1;
+    }
+
     pageController.animateToPage(
-      1, // LawSummaryScreen
+      screenIndex,
       duration: Duration(milliseconds: 800),
       curve: Curves.easeInOutQuint,
     );
@@ -22,13 +31,25 @@ class LawTextFrame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (withDrawer) {
+      return SafeArea(
+        child: Scaffold(
+          drawer: TableOfContents(),
+          appBar: _buildAppBar(),
+          body: Container(
+            color: hexColor("f5eaea"),
+            child: SingleChildScrollView(child: frameContent),
+          ),
+        ),
+      );
+    }
+
     return SafeArea(
       child: Scaffold(
-        drawer: TableOfContents(),
         appBar: _buildAppBar(),
         body: Container(
           color: hexColor("f5eaea"),
-          child: frameContent,
+          child: SingleChildScrollView(child: frameContent),
         ),
       ),
     );
@@ -37,7 +58,7 @@ class LawTextFrame extends StatelessWidget {
   _buildAppBar() {
     return AppBar(
       title: GestureDetector(
-        child: Text("Volver al resumen"),
+        child: Text("Volver al $returnLabelText"),
         onTap: _returnToPreviousScreen,
       ),
       leading: IconButton(

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_widgets/flutter_widgets.dart';
 
 import 'package:infobootleg/models/search_state_model.dart';
-import 'package:infobootleg/shared_widgets/article_card.dart';
-import 'package:infobootleg/shared_widgets/law_title_card.dart';
-import 'package:infobootleg/shared_widgets/table_of_contents.dart';
+import 'package:infobootleg/widgets/article_card.dart';
+import 'package:infobootleg/widgets/law_title_card.dart';
+import 'package:infobootleg/widgets/table_of_contents.dart';
 
 class LawTextScreen extends StatelessWidget {
   LawTextScreen(this.searchState);
@@ -62,10 +62,9 @@ class LawTextScreen extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 30.0),
         child: LawTitleCard(searchState),
       );
-      // return _buildHeader();
     }
     return Padding(
-      padding: EdgeInsets.only(bottom: 15.0, left: 10.0, right: 10.0),
+      padding: EdgeInsets.symmetric(vertical: 7.5, horizontal: 10.0),
       child: ArticleCard(searchState.lawContents, articleNumber),
     );
   }
