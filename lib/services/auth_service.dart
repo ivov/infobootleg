@@ -79,7 +79,7 @@ class AuthService {
     return authResult.user;
   }
 
-  Future<FirebaseUser> createUserInWithEmailAndPassword(
+  Future<FirebaseUser> createUserWithEmailAndPassword(
       String email, String password) async {
     final AuthResult authResult = await FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password);

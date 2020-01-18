@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:infobootleg/helpers/hex_color.dart';
 
 class BeveledFrame extends StatelessWidget {
   final List<Widget> children;
@@ -28,6 +27,7 @@ class BeveledFrame extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Theme.of(context).canvasColor,
         body: Container(
           decoration: BoxDecoration(
             color: Colors.black,
@@ -39,13 +39,10 @@ class BeveledFrame extends StatelessWidget {
                 borderRadius: BorderRadius.circular(50),
               ),
             ),
-            child: Container(
-              color: hexColor("f5eaea"),
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(18.0, 15.0, 18.0, 45.0),
-                child: Center(
-                  child: column,
-                ),
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(18.0, 15.0, 18.0, 45.0),
+              child: Center(
+                child: column,
               ),
             ),
           ),

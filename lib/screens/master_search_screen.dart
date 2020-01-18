@@ -6,7 +6,7 @@ import 'package:infobootleg/screens/law_search_screen.dart';
 import 'package:infobootleg/screens/law_summary_screen.dart';
 import 'package:infobootleg/screens/law_text_screen.dart';
 
-class SearchScreen extends StatelessWidget {
+class MasterSearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final searchState = Provider.of<SearchStateModel>(context);

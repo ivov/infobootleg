@@ -65,7 +65,7 @@ class SignInScreen extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
-        SecondSignInButton(
+        SignInButton(
           textColor: Colors.black,
           buttonColor: Colors.white,
           asset: Image.asset(
@@ -75,7 +75,7 @@ class SignInScreen extends StatelessWidget {
           buttonText: "Google",
           signInMethod: () => _dispatchSignIn(context, SignInMethod.Google),
         ),
-        SecondSignInButton(
+        SignInButton(
           textColor: Colors.white,
           buttonColor: hexColor("273b70"),
           asset: Image.asset(
@@ -93,7 +93,7 @@ class SignInScreen extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
-        SecondSignInButton(
+        SignInButton(
           buttonColor: hexColor("bac7a7"),
           textColor: Colors.black,
           asset: Image.asset(
@@ -103,7 +103,7 @@ class SignInScreen extends StatelessWidget {
           buttonText: "Correo",
           signInMethod: () => _dispatchSignIn(context, SignInMethod.Email),
         ),
-        SecondSignInButton(
+        SignInButton(
           buttonColor: hexColor("ebcb8b"),
           textColor: Colors.black,
           asset: Image.asset(
@@ -118,8 +118,8 @@ class SignInScreen extends StatelessWidget {
   }
 }
 
-class SecondSignInButton extends StatelessWidget {
-  SecondSignInButton({
+class SignInButton extends StatelessWidget {
+  SignInButton({
     @required this.buttonColor,
     @required this.textColor,
     @required this.asset,

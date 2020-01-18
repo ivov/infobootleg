@@ -50,12 +50,16 @@ class LawSearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text("Infobootleg",
-              style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold)),
-          actions: <Widget>[_buildExitButton(context)]),
-      body: Container(
-          color: hexColor("f5eaea"),
-          child: Center(child: _buildSearchCard(context))),
+        title: Text("Infobootleg",
+            style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold)),
+        actions: <Widget>[
+          _buildExitButton(context),
+        ],
+      ),
+      backgroundColor: Theme.of(context).canvasColor,
+      body: Center(
+        child: _buildSearchBox(context),
+      ),
     );
   }
 
@@ -70,7 +74,7 @@ class LawSearchScreen extends StatelessWidget {
     );
   }
 
-  Card _buildSearchCard(BuildContext context) {
+  Card _buildSearchBox(BuildContext context) {
     return Card(
       elevation: 5.0,
       child: Padding(

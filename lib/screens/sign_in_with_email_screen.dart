@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import 'package:infobootleg/helpers/hex_color.dart';
 import 'package:infobootleg/helpers/validators.dart';
 import 'package:infobootleg/services/auth_service.dart';
 import 'package:infobootleg/widgets/sign_in_alert_box.dart';
@@ -13,12 +12,15 @@ class SignInWithEmailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("Ingresar con correo electrónico")),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SignInWithEmailForm(),
-        ),
-        backgroundColor: hexColor("f5eaea"));
+      appBar: AppBar(
+        title: Text("Ingresar con correo electrónico"),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SignInWithEmailForm(),
+      ),
+      backgroundColor: Theme.of(context).canvasColor,
+    );
   }
 }
 
@@ -66,7 +68,7 @@ class _SignInWithEmailFormState extends State<SignInWithEmailForm> {
       if (_formType == EmailSignInFormType.signIn) {
         await authService.signInWithEmailAndPassword(_email, _password);
       } else {
-        await authService.createUserInWithEmailAndPassword(_email, _password);
+        await authService.createUserWithEmailAndPassword(_email, _password);
       }
       Navigator.of(context).pop();
     } on PlatformException catch (error) {
