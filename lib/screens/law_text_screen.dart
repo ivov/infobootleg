@@ -15,41 +15,41 @@ class LawTextScreen extends StatelessWidget {
     // final SearchStateModel searchState = Provider.of<SearchStateModel>(context);
     // searchState.goToArticle();
 
-    if (true) {
-      List<Widget> _myList = [
-        Text("whoa1"),
-        Text("whoa2"),
-        Text("whoa3"),
-      ];
+    // if (true) {
+    //   List<Widget> _myList = [
+    //     Text("whoa1"),
+    //     Text("whoa2"),
+    //     Text("whoa3"),
+    //   ];
 
-      ItemScrollController _scrollController = ItemScrollController();
-      return ScrollablePositionedList.builder(
-        itemScrollController: _scrollController,
-        itemCount: _myList.length,
-        itemBuilder: (context, index) {
-          return _myList[index];
-        },
-      );
-    }
+    //   ItemScrollController _scrollController = ItemScrollController();
+    //   return ScrollablePositionedList.builder(
+    //     itemScrollController: _scrollController,
+    //     itemCount: _myList.length,
+    //     itemBuilder: (context, index) {
+    //       return _myList[index];
+    //     },
+    //   );
+    // }
 
-    // return LawFrame(
-    //   withDrawer: true,
-    //   frameContent: Container(
-    //     width: double.infinity,
-    //     child: Column(
-    //       // TODO: ListView here so as to add scrollController?
-    //       // https://stackoverflow.com/questions/49153087/flutter-scrolling-to-a-widget-in-listview
-    //       children: <Widget>[
-    //         SizedBox(height: 15.0),
-    //         LawTitleCard(searchState),
-    //         SizedBox(height: 15.0),
-    //         _buildAllArticles(context),
-    //       ],
-    //     ),
-    //   ),
-    //   pageController: searchState.pageController,
-    //   returnLabelText: "resumen",
-    // );
+    return LawFrame(
+      withDrawer: true,
+      frameContent: Container(
+        width: double.infinity,
+        child: Column(
+          // TODO: ListView here so as to add scrollController?
+          // https://stackoverflow.com/questions/49153087/flutter-scrolling-to-a-widget-in-listview
+          children: <Widget>[
+            SizedBox(height: 15.0),
+            LawTitleCard(searchState),
+            SizedBox(height: 15.0),
+            _buildAllArticles(context),
+          ],
+        ),
+      ),
+      pageController: searchState.pageController,
+      returnLabelText: "resumen",
+    );
   }
 
   Container _buildAllArticles(BuildContext context) {

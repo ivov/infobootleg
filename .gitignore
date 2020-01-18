@@ -1,5 +1,6 @@
 TEMP_README.md
 /data/
+.flutter-plugins-dependencies
 
 # Miscellaneous
 *.class

@@ -14,5 +14,6 @@
     "**/react-app-env.d.ts": true,
     "**/shrinkwrap.yaml": true,
     "ios": true
-  }
+  },
+  "dart.flutterSdkPath": "C:\\src\\flutter"
 }
