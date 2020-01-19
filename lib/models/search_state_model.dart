@@ -5,7 +5,7 @@ import 'package:infobootleg/models/law_model.dart';
 enum Screen { search, summary, text, favorites }
 
 class SearchStateModel extends ChangeNotifier {
-  // vertical navigation
+  // vertical navigation: search, summary and text
 
   final PageController _verticalPageViewController = PageController();
   PageController get verticalPageViewController => _verticalPageViewController;
@@ -24,7 +24,7 @@ class SearchStateModel extends ChangeNotifier {
     );
   }
 
-  // horizontal nagiation
+  // horizontal navigation: search & favorites
 
   final PageController _horizontalPageViewController = PageController();
   PageController get horizontalPageViewController =>
@@ -57,9 +57,9 @@ class SearchStateModel extends ChangeNotifier {
   // activeLaw and lawContents
 
   Law _activeLaw;
-  Map<String, String> _lawContents = {};
-
   Law get activeLaw => _activeLaw;
+
+  Map<String, String> _lawContents = {};
   Map<String, String> get lawContents => _lawContents;
 
   void updateActiveLaw(Law newLaw) async {
