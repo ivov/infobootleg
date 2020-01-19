@@ -5,9 +5,14 @@ import 'package:infobootleg/models/law_model.dart';
 enum Screen { search, summary, text, favorites }
 
 class SearchStateModel extends ChangeNotifier {
+  Law _activeLaw;
+  final PageController _verticalPageViewController = PageController();
+  final PageController _horizontalPageViewController = PageController();
+  final ScrollController _scrollController = ScrollController();
+  bool _isLoading = false;
+
   // vertical navigation: search, summary and text
 
-  final PageController _verticalPageViewController = PageController();
   PageController get verticalPageViewController => _verticalPageViewController;
 
   void transitionToScreenVertically(Screen screen) {
@@ -26,7 +31,6 @@ class SearchStateModel extends ChangeNotifier {
 
   // horizontal navigation: search & favorites
 
-  final PageController _horizontalPageViewController = PageController();
   PageController get horizontalPageViewController =>
       _horizontalPageViewController;
 
@@ -43,7 +47,6 @@ class SearchStateModel extends ChangeNotifier {
     );
   }
 
-  final ScrollController _scrollController = ScrollController();
   ScrollController get scrollController => _scrollController;
 
   void goToArticle() {
@@ -56,7 +59,6 @@ class SearchStateModel extends ChangeNotifier {
 
   // activeLaw and lawContents
 
-  Law _activeLaw;
   Law get activeLaw => _activeLaw;
 
   Map<String, String> _lawContents = {};
@@ -76,8 +78,6 @@ class SearchStateModel extends ChangeNotifier {
   }
 
   // loading state for transition from LawSummaryScreen to LawTextScreen
-
-  bool _isLoading = false;
 
   bool get isLoading => _isLoading;
 

@@ -1,20 +1,75 @@
 import 'package:flutter/foundation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-import 'package:infobootleg/models/law_model.dart';
+import 'package:infobootleg/models/favorite_model.dart';
 
 class DatabaseService {
-  DatabaseService({@required this.userId}) : assert(userId != null);
-  final String userId;
+  DatabaseService({@required this.currentUserID})
+      : currentUserDoc = usersColl.document(currentUserID);
 
-  Future<Law> retrieveLaw(String documentID) {
-    return Firestore.instance
-        .collection('laws')
-        .document(documentID)
-        .get()
-        .then((snapshot) => Law(snapshot.data));
+  String currentUserID;
+  DocumentReference currentUserDoc;
+
+  static final CollectionReference lawsColl =
+      Firestore.instance.collection('laws');
+
+  static final CollectionReference usersColl =
+      Firestore.instance.collection('users');
+
+  // laws
+
+  Future<QuerySnapshot> readAllLaws() async {
+    return lawsColl.getDocuments();
+  }
+
+  Future<DocumentSnapshot> readLaw({@required String id}) async {
+    return lawsColl.document(id).get();
+  }
+
+  // users
+
+  Future<DocumentSnapshot> readAllFavoritesOfUser() async {
+    return currentUserDoc.get();
+  }
+
+  Future<void> createFavorite(Favorite favorite) async {
+    return currentUserDoc.setData(favorite.toMap(), merge: true);
+    // `merge: true` prevents overwriting other favorites in same user document.
+  }
+
+  Future<void> deleteFavorite(String lawAndArticle) {
+    return currentUserDoc.updateData({
+      lawAndArticle: FieldValue.delete(),
+    });
+  }
+
+  /// Adds or edits the `comment` field in a single `lawAndArticle` favorite in the current user's document.
+  /// ```
+  /// userDoc = {
+  ///   "20305&33": {"text": "Lorem ipsum...", "comment": "It's great"}, // favorite 1
+  ///   "11723&13": {"text": "Sit amet...", "comment": "It's terrible"} // favorite 2
+  /// };
+  /// ```
+  Future<void> addCommentToFavorite(Favorite favorite, String comment) {
+    return currentUserDoc.updateData({
+      favorite.lawAndArticle: {
+        "text": favorite.articleText,
+        "comment": comment,
+      }
+    });
+  }
+
+  Future<void> deleteCommentFromFavorite(Favorite favorite, String comment) {
+    return currentUserDoc.updateData({
+      favorite.lawAndArticle: {
+        "text": favorite.articleText,
+        "comment": FieldValue.delete(),
+      }
+    });
   }
 }
+
+// https://firebase.google.com/docs/firestore/manage-data/add-data
+// https://firebase.google.com/docs/firestore/manage-data/delete-data
 
 // @override
 // Future<void> createJob(Job job) async => _setData(
@@ -44,18 +99,4 @@ class DatabaseService {
 //     (snapshot) =>
 //         snapshot.documents.map((snapshot) => builder(snapshot.data)).toList(),
 //   );
-// }
-
-// import 'package:cloud_firestore/cloud_firestore.dart';
-
-// import 'Law.dart';
-
-// class DB {
-//   static Future<Law> retrieveLaw(String documentID) {
-//     return Firestore.instance
-//         .collection('laws')
-//         .document(documentID)
-//         .get()
-//         .then((snapshot) => Law.fromFirestore(snapshot));
-//   }
 // }

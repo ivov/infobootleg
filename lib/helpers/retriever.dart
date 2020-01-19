@@ -18,6 +18,7 @@ Map<String, Map<String, RegExp>> lawRegexes = {
   },
 };
 
+/// Retrieves the full text of a law and its modification relations from Infoleg.gob.ar.
 class Retriever {
   static String lawTextString;
   static Map<String, String> lawContents = {};
@@ -25,7 +26,7 @@ class Retriever {
 
   static Future<Map<String, String>> retrieveLawText({String url}) async {
     await _getLawTextString(url);
-    _selectLawPattern();
+    _selectLawPattern(); // TODO: if no pattern matches, url_launcher for Infoleg's site
     _parseMostArticles();
     _parseFinalArticle();
     return lawContents;

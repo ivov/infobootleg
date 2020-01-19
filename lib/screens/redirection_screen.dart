@@ -6,9 +6,9 @@ import 'package:infobootleg/screens/master_search_screen.dart';
 import 'package:infobootleg/screens/sign_in_screen.dart';
 import 'package:infobootleg/services/auth_service.dart';
 
-/// Refers user to MasterSearchScreen or to SignInScreen based on user's sign-in status.
+/// Redirects user to MasterSearchScreen or to SignInScreen based on user's sign-in status.
 /// User's sign-in status is provided by Firebase's onAuthStateChanged stream.
-class ReferralScreen extends StatelessWidget {
+class RedirectionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);

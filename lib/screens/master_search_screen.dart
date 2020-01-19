@@ -14,7 +14,7 @@ class MasterSearchScreen extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider<DatabaseService>(
-          builder: (context) => DatabaseService(userId: user.uid),
+          builder: (context) => DatabaseService(currentUserID: user.uid),
         ),
         ChangeNotifierProvider<SearchStateModel>(
           builder: (context) => SearchStateModel(),

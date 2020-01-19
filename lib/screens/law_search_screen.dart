@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:infobootleg/models/law_model.dart';
 import 'package:provider/provider.dart';
 
 import 'package:infobootleg/models/search_state_model.dart';
@@ -114,8 +115,8 @@ class LawSearchScreen extends StatelessWidget {
   _onSubmitted(BuildContext context, String userInput) async {
     final dbService = Provider.of<DatabaseService>(context);
     try {
-      final retrievedLaw = await dbService.retrieveLaw(leftPad(userInput));
-      searchState.updateActiveLaw(retrievedLaw);
+      final snapshot = await dbService.readLaw(id: leftPad(userInput));
+      searchState.updateActiveLaw(Law(snapshot.data));
       searchState.transitionToScreenVertically(Screen.summary);
     } catch (e) {
       AlertBox(

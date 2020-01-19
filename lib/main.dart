@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:infobootleg/screens/referral_screen.dart';
+import 'package:infobootleg/screens/redirection_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'helpers/theme_data.dart';
@@ -16,7 +16,7 @@ class Infobootleg extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Infobootleg',
         theme: themeData,
-        home: ReferralScreen(),
+        home: RedirectionScreen(),
       ),
     );
   }
