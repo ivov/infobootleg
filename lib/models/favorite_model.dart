@@ -5,7 +5,7 @@ class Favorite {
     this.articleText,
   }) : dotlessLawNumber = lawNumber.replaceAll(".", "");
 
-  // Dotless version is necessary to enable `FieldValue.delete()` at `deleteFavorite` method in `DatabaseService`.
+  // Dotless fieldname enables `FieldValue.delete()` at `deleteFavorite` method in `DatabaseService`.
 
   String dotlessLawNumber;
   final String articleNumber;

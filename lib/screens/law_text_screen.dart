@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widgets/flutter_widgets.dart';
+import 'package:infobootleg/models/favorite_model.dart';
 
 import 'package:infobootleg/models/search_state_model.dart';
 import 'package:infobootleg/services/database_service.dart';
 import 'package:infobootleg/widgets/article_card.dart';
 import 'package:infobootleg/widgets/law_title_card.dart';
 import 'package:infobootleg/widgets/table_of_contents.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class LawTextScreen extends StatefulWidget {
   LawTextScreen(this.searchState, this.dbService);
@@ -20,7 +22,8 @@ class LawTextScreen extends StatefulWidget {
 
 class _LawTextScreenState extends State<LawTextScreen> {
   final ItemScrollController _scrollController = ItemScrollController();
-  Map<String, dynamic> userFavorites;
+  Map<String, dynamic>
+      userFavorites; // triggers rebuild on update at _updateUserFavorites from onYesAtSave and onYesAtDelete
 
   @override
   void initState() {
@@ -89,8 +92,7 @@ class _LawTextScreenState extends State<LawTextScreen> {
       itemCount: widget.searchState.lawContents.length,
       itemBuilder: (context, index) {
         return _buildListItem(
-          articleNumber: index.toString(),
-        );
+            articleNumber: index.toString(), context: context);
       },
     );
   }
@@ -107,7 +109,8 @@ class _LawTextScreenState extends State<LawTextScreen> {
     return false;
   }
 
-  Widget _buildListItem({String articleNumber}) {
+  Widget _buildListItem(
+      {@required String articleNumber, @required BuildContext context}) {
     if (articleNumber == "0") {
       return Padding(
         padding: EdgeInsets.symmetric(
@@ -129,15 +132,49 @@ class _LawTextScreenState extends State<LawTextScreen> {
         articleText: widget.searchState.lawContents[articleNumber],
         isStarred: _getStarredStatus(articleNumber),
         onArticleSelected: scrollToListItem,
-        onYesAtSave: (favorite) {
-          widget.dbService.saveFavorite(favorite);
-          _updateUserFavorites();
-        },
-        onYesAtDelete: (favorite) {
-          widget.dbService.deleteFavorite(favorite);
-          _updateUserFavorites();
-        },
+        onYesAtSave: (favorite) => _onYesAtSave(favorite, context),
+        onYesAtDelete: (favorite) => _onNoAtSave(favorite, context),
       ),
     );
+  }
+
+  void _onYesAtSave(Favorite favorite, BuildContext context) async {
+    await widget.dbService.saveFavorite(favorite);
+    _updateUserFavorites();
+    _showSnackBar(favorite, context, onSave: true);
+  }
+
+  void _onNoAtSave(Favorite favorite, BuildContext context) async {
+    await widget.dbService.deleteFavorite(favorite);
+    _updateUserFavorites();
+    _showSnackBar(favorite, context, onDelete: true);
+  }
+
+  _showSnackBar(Favorite favorite, BuildContext context,
+      {onSave = false, onDelete = false}) {
+    String snackBarText = "Artículo ${favorite.articleNumber} ";
+
+    if (onSave) {
+      snackBarText += 'guardado en favoritos';
+    } else if (onDelete) {
+      snackBarText += 'eliminado de favoritos';
+    }
+
+    final snackBar = SnackBar(
+      content: Row(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(right: 15.0),
+            child: Icon(MdiIcons.star),
+          ),
+          Text(
+            snackBarText,
+            style: TextStyle(fontSize: 18.0),
+          )
+        ],
+      ),
+    );
+
+    Scaffold.of(context).showSnackBar(snackBar);
   }
 }

@@ -14,4 +14,7 @@ final themeData = ThemeData(
       fontSize: 20.0,
     ),
   ),
+  snackBarTheme: SnackBarThemeData(
+    contentTextStyle: TextStyle(fontFamily: "Lusitana"),
+  ),
 );

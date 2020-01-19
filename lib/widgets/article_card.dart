@@ -56,7 +56,6 @@ class _ArticleCardState extends State<ArticleCard> {
           articleText: widget.articleText,
         ),
       );
-      // TODO: Snackbar offering to navigate to favorites screen.
     }
     setState(() => cardColor = Colors.white);
   }

@@ -31,19 +31,18 @@ class DatabaseService {
     return currentUserDoc.get();
   }
 
-  void saveFavorite(Favorite favorite) async {
-    return await currentUserDoc.setData(favorite.toMap(), merge: true);
+  Future<void> saveFavorite(Favorite favorite) async {
+    return currentUserDoc.setData(favorite.toMap(), merge: true);
     // The flag `merge: true` prevents this favorite from overwriting other favorites in same user document.
   }
 
-  void deleteFavorite(Favorite favorite) async {
-    return await currentUserDoc.updateData(
-        {favorite.lawAndArticle: FieldValue.delete()}).whenComplete(() {
-      print(favorite.lawAndArticle);
+  Future<void> deleteFavorite(Favorite favorite) async {
+    return currentUserDoc.updateData({
+      favorite.lawAndArticle: FieldValue.delete(),
     });
   }
 
-  /// Adds a `comment` field to, or edits the `comment` field in, a given favorite in the current user's document.
+  /// Adds a `comment` field to, or edits the `comment` field in, a favorite field in the current user's document.
   /// ```
   /// {
   ///   "20.305&33": {"text": "Lorem ipsum...", "comment": "It's great"}, // favorite 1
