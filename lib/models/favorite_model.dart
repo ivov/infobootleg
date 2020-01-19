@@ -13,13 +13,6 @@ class Favorite {
 
   get lawAndArticle => dotlessLawNumber + "&" + articleNumber;
 
-  // Map<String, dynamic> toMap() {
-  //   return {
-  //     "lawAndArticle": lawAndArticle,
-  //     "articleText": articleText,
-  //   };
-  // }
-
   Map<String, dynamic> toMap() {
     return {
       lawAndArticle: {"articleText": articleText},
