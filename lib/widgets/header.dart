@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 class Header extends StatelessWidget {
-  Header({@required BuildContext context, @required this.subtitleText});
+  Header({
+    @required BuildContext context,
+    @required this.subtitleText,
+  });
 
   final String subtitleText;
 

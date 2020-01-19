@@ -4,7 +4,7 @@ import 'package:infobootleg/models/search_state_model.dart';
 import 'package:provider/provider.dart';
 
 class TableOfContents extends StatelessWidget {
-  TableOfContents({this.onListItemSelected});
+  TableOfContents({@required this.onListItemSelected});
 
   final void Function(int) onListItemSelected;
 

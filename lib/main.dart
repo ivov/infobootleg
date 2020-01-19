@@ -7,8 +7,6 @@ import 'services/auth_service.dart';
 
 void main() => runApp(Infobootleg());
 
-// TODO: Save favorite articles and laws for user.
-
 class Infobootleg extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

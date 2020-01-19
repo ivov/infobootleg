@@ -12,10 +12,10 @@ class LawTextScreen extends StatelessWidget {
   final SearchStateModel searchState;
   final ItemScrollController _scrollController = ItemScrollController();
 
-  void scrollToListItem(int listItemPosition) {
+  void scrollToListItem(int listItemPosition, {int milliseconds = 500}) {
     _scrollController.scrollTo(
       index: listItemPosition,
-      duration: Duration(milliseconds: 500),
+      duration: Duration(milliseconds: milliseconds),
     );
   }
 
@@ -60,13 +60,23 @@ class LawTextScreen extends StatelessWidget {
   Widget _buildListItem({String articleNumber}) {
     if (articleNumber == "0") {
       return Padding(
-        padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 30.0),
+        padding: EdgeInsets.symmetric(
+          vertical: 15.0,
+          horizontal: 30.0,
+        ),
         child: LawTitleCard(searchState.activeLaw),
       );
     }
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 7.5, horizontal: 10.0),
-      child: ArticleCard(searchState.lawContents, articleNumber),
+      padding: EdgeInsets.symmetric(
+        vertical: 7.5,
+        horizontal: 10.0,
+      ),
+      child: ArticleCard(
+        lawContents: searchState.lawContents,
+        articleNumber: articleNumber,
+        onArticleSelected: scrollToListItem,
+      ),
     );
   }
 }
