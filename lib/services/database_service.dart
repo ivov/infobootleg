@@ -37,9 +37,8 @@ class DatabaseService {
   }
 
   void deleteFavorite(Favorite favorite) async {
-    // TODO: FieldValue.delete not working
-    return await currentUserDoc
-        .updateData({"20.305&2": FieldValue.delete()}).whenComplete(() {
+    return await currentUserDoc.updateData(
+        {favorite.lawAndArticle: FieldValue.delete()}).whenComplete(() {
       print(favorite.lawAndArticle);
     });
   }

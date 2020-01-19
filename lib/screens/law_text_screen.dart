@@ -95,8 +95,10 @@ class _LawTextScreenState extends State<LawTextScreen> {
     );
   }
 
-  bool _getStarredStatusBasedOnUserFavorites(String articleNumber) {
-    String cardName = widget.searchState.activeLaw.number + "&" + articleNumber;
+  bool _getStarredStatus(String articleNumber) {
+    String dotlessLawNumber =
+        widget.searchState.activeLaw.number.replaceAll(".", "");
+    String cardName = dotlessLawNumber + "&" + articleNumber;
     if (userFavorites != null) {
       if (userFavorites.keys.toList().contains(cardName)) {
         return true;
@@ -125,7 +127,7 @@ class _LawTextScreenState extends State<LawTextScreen> {
         lawNumber: widget.searchState.activeLaw.number,
         articleNumber: articleNumber,
         articleText: widget.searchState.lawContents[articleNumber],
-        isStarred: _getStarredStatusBasedOnUserFavorites(articleNumber),
+        isStarred: _getStarredStatus(articleNumber),
         onArticleSelected: scrollToListItem,
         onYesAtSave: (favorite) {
           widget.dbService.saveFavorite(favorite);
