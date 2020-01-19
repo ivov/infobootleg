@@ -25,28 +25,30 @@ class DatabaseService {
     return lawsColl.document(id).get();
   }
 
-  // users
+  // users (favorites)
 
   Future<DocumentSnapshot> readAllFavoritesOfUser() async {
     return currentUserDoc.get();
   }
 
-  Future<void> createFavorite(Favorite favorite) async {
-    return currentUserDoc.setData(favorite.toMap(), merge: true);
-    // `merge: true` prevents overwriting other favorites in same user document.
+  void saveFavorite(Favorite favorite) async {
+    return await currentUserDoc.setData(favorite.toMap(), merge: true);
+    // The flag `merge: true` prevents this favorite from overwriting other favorites in same user document.
   }
 
-  Future<void> deleteFavorite(String lawAndArticle) {
-    return currentUserDoc.updateData({
-      lawAndArticle: FieldValue.delete(),
+  void deleteFavorite(Favorite favorite) async {
+    // TODO: FieldValue.delete not working
+    return await currentUserDoc
+        .updateData({"20.305&2": FieldValue.delete()}).whenComplete(() {
+      print(favorite.lawAndArticle);
     });
   }
 
-  /// Adds or edits the `comment` field in a single `lawAndArticle` favorite in the current user's document.
+  /// Adds a `comment` field to, or edits the `comment` field in, a given favorite in the current user's document.
   /// ```
-  /// userDoc = {
-  ///   "20305&33": {"text": "Lorem ipsum...", "comment": "It's great"}, // favorite 1
-  ///   "11723&13": {"text": "Sit amet...", "comment": "It's terrible"} // favorite 2
+  /// {
+  ///   "20.305&33": {"text": "Lorem ipsum...", "comment": "It's great"}, // favorite 1
+  ///   "11.723&13": {"text": "Sit amet...", "comment": "It's terrible"} // favorite 2
   /// };
   /// ```
   Future<void> addCommentToFavorite(Favorite favorite, String comment) {

@@ -27,6 +27,7 @@ class MasterSearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final searchState = Provider.of<SearchStateModel>(context);
+    final dbService = Provider.of<DatabaseService>(context);
 
     return PageView(
       controller: searchState.verticalPageViewController,
@@ -45,7 +46,7 @@ class MasterSearchScreen extends StatelessWidget {
           ],
         ),
         LawSummaryScreen(searchState),
-        LawTextScreen(searchState),
+        LawTextScreen(searchState, dbService),
       ],
     );
   }

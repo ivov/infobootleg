@@ -9,12 +9,18 @@ class Favorite {
   final String articleNumber;
   final String articleText;
 
-  get lawAndArticle => lawNumber + " " + articleNumber;
+  get lawAndArticle => lawNumber + "&" + articleNumber;
+
+  // Map<String, dynamic> toMap() {
+  //   return {
+  //     "lawAndArticle": lawAndArticle,
+  //     "articleText": articleText,
+  //   };
+  // }
 
   Map<String, dynamic> toMap() {
     return {
-      "lawAndArticle": lawAndArticle,
-      "articleText": articleText,
+      lawAndArticle: {"articleText": articleText},
     };
   }
 }
