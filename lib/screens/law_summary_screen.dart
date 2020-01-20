@@ -124,7 +124,6 @@ class LawSummaryScreen extends StatelessWidget {
     try {
       await searchState.updateLawContents();
       searchState.transitionToScreenVertically(Screen.text);
-      searchState.toggleLoadingState();
     } on NoPatternMatchException {
       final bool answer = await AlertBox(
         title: "Formato desconocido",

@@ -25,10 +25,14 @@ class DatabaseService {
     return lawsColl.document(id).get();
   }
 
-  // users (favorites)
+  // users (favorited articles)
 
   Future<DocumentSnapshot> readAllFavoritesOfUser() async {
     return currentUserDoc.get();
+  }
+
+  Stream<DocumentSnapshot> streamAllFavoritesOfUser() {
+    return currentUserDoc.snapshots();
   }
 
   Future<void> saveFavorite(Favorite favorite) async {

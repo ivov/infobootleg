@@ -1,26 +1,31 @@
 import 'package:flutter/material.dart';
 
-import 'package:infobootleg/models/search_state_model.dart';
-import 'package:provider/provider.dart';
-
 class TableOfContents extends StatelessWidget {
-  TableOfContents({@required this.onListItemSelected});
+  TableOfContents({
+    @required this.onListItemSelected,
+    @required this.drawerTitle,
+    @required this.drawerSubtitle,
+    @required this.drawerContents,
+    this.isForFavoritesScreen = false,
+  });
 
-  final void Function(int) onListItemSelected;
+  final Function onListItemSelected;
+  final String drawerTitle;
+  final String drawerSubtitle;
+  final Map<String, dynamic> drawerContents;
+  final bool isForFavoritesScreen;
 
   @override
   Widget build(BuildContext context) {
-    final SearchStateModel searchState = Provider.of<SearchStateModel>(context);
-
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
-        children: _buildDrawerSections(searchState, context),
+        children: _buildDrawerSections(context),
       ),
     );
   }
 
-  List<Widget> _buildDrawerSections(SearchStateModel searchState, context) {
+  List<Widget> _buildDrawerSections(context) {
     Container drawerHeader = Container(
       height: 160.0,
       child: GestureDetector(
@@ -33,7 +38,7 @@ class TableOfContents extends StatelessWidget {
             children: [
               SizedBox(height: 15.0),
               Text(
-                "Ley " + searchState.activeLaw.number,
+                drawerTitle,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 30.0,
@@ -42,7 +47,7 @@ class TableOfContents extends StatelessWidget {
               ),
               SizedBox(height: 20.0),
               Text(
-                "Índice de artículos",
+                drawerSubtitle,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 25.0,
@@ -58,30 +63,38 @@ class TableOfContents extends StatelessWidget {
       ),
     );
 
-    List<ListTile> drawerButtons = searchState.lawContents.keys
-        .map(
-          (articleNumber) => ListTile(
-            contentPadding:
-                EdgeInsets.symmetric(vertical: 6.0, horizontal: 15.0),
-            title: Text(
-              "Artículo $articleNumber",
-              style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
-            ),
-            subtitle: Text(
-              searchState.lawContents[articleNumber],
-              overflow: TextOverflow.ellipsis,
-              maxLines: 2,
-              style: TextStyle(fontSize: 16.0),
-            ),
-            onTap: () {
-              Navigator.of(context).pop();
-              onListItemSelected(
-                int.parse(articleNumber),
-              );
-            },
+    List<ListTile> drawerButtons = drawerContents.keys.toList().map(
+      (key) {
+        int index = drawerContents.keys.toList().indexOf(key);
+        String drawerItemTitle;
+
+        if (isForFavoritesScreen == false) {
+          drawerItemTitle = "Artículo $key";
+        } else if (isForFavoritesScreen == true) {
+          String lawNumber = key.split("&")[0];
+          String articleNumber = key.split("&")[1];
+          drawerItemTitle = "Ley $lawNumber — Artículo $articleNumber";
+        }
+
+        return ListTile(
+          contentPadding: EdgeInsets.symmetric(vertical: 6.0, horizontal: 15.0),
+          title: Text(
+            drawerItemTitle,
+            style: TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
           ),
-        )
-        .toList();
+          subtitle: Text(
+            drawerContents[key],
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
+            style: TextStyle(fontSize: 16.0),
+          ),
+          onTap: () {
+            Navigator.of(context).pop();
+            onListItemSelected(index);
+          },
+        );
+      },
+    ).toList();
 
     return [drawerHeader, ...drawerButtons];
   }

@@ -24,16 +24,16 @@ class LawTitleCard extends StatelessWidget {
             padding: EdgeInsets.only(bottom: 20.0),
             child: Text(
               activeLaw.summaryTitle,
-              textAlign: TextAlign.center,
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
             ),
           ),
           Padding(
             padding: EdgeInsets.only(bottom: 20.0),
             child: Text(
               activeLaw.abstractTitle,
+              style: TextStyle(fontSize: 22.0),
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 22),
             ),
           )
         ],

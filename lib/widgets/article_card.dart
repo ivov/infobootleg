@@ -6,6 +6,7 @@ import 'package:infobootleg/widgets/confirmation_prompt.dart';
 
 class ArticleCard extends StatefulWidget {
   ArticleCard({
+    this.position,
     @required this.lawNumber,
     @required this.articleNumber,
     @required this.articleText,
@@ -13,15 +14,20 @@ class ArticleCard extends StatefulWidget {
     @required this.onArticleSelected,
     @required this.onYesAtSave,
     @required this.onYesAtDelete,
+    this.forFavoritesScreen = false,
+    this.favoriteText,
   });
 
+  final int position;
   final String lawNumber;
   final String articleNumber;
   final String articleText;
   final bool isStarred;
-  final void Function(int, {int milliseconds}) onArticleSelected;
+  final Function onArticleSelected;
   final void Function(Favorite favorite) onYesAtSave;
   final void Function(Favorite favorite) onYesAtDelete;
+  final bool forFavoritesScreen;
+  final RichText favoriteText;
 
   @override
   _ArticleCardState createState() => _ArticleCardState();
@@ -33,8 +39,7 @@ class _ArticleCardState extends State<ArticleCard> {
   void _confirmAction(BuildContext context) async {
     setState(() => cardColor = Colors.lightBlueAccent);
 
-    widget.onArticleSelected(int.parse(widget.articleNumber),
-        milliseconds: 200);
+    widget.onArticleSelected(widget.position, milliseconds: 200);
 
     if (!widget.isStarred) {
       _confirmSave(context);
@@ -111,6 +116,15 @@ class _ArticleCardState extends State<ArticleCard> {
   }
 
   _buildRightSideOfCard() {
+    if (widget.forFavoritesScreen == true) {
+      return Expanded(
+        child: Padding(
+          padding: EdgeInsets.all(12.0),
+          child: widget.favoriteText,
+        ),
+      );
+    }
+
     return Expanded(
       child: Padding(
         padding: EdgeInsets.all(12.0),
