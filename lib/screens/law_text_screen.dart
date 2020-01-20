@@ -97,18 +97,6 @@ class _LawTextScreenState extends State<LawTextScreen> {
     );
   }
 
-  bool _getStarredStatus(String articleNumber) {
-    String dotlessLawNumber =
-        widget.searchState.activeLaw.number.replaceAll(".", "");
-    String cardName = dotlessLawNumber + "&" + articleNumber;
-    if (userFavorites != null) {
-      if (userFavorites.keys.toList().contains(cardName)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   Widget _buildListItem(
       {@required String articleNumber, @required BuildContext context}) {
     if (articleNumber == "0") {
@@ -136,6 +124,18 @@ class _LawTextScreenState extends State<LawTextScreen> {
         onYesAtDelete: (favorite) => _onNoAtSave(favorite, context),
       ),
     );
+  }
+
+  bool _getStarredStatus(String articleNumber) {
+    String dotlessLawNumber =
+        widget.searchState.activeLaw.number.replaceAll(".", "");
+    String cardName = dotlessLawNumber + "&" + articleNumber;
+    if (userFavorites != null) {
+      if (userFavorites.keys.toList().contains(cardName)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   void _onYesAtSave(Favorite favorite, BuildContext context) async {

@@ -22,11 +22,11 @@ Map<String, Map<String, RegExp>> lawRegexes = {
 class Retriever {
   static String lawTextString;
   static Map<String, String> lawContents = {};
-  static String lawPattern;
+  static String lawPattern = "";
 
   static Future<Map<String, String>> retrieveLawText({String url}) async {
     await _getLawTextString(url);
-    _selectLawPattern(); // TODO: if no pattern matches, url_launcher for Infoleg's site
+    _selectLawPattern();
     _parseMostArticles();
     _parseFinalArticle();
     return lawContents;
@@ -39,10 +39,20 @@ class Retriever {
   }
 
   static void _selectLawPattern() {
-    if (lawTextString.contains(lawRegexes["law20305"]["initial"])) {
+    bool isLaw20305 =
+        lawTextString.contains(lawRegexes["law20305"]["initial"]) &&
+            lawTextString.contains(lawRegexes["law20305"]["final"]);
+
+    bool isLaw11723 =
+        lawTextString.contains(lawRegexes["law11723"]["initial"]) &&
+            lawTextString.contains(lawRegexes["law11723"]["final"]);
+
+    if (isLaw20305) {
       lawPattern = "law20305";
-    } else if (lawTextString.contains(lawRegexes["law11723"]["initial"])) {
+    } else if (isLaw11723) {
       lawPattern = "law11723";
+    } else if (lawPattern == "") {
+      throw NoPatternMatchException();
     }
   }
 

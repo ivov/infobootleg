@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:infobootleg/models/law_model.dart';
+import 'package:infobootleg/widgets/alert_box.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import 'package:infobootleg/helpers/retriever.dart';
@@ -8,8 +9,13 @@ import 'package:infobootleg/widgets/law_title_card.dart';
 import 'package:infobootleg/widgets/modif_relations_box.dart';
 import 'package:infobootleg/models/search_state_model.dart';
 import 'package:infobootleg/helpers/hex_color.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 enum ModificationType { modifies, isModifiedBy }
+
+class NoPatternMatchException implements Exception {
+  NoPatternMatchException();
+}
 
 class LawSummaryScreen extends StatelessWidget {
   LawSummaryScreen(this.searchState);
@@ -105,19 +111,44 @@ class LawSummaryScreen extends StatelessWidget {
     );
   }
 
+  _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  void _accessLaw(BuildContext context) async {
+    searchState.toggleLoadingState();
+    try {
+      await searchState.updateLawContents();
+      searchState.transitionToScreenVertically(Screen.text);
+      searchState.toggleLoadingState();
+    } on NoPatternMatchException {
+      final bool answer = await AlertBox(
+        title: "Formato desconocido",
+        content:
+            "La Ley ${searchState.activeLaw.number} tiene formato desconocido y la aplicación no puede procesarla. ¿Abrir esta ley en Infoleg en el navagador?",
+        confirmActionText: "Sí",
+        cancelActionText: "No",
+      ).show(context);
+      if (answer) {
+        _launchURL(searchState.activeLaw.link);
+      }
+    } finally {
+      searchState.toggleLoadingState();
+    }
+  }
+
   _buildLawAccessButton(BuildContext context, bool isLoading) {
     if (isLoading == true) {
       return CircularProgressIndicator();
     }
 
     return RaisedButton(
+      onPressed: () => _accessLaw(context),
       elevation: 10.0,
-      onPressed: () async {
-        searchState.toggleLoadingState();
-        await searchState.updateLawContents();
-        searchState.transitionToScreenVertically(Screen.text);
-        searchState.toggleLoadingState();
-      },
       autofocus: true,
       color: hexColor("2c7873"),
       shape: RoundedRectangleBorder(
