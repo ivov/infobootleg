@@ -21,23 +21,29 @@ class FavoritesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // StreamBuilder located here and not below because `TableOfContents` of favorites needs access to `userFavorites`
+
     return StreamBuilder(
       stream: dbService.streamAllFavoritesOfUser(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return CircularProgressIndicator();
         Map<String, dynamic> userFavorites = snapshot.data.data;
+        Map<String, dynamic> flattenedFavorites =
+            _flattenFavorites(userFavorites);
+        List<String> sortedKeys = _sortFavorites(flattenedFavorites);
         return SafeArea(
           child: Scaffold(
             drawer: TableOfContents(
               onListItemSelected: scrollToListItem,
               drawerTitle: "Favoritos",
               drawerSubtitle: "Índice de favoritos",
-              drawerContents: _flattenFavorites(userFavorites),
+              drawerContents: flattenedFavorites,
               isForFavoritesScreen: true,
+              sortedKeys: sortedKeys,
             ),
             appBar: _buildAppBar(),
             backgroundColor: Theme.of(context).canvasColor,
-            body: _buildScrollablePositionedList(context, userFavorites),
+            body: _buildScrollablePositionedList(
+                context, userFavorites, sortedKeys),
           ),
         );
       },
@@ -58,7 +64,25 @@ class FavoritesScreen extends StatelessWidget {
       flattenedFavorites[key] = userFavorites[key]["articleText"];
     });
     return flattenedFavorites;
-    // TODO: Sort favorites by law and then by article.
+  }
+
+  /// Sorts Map of `flattenedFavorites` by law number and, in same law, by article number.
+  List<String> _sortFavorites(Map<String, dynamic> flattenedFavorites) {
+    return flattenedFavorites.keys.toList()
+      ..sort((a, b) {
+        int lawNumber1 = int.parse(a.split("&")[0]);
+        int lawNumber2 = int.parse(b.split("&")[0]);
+        int lawComparisonResult = lawNumber1.compareTo(lawNumber2);
+
+        // same law
+        if (lawComparisonResult == 0) {
+          int articleNumber1 = int.parse(a.split("&")[1]);
+          int articleNumber2 = int.parse(b.split("&")[1]);
+          return articleNumber1.compareTo(articleNumber2);
+        }
+
+        return lawComparisonResult;
+      });
   }
 
   _buildAppBar() {
@@ -75,26 +99,26 @@ class FavoritesScreen extends StatelessWidget {
     );
   }
 
-  _buildScrollablePositionedList(
-      BuildContext context, Map<String, dynamic> userFavorites) {
+  _buildScrollablePositionedList(BuildContext context,
+      Map<String, dynamic> userFavorites, List<String> sortedKeys) {
     // add 1 to account for the list item header added at zeroth index
     return ScrollablePositionedList.builder(
       itemScrollController: _scrollController,
       itemCount: userFavorites.length + 1,
       itemBuilder: (context, index) {
-        return _buildListItem(index, context, userFavorites);
+        return _buildListItem(index, context, userFavorites, sortedKeys);
       },
     );
   }
 
-  Widget _buildListItem(
-      int index, BuildContext context, Map<String, dynamic> userFavorites) {
+  Widget _buildListItem(int index, BuildContext context,
+      Map<String, dynamic> userFavorites, List<String> sortedKeys) {
     if (index == 0) return FavoritesTitleCard();
 
     // subtract 1 to recover the zeroth index used by the list item header
     int articleIndex = index - 1;
 
-    String lawAndArticle = userFavorites.keys.toList()[articleIndex];
+    String lawAndArticle = sortedKeys[articleIndex];
     String lawNumber = lawAndArticle.split("&")[0];
     String articleNumber = lawAndArticle.split("&")[1];
     String articleText = userFavorites[lawAndArticle]["articleText"];
