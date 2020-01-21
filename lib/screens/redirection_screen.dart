@@ -12,7 +12,6 @@ class RedirectionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context);
-
     return StreamBuilder<FirebaseUser>(
       stream: authService.onAuthStateChanged,
       builder: (context, snapshot) {

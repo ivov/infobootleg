@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:infobootleg/services/database_service.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import 'package:infobootleg/models/favorite_model.dart';
@@ -6,26 +7,27 @@ import 'package:infobootleg/widgets/confirmation_prompt.dart';
 
 class ArticleCard extends StatefulWidget {
   ArticleCard({
-    this.position,
+    @required this.position,
     @required this.lawNumber,
     @required this.articleNumber,
     @required this.articleText,
     @required this.isStarred,
     @required this.onArticleSelected,
-    @required this.onYesAtSave,
-    @required this.onYesAtDelete,
+    @required this.onSaveOrDelete,
+    @required this.dbService,
     this.forFavoritesScreen = false,
     this.favoriteText,
   });
 
   final int position;
+  final DatabaseService dbService;
   final String lawNumber;
   final String articleNumber;
   final String articleText;
   final bool isStarred;
-  final Function onArticleSelected;
-  final void Function(Favorite favorite) onYesAtSave;
-  final void Function(Favorite favorite) onYesAtDelete;
+  final void Function(int, {int milliseconds}) onArticleSelected;
+  final Function onSaveOrDelete;
+
   final bool forFavoritesScreen;
   final RichText favoriteText;
 
@@ -54,13 +56,13 @@ class _ArticleCardState extends State<ArticleCard> {
     ).show(context);
 
     if (answer == true) {
-      widget.onYesAtSave(
-        Favorite(
-          lawNumber: widget.lawNumber,
-          articleNumber: widget.articleNumber,
-          articleText: widget.articleText,
-        ),
+      Favorite favorite = Favorite(
+        lawNumber: widget.lawNumber,
+        articleNumber: widget.articleNumber,
+        articleText: widget.articleText,
       );
+      await widget.dbService.saveFavorite(favorite);
+      widget.onSaveOrDelete(favorite, context, onSave: true);
     }
     setState(() => cardColor = Colors.white);
   }
@@ -71,13 +73,13 @@ class _ArticleCardState extends State<ArticleCard> {
     ).show(context);
 
     if (answer == true) {
-      widget.onYesAtDelete(
-        Favorite(
-          lawNumber: widget.lawNumber,
-          articleNumber: widget.articleNumber,
-          articleText: widget.articleText,
-        ),
+      Favorite favorite = Favorite(
+        lawNumber: widget.lawNumber,
+        articleNumber: widget.articleNumber,
+        articleText: widget.articleText,
       );
+      await widget.dbService.deleteFavorite(favorite);
+      widget.onSaveOrDelete(favorite, context, onDelete: true);
     }
     setState(() => cardColor = Colors.white);
   }

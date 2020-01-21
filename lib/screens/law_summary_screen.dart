@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:infobootleg/models/law_model.dart';
-import 'package:infobootleg/widgets/alert_box.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 import 'package:infobootleg/helpers/retriever.dart';
@@ -9,7 +8,8 @@ import 'package:infobootleg/widgets/law_title_card.dart';
 import 'package:infobootleg/widgets/modif_relations_box.dart';
 import 'package:infobootleg/models/search_state_model.dart';
 import 'package:infobootleg/helpers/hex_color.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:infobootleg/models/law_model.dart';
+import 'package:infobootleg/widgets/alert_box.dart';
 
 enum ModificationType { modifies, isModifiedBy }
 
@@ -51,10 +51,7 @@ class LawSummaryScreen extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 30.0),
-            child: LawTitleCard(searchState.activeLaw),
-          ),
+          LawTitleCard(searchState.activeLaw),
           Padding(
             padding: EdgeInsets.symmetric(vertical: 10.0),
             child: _buildLawDateRows(searchState.activeLaw),

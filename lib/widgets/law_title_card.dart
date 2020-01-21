@@ -8,35 +8,41 @@ class LawTitleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BasicCard(
-      cardContent: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 20.0),
-            child: Text(
-              "Ley " + activeLaw.number,
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        vertical: 15.0,
+        horizontal: 30.0,
+      ),
+      child: BasicCard(
+        cardContent: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 20.0),
+              child: Text(
+                "Ley " + activeLaw.number,
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(bottom: 20.0),
-            child: Text(
-              activeLaw.summaryTitle,
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
+            Padding(
+              padding: EdgeInsets.only(bottom: 20.0),
+              child: Text(
+                activeLaw.summaryTitle,
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(bottom: 20.0),
-            child: Text(
-              activeLaw.abstractTitle,
-              style: TextStyle(fontSize: 22.0),
-              textAlign: TextAlign.center,
-            ),
-          )
-        ],
+            Padding(
+              padding: EdgeInsets.only(bottom: 20.0),
+              child: Text(
+                activeLaw.abstractTitle,
+                style: TextStyle(fontSize: 22.0),
+                textAlign: TextAlign.center,
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

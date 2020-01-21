@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_widgets/flutter_widgets.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
@@ -10,39 +9,28 @@ import 'package:infobootleg/widgets/article_card.dart';
 import 'package:infobootleg/widgets/law_title_card.dart';
 import 'package:infobootleg/widgets/table_of_contents.dart';
 
-// TODO: Convert to stream just like FavoritesScreen.
-class LawTextScreen extends StatefulWidget {
+class LawTextScreen extends StatelessWidget {
   LawTextScreen(this.searchState, this.dbService);
 
   final SearchStateModel searchState;
   final DatabaseService dbService;
-
-  @override
-  _LawTextScreenState createState() => _LawTextScreenState();
-}
-
-class _LawTextScreenState extends State<LawTextScreen> {
   final ItemScrollController _scrollController = ItemScrollController();
-  Map<String, dynamic>
-      userFavorites; // triggers rebuild on update at _updateUserFavorites from onYesAtSave and onYesAtDelete
 
   @override
-  void initState() {
-    super.initState();
-    _getFavoritesObject().then((data) {
-      setState(() => userFavorites = data);
-    });
-  }
-
-  _updateUserFavorites() {
-    _getFavoritesObject().then((data) {
-      setState(() => userFavorites = data);
-    });
-  }
-
-  Future<Map<String, dynamic>> _getFavoritesObject() async {
-    DocumentSnapshot snapshot = await widget.dbService.readAllFavoritesOfUser();
-    return snapshot.data;
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+        drawer: TableOfContents(
+          onListItemSelected: scrollToListItem,
+          drawerTitle: "Ley " + searchState.activeLaw.number,
+          drawerSubtitle: "Índice de artículos",
+          drawerContents: searchState.lawContents,
+        ),
+        appBar: _buildAppBar(),
+        backgroundColor: Theme.of(context).canvasColor,
+        body: _buildScrollablePositionedList(context),
+      ),
+    );
   }
 
   void scrollToListItem(int index, {int milliseconds = 500}) {
@@ -52,69 +40,46 @@ class _LawTextScreenState extends State<LawTextScreen> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        drawer: TableOfContents(
-          onListItemSelected: scrollToListItem,
-          drawerTitle: "Ley " + widget.searchState.activeLaw.number,
-          drawerSubtitle: "Índice de artículos",
-          drawerContents: widget.searchState.lawContents,
-        ),
-        appBar: _buildAppBar(),
-        backgroundColor: Theme.of(context).canvasColor,
-        body: _buildScrollablePositionedList(context),
-      ),
-    );
-  }
-
   _buildAppBar() {
     return AppBar(
       title: GestureDetector(
         child: Text("Volver al resumen"),
-        onTap: () =>
-            widget.searchState.transitionToScreenVertically(Screen.summary),
+        onTap: () => searchState.transitionToScreenVertically(Screen.summary),
       ),
       leading: IconButton(
         icon: Icon(Icons.arrow_upward),
         onPressed: () =>
-            widget.searchState.transitionToScreenVertically(Screen.summary),
+            searchState.transitionToScreenVertically(Screen.summary),
       ),
     );
   }
 
   _buildScrollablePositionedList(BuildContext context) {
     // add 1 to account for the list item header added at zeroth index
-    return ScrollablePositionedList.builder(
-      itemScrollController: _scrollController,
-      itemCount: widget.searchState.lawContents.length + 1,
-      itemBuilder: (context, index) {
-        return _buildListItem(index, context);
+    return StreamBuilder(
+      stream: dbService.streamAllFavoritesOfUser(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) return CircularProgressIndicator();
+        Map<String, dynamic> userFavorites = snapshot.data.data;
+        return ScrollablePositionedList.builder(
+          itemScrollController: _scrollController,
+          itemCount: searchState.lawContents.length + 1,
+          itemBuilder: (context, index) {
+            return _buildListItem(index, context, userFavorites);
+          },
+        );
       },
     );
   }
 
-  _buildListItemHeader() {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        vertical: 15.0,
-        horizontal: 30.0,
-      ),
-      child: LawTitleCard(widget.searchState.activeLaw),
-    );
-  }
+  Widget _buildListItem(
+      int index, BuildContext context, Map<String, dynamic> userFavorites) {
+    if (index == 0) return LawTitleCard(searchState.activeLaw);
 
-  Widget _buildListItem(int index, BuildContext context) {
-    if (index == 0) {
-      return _buildListItemHeader();
-    }
-
-    // new index only for articles, subtracting 1 to recover the zeroth index used by the list item header
+    // subtract 1 to recover the zeroth index used by the list item header
     int articleIndex = index - 1;
 
-    String articleNumber =
-        widget.searchState.lawContents.keys.toList()[articleIndex];
+    String articleNumber = searchState.lawContents.keys.toList()[articleIndex];
 
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -123,39 +88,24 @@ class _LawTextScreenState extends State<LawTextScreen> {
       ),
       child: ArticleCard(
         position: articleIndex,
-        lawNumber: widget.searchState.activeLaw.number,
+        lawNumber: searchState.activeLaw.number,
         articleNumber: articleNumber,
-        articleText: widget.searchState.lawContents[articleNumber],
-        isStarred: _getStarredStatus(articleNumber),
+        articleText: searchState.lawContents[articleNumber],
+        isStarred: _getStarredStatus(articleNumber, userFavorites),
         onArticleSelected: scrollToListItem,
-        onYesAtSave: (favorite) => _onYesAtSave(favorite, context),
-        onYesAtDelete: (favorite) => _onNoAtSave(favorite, context),
+        onSaveOrDelete: _showSnackBar,
+        dbService: dbService,
       ),
     );
   }
 
-  bool _getStarredStatus(String articleNumber) {
-    String dotlessLawNumber =
-        widget.searchState.activeLaw.number.replaceAll(".", "");
+  bool _getStarredStatus(
+      String articleNumber, Map<String, dynamic> userFavorites) {
+    String dotlessLawNumber = searchState.activeLaw.number.replaceAll(".", "");
     String cardName = dotlessLawNumber + "&" + articleNumber;
-    if (userFavorites != null) {
-      if (userFavorites.keys.toList().contains(cardName)) {
-        return true;
-      }
-    }
+
+    if (userFavorites.keys.toList().contains(cardName)) return true;
     return false;
-  }
-
-  void _onYesAtSave(Favorite favorite, BuildContext context) async {
-    await widget.dbService.saveFavorite(favorite);
-    _updateUserFavorites();
-    _showSnackBar(favorite, context, onSave: true);
-  }
-
-  void _onNoAtSave(Favorite favorite, BuildContext context) async {
-    await widget.dbService.deleteFavorite(favorite);
-    _updateUserFavorites();
-    _showSnackBar(favorite, context, onDelete: true);
   }
 
   _showSnackBar(Favorite favorite, BuildContext context,
