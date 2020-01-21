@@ -65,9 +65,14 @@ class TableOfContents extends StatelessWidget {
       ),
     );
 
-    List<ListTile> drawerButtons = sortedKeys.map(
+    List<String> keysList = drawerContents.keys.toList();
+    if (isForFavoritesScreen) {
+      keysList = sortedKeys;
+    }
+
+    List<ListTile> drawerButtons = keysList.map(
       (key) {
-        int index = sortedKeys.indexOf(key);
+        int index = keysList.indexOf(key);
         String drawerItemTitle;
 
         if (isForFavoritesScreen == false) {
