@@ -37,12 +37,11 @@ class LawSummaryScreen extends StatelessWidget {
     return AppBar(
       title: GestureDetector(
         child: Text("Volver al buscador"),
-        onTap: () => searchState.transitionToScreenVertically(Screen.search),
+        onTap: () => searchState.transitionVerticallyTo(Screen.search),
       ),
       leading: IconButton(
         icon: Icon(Icons.arrow_upward),
-        onPressed: () =>
-            searchState.transitionToScreenVertically(Screen.search),
+        onPressed: () => searchState.transitionVerticallyTo(Screen.search),
       ),
     );
   }
@@ -120,7 +119,7 @@ class LawSummaryScreen extends StatelessWidget {
     searchState.toggleLoadingState();
     try {
       await searchState.updateLawContents();
-      searchState.transitionToScreenVertically(Screen.text);
+      searchState.transitionVerticallyTo(Screen.text);
     } on NoPatternMatchException {
       final bool answer = await AlertBox(
         title: "Formato desconocido",

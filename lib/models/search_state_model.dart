@@ -10,12 +10,13 @@ class SearchStateModel extends ChangeNotifier {
   final PageController _horizontalPageViewController = PageController();
   final ScrollController _scrollController = ScrollController();
   bool _isLoading = false;
+  Map<String, dynamic> _articleToComment;
 
   // vertical navigation: search, summary, text
 
   PageController get verticalPageViewController => _verticalPageViewController;
 
-  void transitionToScreenVertically(Screen screen) {
+  void transitionVerticallyTo(Screen screen) {
     Map<Screen, int> indices = {
       Screen.search: 0,
       Screen.summary: 1,
@@ -34,7 +35,7 @@ class SearchStateModel extends ChangeNotifier {
   PageController get horizontalPageViewController =>
       _horizontalPageViewController;
 
-  void transitionToScreenHorizontally(Screen screen) {
+  void transitionHorizontallyTo(Screen screen) {
     Map<Screen, int> indices = {
       Screen.search: 0,
       Screen.favorites: 1,
@@ -84,6 +85,15 @@ class SearchStateModel extends ChangeNotifier {
 
   void toggleLoadingState() {
     _isLoading = !_isLoading;
+    notifyListeners();
+  }
+
+  // article to comment
+
+  Map<String, dynamic> get articleToComment => _articleToComment;
+
+  void updateArticleToComment(Map<String, dynamic> newArticleToComment) {
+    _articleToComment = newArticleToComment;
     notifyListeners();
   }
 }

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:infobootleg/widgets/basic_card.dart';
 
-class FavoritesTitleCard extends StatelessWidget {
+class ShortTitleCard extends StatelessWidget {
+  ShortTitleCard({this.title});
+
+  final String title;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -16,7 +20,7 @@ class FavoritesTitleCard extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(vertical: 20.0),
               child: Text(
-                "Favoritos",
+                title,
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),

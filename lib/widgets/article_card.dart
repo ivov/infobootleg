@@ -5,14 +5,14 @@ class ArticleCard extends StatelessWidget {
     this.cardColor,
     this.articleNumber,
     this.articleText,
-    this.forFavoritesScreen,
+    this.isFavorite,
     this.favoriteText,
   });
 
   final Color cardColor;
   final String articleNumber;
   final String articleText;
-  final bool forFavoritesScreen;
+  final bool isFavorite;
   final RichText favoriteText;
 
   @override
@@ -41,7 +41,7 @@ class ArticleCard extends StatelessWidget {
   }
 
   _buildRightSideOfCard() {
-    if (forFavoritesScreen == true) {
+    if (isFavorite == true) {
       return Expanded(
         child: Padding(
           padding: EdgeInsets.all(12.0),

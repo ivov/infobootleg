@@ -92,21 +92,27 @@ class _ArticleCardWithCornerIconsState
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        GestureDetector(
-          onLongPress: () => _confirmAction(context),
-          child: ArticleCard(
-            cardColor: cardColor,
-            articleNumber: widget.articleNumber,
-            articleText: widget.articleText,
-            forFavoritesScreen: widget.forFavoritesScreen,
-            favoriteText: widget.favoriteText,
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        vertical: 7.5,
+        horizontal: 10.0,
+      ),
+      child: Stack(
+        children: [
+          GestureDetector(
+            onLongPress: () => _confirmAction(context),
+            child: ArticleCard(
+              cardColor: cardColor,
+              articleNumber: widget.articleNumber,
+              articleText: widget.articleText,
+              isFavorite: widget.forFavoritesScreen,
+              favoriteText: widget.favoriteText,
+            ),
           ),
-        ),
-        _buildStarIcon(),
-        _buildCommentIcon()
-      ],
+          _buildStarIcon(),
+          _buildCommentIcon()
+        ],
+      ),
     );
   }
 

@@ -4,26 +4,38 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 
 import 'package:infobootleg/services/database_service.dart';
 import 'package:infobootleg/models/search_state_model.dart';
-import 'package:infobootleg/widgets/favorites_title_card.dart';
+import 'package:infobootleg/widgets/short_title_card.dart';
 import 'package:infobootleg/models/favorite_model.dart';
 import 'package:infobootleg/widgets/article_card_with_corner_icons.dart';
 import 'package:infobootleg/widgets/table_of_contents.dart';
 
 // TODO: Add comments to favorites.
 
-class FavoritesScreen extends StatelessWidget {
+class FavoritesScreen extends StatefulWidget {
+  // Stateful because of the need dispose of _ScrollablePositionedListState. See: https://github.com/google/flutter.widgets/issues/24
   FavoritesScreen(this.searchState, this.dbService);
 
   final SearchStateModel searchState;
   final DatabaseService dbService;
-  final ItemScrollController _scrollController = ItemScrollController();
+
+  @override
+  _FavoritesScreenState createState() => _FavoritesScreenState();
+}
+
+class _FavoritesScreenState extends State<FavoritesScreen> {
+  ItemScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ItemScrollController();
+  }
 
   @override
   Widget build(BuildContext context) {
-    // `StreamBuilder` is located up here rather than down below (as in LawTextScreen) because `TableOfContents` of favorites needs access to `userFavorites`
-
+    // `StreamBuilder` is located up here rather than down below (as in LawTextScreen) because `TableOfContents` for `FavoritesScreen` needs access to `userFavorites`.
     return StreamBuilder(
-      stream: dbService.streamAllFavoritesOfUser(),
+      stream: widget.dbService.streamAllFavoritesOfUser(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) return CircularProgressIndicator();
         Map<String, dynamic> userFavorites = snapshot.data.data;
@@ -90,12 +102,12 @@ class FavoritesScreen extends StatelessWidget {
     return AppBar(
       title: GestureDetector(
         child: Text("Volver al buscador"),
-        onTap: () => searchState.transitionToScreenHorizontally(Screen.search),
+        onTap: () => widget.searchState.transitionHorizontallyTo(Screen.search),
       ),
       leading: IconButton(
         icon: Icon(MdiIcons.arrowLeft),
         onPressed: () =>
-            searchState.transitionToScreenHorizontally(Screen.search),
+            widget.searchState.transitionHorizontallyTo(Screen.search),
       ),
     );
   }
@@ -114,7 +126,7 @@ class FavoritesScreen extends StatelessWidget {
 
   Widget _buildListItem(int index, BuildContext context,
       Map<String, dynamic> userFavorites, List<String> sortedKeys) {
-    if (index == 0) return FavoritesTitleCard();
+    if (index == 0) return ShortTitleCard(title: "Favoritos");
 
     // subtract 1 to recover the zeroth index used by FavoritesTitleCard
     int articleIndex = index - 1;
@@ -143,26 +155,25 @@ class FavoritesScreen extends StatelessWidget {
       ),
     );
 
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        vertical: 7.5,
-        horizontal: 10.0,
-      ),
-      child: ArticleCardWithCornerIcons(
-        position: articleIndex,
-        lawNumber: lawNumber,
-        articleNumber: articleNumber,
-        articleText: articleText,
-        isStarred: true,
-        onArticleSelected: _scrollToListItem,
-        onSave: (favorite) => dbService.saveFavorite(favorite),
-        onDelete: (favorite) => dbService.deleteFavorite(favorite),
-        onSaveOrDeleteCompleted: _showSnackBar,
-        forFavoritesScreen: true,
-        favoriteText: favoriteText,
-        onCommentPressed: () =>
-            searchState.transitionToScreenHorizontally(Screen.comment),
-      ),
+    return ArticleCardWithCornerIcons(
+      position: articleIndex,
+      lawNumber: lawNumber,
+      articleNumber: articleNumber,
+      articleText: articleText,
+      isStarred: true,
+      onArticleSelected: _scrollToListItem,
+      onSave: (favorite) => widget.dbService.saveFavorite(favorite),
+      onDelete: (favorite) => widget.dbService.deleteFavorite(favorite),
+      onSaveOrDeleteCompleted: _showSnackBar,
+      forFavoritesScreen: true,
+      favoriteText: favoriteText,
+      onCommentPressed: () {
+        widget.searchState.updateArticleToComment({
+          "articleNumber": articleNumber,
+          "favoriteText": favoriteText,
+        });
+        widget.searchState.transitionHorizontallyTo(Screen.comment);
+      },
     );
   }
 

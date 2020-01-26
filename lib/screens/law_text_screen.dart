@@ -44,12 +44,11 @@ class LawTextScreen extends StatelessWidget {
     return AppBar(
       title: GestureDetector(
         child: Text("Volver al resumen"),
-        onTap: () => searchState.transitionToScreenVertically(Screen.summary),
+        onTap: () => searchState.transitionVerticallyTo(Screen.summary),
       ),
       leading: IconButton(
         icon: Icon(Icons.arrow_upward),
-        onPressed: () =>
-            searchState.transitionToScreenVertically(Screen.summary),
+        onPressed: () => searchState.transitionVerticallyTo(Screen.summary),
       ),
     );
   }

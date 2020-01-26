@@ -62,8 +62,7 @@ class LawSearchScreen extends StatelessWidget {
             fontSize: 18.0,
             color: Colors.white,
           )),
-      onPressed: () =>
-          searchState.transitionToScreenHorizontally(Screen.favorites),
+      onPressed: () => searchState.transitionHorizontallyTo(Screen.favorites),
     );
   }
 
@@ -130,7 +129,7 @@ class LawSearchScreen extends StatelessWidget {
     try {
       final snapshot = await dbService.readLaw(id: leftPad(userInput));
       searchState.updateActiveLaw(Law(snapshot.data));
-      searchState.transitionToScreenVertically(Screen.summary);
+      searchState.transitionVerticallyTo(Screen.summary);
     } catch (e) {
       AlertBox(
         title: "Sin datos",
