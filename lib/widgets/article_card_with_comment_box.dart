@@ -18,7 +18,6 @@ class ArticleCardWithCommentBox extends StatelessWidget {
         horizontal: 10.0,
       ),
       child: ArticleCard(
-        cardColor: Colors.white,
         articleNumber: articleNumber,
         isFavorite: true,
         favoriteText: favoriteText,

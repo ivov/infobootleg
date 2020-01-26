@@ -9,10 +9,9 @@ import 'package:infobootleg/models/favorite_model.dart';
 import 'package:infobootleg/widgets/article_card_with_corner_icons.dart';
 import 'package:infobootleg/widgets/table_of_contents.dart';
 
-// TODO: Add comments to favorites.
-
 class FavoritesScreen extends StatefulWidget {
-  // Stateful because of the need dispose of _ScrollablePositionedListState. See: https://github.com/google/flutter.widgets/issues/24
+  // Stateful because of the need to dispose of `_ScrollablePositionedListState`.
+  // See: https://github.com/google/flutter.widgets/issues/24
   FavoritesScreen(this.searchState, this.dbService);
 
   final SearchStateModel searchState;
@@ -135,26 +134,9 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     String lawNumber = lawAndArticle.split("&")[0];
     String articleNumber = lawAndArticle.split("&")[1];
     String articleText = userFavorites[lawAndArticle]["articleText"];
+    RichText favoriteText = _buildFavoriteText(articleText, lawNumber);
 
-    RichText favoriteText = RichText(
-      text: TextSpan(
-        style: Theme.of(context).textTheme.body1,
-        children: [
-          TextSpan(
-            text: userFavorites[lawAndArticle]["articleText"],
-            style: TextStyle(fontSize: 18.0),
-          ),
-          TextSpan(
-            text: " — Ley $lawNumber",
-            style: TextStyle(
-              fontSize: 18.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
-
+    // TODO: Show comment if applicable.
     return ArticleCardWithCornerIcons(
       position: articleIndex,
       lawNumber: lawNumber,
@@ -174,6 +156,27 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         });
         widget.searchState.transitionHorizontallyTo(Screen.comment);
       },
+    );
+  }
+
+  _buildFavoriteText(String articleText, String lawNumber) {
+    return RichText(
+      text: TextSpan(
+        style: Theme.of(context).textTheme.body1,
+        children: [
+          TextSpan(
+            text: articleText,
+            style: TextStyle(fontSize: 18.0),
+          ),
+          TextSpan(
+            text: " — Ley $lawNumber",
+            style: TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
     );
   }
 

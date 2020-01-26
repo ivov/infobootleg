@@ -12,7 +12,7 @@ class LawSearchScreen extends StatelessWidget {
   LawSearchScreen(this.searchState, this.dbService);
   final SearchStateModel searchState;
   final DatabaseService dbService;
-  final TextEditingController _myTextController = TextEditingController();
+  final TextEditingController _textController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +108,7 @@ class LawSearchScreen extends StatelessWidget {
       width: 200,
       alignment: Alignment.center,
       child: TextField(
-        controller: _myTextController,
+        controller: _textController,
         onSubmitted: (userInput) => _onSubmitted(context, userInput),
         style: TextStyle(fontSize: 25.0),
         keyboardType: TextInputType.number,

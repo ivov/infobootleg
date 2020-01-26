@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:infobootleg/widgets/article_card.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
+import 'package:infobootleg/widgets/article_card.dart';
 import 'package:infobootleg/models/favorite_model.dart';
 import 'package:infobootleg/widgets/confirmation_prompt.dart';
 
 class ArticleCardWithCornerIcons extends StatefulWidget {
-  // stateful because of cardColor
+  // Stateful because of temporary change in cardColor on long press.
   ArticleCardWithCornerIcons({
     @required this.position,
     @required this.lawNumber,
