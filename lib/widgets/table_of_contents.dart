@@ -7,7 +7,7 @@ class TableOfContents extends StatelessWidget {
     @required this.drawerSubtitle,
     @required this.drawerContents,
     this.isForFavoritesScreen = false,
-    this.sortedKeys,
+    this.sortedKeysForFavorites,
   });
 
   final Function onListItemSelected;
@@ -15,7 +15,7 @@ class TableOfContents extends StatelessWidget {
   final String drawerSubtitle;
   final Map<String, dynamic> drawerContents;
   final bool isForFavoritesScreen;
-  final List<String> sortedKeys; // TODO: user this
+  final List<String> sortedKeysForFavorites;
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +67,7 @@ class TableOfContents extends StatelessWidget {
 
     List<String> keysList = drawerContents.keys.toList();
     if (isForFavoritesScreen) {
-      keysList = sortedKeys;
+      keysList = sortedKeysForFavorites;
     }
 
     List<ListTile> drawerButtons = keysList.map(

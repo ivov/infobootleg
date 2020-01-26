@@ -1,56 +1,72 @@
 import 'package:flutter/material.dart';
-import 'package:infobootleg/models/law_model.dart';
 import 'package:provider/provider.dart';
 
+import 'package:infobootleg/models/law_model.dart';
 import 'package:infobootleg/models/search_state_model.dart';
-import 'package:infobootleg/helpers/hex_color.dart';
 import 'package:infobootleg/helpers/left_pad.dart';
 import 'package:infobootleg/services/auth_service.dart';
 import 'package:infobootleg/services/database_service.dart';
 import 'package:infobootleg/widgets/alert_box.dart';
 
 class LawSearchScreen extends StatelessWidget {
-  LawSearchScreen(this.searchState);
+  LawSearchScreen(this.searchState, this.dbService);
   final SearchStateModel searchState;
+  final DatabaseService dbService;
   final TextEditingController _myTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          "Infobootleg",
-          style: TextStyle(
-            fontSize: 24.0,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        actions: <Widget>[
+        automaticallyImplyLeading: false,
+        titleSpacing: 0.0,
+        actions: [
           _buildExitButton(context),
+          Expanded(
+            child:
+                Container(), // fill up space between exit button and favorites button
+          ),
+          FutureBuilder(
+              future: dbService.readAllFavoritesOfUser(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.hasData && snapshot.data.data != null) {
+                  return _buildFavoritesButton(context);
+                }
+                return Container(); // show nothing instead of favorites button
+              }),
         ],
       ),
       backgroundColor: Theme.of(context).canvasColor,
-      body: Center(
-        child: _buildSearchCard(context),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () =>
-            searchState.transitionToScreenHorizontally(Screen.favorites),
-      ),
+      body: Center(child: _buildSearchCard(context)),
     );
   }
 
   FlatButton _buildExitButton(BuildContext context) {
     return FlatButton.icon(
-      icon: Icon(Icons.exit_to_app),
+      icon: Transform.rotate(angle: 180 * 3.14 / 180, child: Icon(Icons.close)),
       textColor: Colors.white,
-      color: hexColor("5b5656"),
+      // color: hexColor("5b5656"),
       label: Text("Salir",
           style: TextStyle(
             fontSize: 18.0,
             color: Colors.white,
           )),
       onPressed: () => _confirmSignOut(context),
+    );
+  }
+
+  FlatButton _buildFavoritesButton(BuildContext context) {
+    return FlatButton.icon(
+      icon: Icon(Icons.star),
+      textColor: Colors.white,
+      // color: hexColor("5b5656"),
+      label: Text("Favoritos",
+          style: TextStyle(
+            fontSize: 18.0,
+            color: Colors.white,
+          )),
+      onPressed: () =>
+          searchState.transitionToScreenHorizontally(Screen.favorites),
     );
   }
 

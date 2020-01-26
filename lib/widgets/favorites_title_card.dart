@@ -16,7 +16,7 @@ class FavoritesTitleCard extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(vertical: 20.0),
               child: Text(
-                "Mis favoritos",
+                "Favoritos",
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center,
               ),

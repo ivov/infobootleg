@@ -35,7 +35,7 @@ class LawTextScreen extends StatelessWidget {
 
   void scrollToListItem(int index, {int milliseconds = 500}) {
     _scrollController.scrollTo(
-      index: index + 1, // add 1 to account for list item header at zeroth index
+      index: index + 1, // add 1 to account for LawTitleCard at zeroth index
       duration: Duration(milliseconds: milliseconds),
     );
   }
@@ -55,7 +55,6 @@ class LawTextScreen extends StatelessWidget {
   }
 
   _buildScrollablePositionedList(BuildContext context) {
-    // add 1 to account for the list item header added at zeroth index
     return StreamBuilder(
       stream: dbService.streamAllFavoritesOfUser(),
       builder: (context, snapshot) {
@@ -63,6 +62,7 @@ class LawTextScreen extends StatelessWidget {
         Map<String, dynamic> userFavorites = snapshot.data.data;
         return ScrollablePositionedList.builder(
           itemScrollController: _scrollController,
+          // add 1 to account for the LawTitleCard added at zeroth index
           itemCount: searchState.lawContents.length + 1,
           itemBuilder: (context, index) {
             return _buildListItem(index, context, userFavorites);
@@ -76,7 +76,7 @@ class LawTextScreen extends StatelessWidget {
       int index, BuildContext context, Map<String, dynamic> userFavorites) {
     if (index == 0) return LawTitleCard(searchState.activeLaw);
 
-    // subtract 1 to recover the zeroth index used by the list item header
+    // subtract 1 to recover the zeroth index used by the LawTitleCard
     int articleIndex = index - 1;
 
     String articleNumber = searchState.lawContents.keys.toList()[articleIndex];

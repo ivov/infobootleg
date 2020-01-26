@@ -41,7 +41,7 @@ class MasterSearchScreen extends StatelessWidget {
           physics:
               NeverScrollableScrollPhysics(), // prevents manual PageView transition
           children: [
-            LawSearchScreen(searchState),
+            LawSearchScreen(searchState, dbService),
             FavoritesScreen(searchState, dbService),
           ],
         ),

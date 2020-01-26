@@ -20,7 +20,7 @@ class FavoritesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // StreamBuilder located here and not below because `TableOfContents` of favorites needs access to `userFavorites`
+    // `StreamBuilder` is located up here rather than down below (as in LawTextScreen) because `TableOfContents` of favorites needs access to `userFavorites`
 
     return StreamBuilder(
       stream: dbService.streamAllFavoritesOfUser(),
@@ -38,7 +38,7 @@ class FavoritesScreen extends StatelessWidget {
               drawerSubtitle: "Índice de favoritos",
               drawerContents: flattenedFavorites,
               isForFavoritesScreen: true,
-              sortedKeys: sortedKeys,
+              sortedKeysForFavorites: sortedKeys,
             ),
             appBar: _buildAppBar(),
             backgroundColor: Theme.of(context).canvasColor,
@@ -52,7 +52,8 @@ class FavoritesScreen extends StatelessWidget {
 
   void scrollToListItem(int index, {int milliseconds = 500}) {
     _scrollController.scrollTo(
-      index: index + 1, // add 1 to account for header at zeroth index
+      index:
+          index + 1, // add 1 to account for FavoritesTitleCard at zeroth index
       duration: Duration(milliseconds: milliseconds),
     );
   }
@@ -101,7 +102,7 @@ class FavoritesScreen extends StatelessWidget {
 
   _buildScrollablePositionedList(BuildContext context,
       Map<String, dynamic> userFavorites, List<String> sortedKeys) {
-    // add 1 to account for the list item header added at zeroth index
+    // add 1 to account for the FavoritesTitleCard added at zeroth index
     return ScrollablePositionedList.builder(
       itemScrollController: _scrollController,
       itemCount: userFavorites.length + 1,
@@ -115,7 +116,7 @@ class FavoritesScreen extends StatelessWidget {
       Map<String, dynamic> userFavorites, List<String> sortedKeys) {
     if (index == 0) return FavoritesTitleCard();
 
-    // subtract 1 to recover the zeroth index used by the list item header
+    // subtract 1 to recover the zeroth index used by FavoritesTitleCard
     int articleIndex = index - 1;
 
     String lawAndArticle = sortedKeys[articleIndex];
