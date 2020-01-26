@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:infobootleg/helpers/retriever.dart';
 import 'package:infobootleg/models/law_model.dart';
 
-enum Screen { search, summary, text, favorites }
+enum Screen { search, summary, text, favorites, comment }
 
 class SearchStateModel extends ChangeNotifier {
   Law _activeLaw;
@@ -11,7 +11,7 @@ class SearchStateModel extends ChangeNotifier {
   final ScrollController _scrollController = ScrollController();
   bool _isLoading = false;
 
-  // vertical navigation: search, summary and text
+  // vertical navigation: search, summary, text
 
   PageController get verticalPageViewController => _verticalPageViewController;
 
@@ -29,7 +29,7 @@ class SearchStateModel extends ChangeNotifier {
     );
   }
 
-  // horizontal navigation: search & favorites
+  // horizontal navigation: search, favorites, comment
 
   PageController get horizontalPageViewController =>
       _horizontalPageViewController;
@@ -38,6 +38,7 @@ class SearchStateModel extends ChangeNotifier {
     Map<Screen, int> indices = {
       Screen.search: 0,
       Screen.favorites: 1,
+      Screen.comment: 2,
     };
 
     _horizontalPageViewController.animateToPage(

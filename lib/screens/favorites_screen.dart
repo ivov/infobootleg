@@ -6,7 +6,7 @@ import 'package:infobootleg/services/database_service.dart';
 import 'package:infobootleg/models/search_state_model.dart';
 import 'package:infobootleg/widgets/favorites_title_card.dart';
 import 'package:infobootleg/models/favorite_model.dart';
-import 'package:infobootleg/widgets/article_card.dart';
+import 'package:infobootleg/widgets/article_card_with_corner_icons.dart';
 import 'package:infobootleg/widgets/table_of_contents.dart';
 
 // TODO: Add comments to favorites.
@@ -33,7 +33,7 @@ class FavoritesScreen extends StatelessWidget {
         return SafeArea(
           child: Scaffold(
             drawer: TableOfContents(
-              onListItemSelected: scrollToListItem,
+              onListItemSelected: _scrollToListItem,
               drawerTitle: "Favoritos",
               drawerSubtitle: "Índice de favoritos",
               drawerContents: flattenedFavorites,
@@ -50,7 +50,7 @@ class FavoritesScreen extends StatelessWidget {
     );
   }
 
-  void scrollToListItem(int index, {int milliseconds = 500}) {
+  void _scrollToListItem(int index, {int milliseconds = 500}) {
     _scrollController.scrollTo(
       index:
           index + 1, // add 1 to account for FavoritesTitleCard at zeroth index
@@ -148,17 +148,20 @@ class FavoritesScreen extends StatelessWidget {
         vertical: 7.5,
         horizontal: 10.0,
       ),
-      child: ArticleCard(
+      child: ArticleCardWithCornerIcons(
         position: articleIndex,
         lawNumber: lawNumber,
         articleNumber: articleNumber,
         articleText: articleText,
         isStarred: true,
-        onArticleSelected: scrollToListItem,
-        onSaveOrDelete: _showSnackBar,
+        onArticleSelected: _scrollToListItem,
+        onSave: (favorite) => dbService.saveFavorite(favorite),
+        onDelete: (favorite) => dbService.deleteFavorite(favorite),
+        onSaveOrDeleteCompleted: _showSnackBar,
         forFavoritesScreen: true,
         favoriteText: favoriteText,
-        dbService: dbService,
+        onCommentPressed: () =>
+            searchState.transitionToScreenHorizontally(Screen.comment),
       ),
     );
   }

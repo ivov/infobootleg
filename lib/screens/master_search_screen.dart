@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:infobootleg/screens/comment_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'package:infobootleg/screens/favorites_screen.dart';
@@ -43,6 +44,7 @@ class MasterSearchScreen extends StatelessWidget {
           children: [
             LawSearchScreen(searchState, dbService),
             FavoritesScreen(searchState, dbService),
+            CommentScreen(searchState),
           ],
         ),
         LawSummaryScreen(searchState),

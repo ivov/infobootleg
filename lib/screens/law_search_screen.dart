@@ -22,10 +22,7 @@ class LawSearchScreen extends StatelessWidget {
         titleSpacing: 0.0,
         actions: [
           _buildExitButton(context),
-          Expanded(
-            child:
-                Container(), // fill up space between exit button and favorites button
-          ),
+          Expanded(child: Container()), // fill up space between buttons
           FutureBuilder(
               future: dbService.readAllFavoritesOfUser(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {

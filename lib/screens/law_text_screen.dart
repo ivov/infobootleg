@@ -5,7 +5,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:infobootleg/models/favorite_model.dart';
 import 'package:infobootleg/models/search_state_model.dart';
 import 'package:infobootleg/services/database_service.dart';
-import 'package:infobootleg/widgets/article_card.dart';
+import 'package:infobootleg/widgets/article_card_with_corner_icons.dart';
 import 'package:infobootleg/widgets/law_title_card.dart';
 import 'package:infobootleg/widgets/table_of_contents.dart';
 
@@ -86,15 +86,16 @@ class LawTextScreen extends StatelessWidget {
         vertical: 7.5,
         horizontal: 10.0,
       ),
-      child: ArticleCard(
+      child: ArticleCardWithCornerIcons(
         position: articleIndex,
         lawNumber: searchState.activeLaw.number,
         articleNumber: articleNumber,
         articleText: searchState.lawContents[articleNumber],
         isStarred: _getStarredStatus(articleNumber, userFavorites),
         onArticleSelected: scrollToListItem,
-        onSaveOrDelete: _showSnackBar,
-        dbService: dbService,
+        onSave: (favorite) => dbService.saveFavorite(favorite),
+        onDelete: (favorite) => dbService.deleteFavorite(favorite),
+        onSaveOrDeleteCompleted: _showSnackBar,
       ),
     );
   }
