@@ -44,7 +44,7 @@ class MasterSearchScreen extends StatelessWidget {
           children: [
             LawSearchScreen(searchState, dbService),
             FavoritesScreen(searchState, dbService),
-            CommentScreen(searchState),
+            CommentScreen(searchState, dbService),
           ],
         ),
         LawSummaryScreen(searchState),

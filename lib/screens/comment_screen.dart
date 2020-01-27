@@ -1,16 +1,21 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:infobootleg/widgets/basic_card.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
+import 'package:infobootleg/models/favorite_model.dart';
+import 'package:infobootleg/services/database_service.dart';
+import 'package:infobootleg/widgets/basic_card.dart';
 import 'package:infobootleg/widgets/article_card_with_comment_box.dart';
 import 'package:infobootleg/widgets/short_title_card.dart';
 import 'package:infobootleg/models/search_state_model.dart';
 
 class CommentScreen extends StatelessWidget {
   // Stateful become of TextEditingController.
-  CommentScreen(this.searchState);
+  CommentScreen(this.searchState, this.dbService);
 
   final SearchStateModel searchState;
+  final DatabaseService dbService;
   final TextEditingController _textEditingController = TextEditingController();
 
   @override
@@ -20,17 +25,20 @@ class CommentScreen extends StatelessWidget {
         resizeToAvoidBottomInset: true,
         appBar: _buildAppBar(),
         backgroundColor: Theme.of(context).canvasColor,
-        body: SingleChildScrollView(
-          // prevents keyboard from blocking text field
-          child: Column(
-            children: [
-              ShortTitleCard(title: "Comentar artículo"),
-              ArticleCardWithCommentBox(
-                articleNumber: searchState.articleToComment["articleNumber"],
-                favoriteText: searchState.articleToComment["favoriteText"],
-              ),
-              _buildTextField(context)
-            ],
+        body: Builder(
+          // gets context under the Scaffold, for Snackbar down below
+          builder: (context) => SingleChildScrollView(
+            // prevents keyboard from blocking text field
+            child: Column(
+              children: [
+                ShortTitleCard(title: "Comentar artículo"),
+                ArticleCardWithCommentBox(
+                  articleNumber: searchState.articleToComment["articleNumber"],
+                  favoriteText: searchState.articleToComment["favoriteText"],
+                ),
+                _buildTextField(context)
+              ],
+            ),
           ),
         ),
       ),
@@ -58,7 +66,7 @@ class CommentScreen extends StatelessWidget {
           Padding(
             padding: EdgeInsets.symmetric(vertical: 20.0),
             child: TextField(
-              onSubmitted: (userInput) => _onSubmitted(userInput),
+              onSubmitted: (userInput) => _onSubmitted(context, userInput),
               textInputAction: TextInputAction.done,
               controller: _textEditingController,
               style: TextStyle(
@@ -74,11 +82,44 @@ class CommentScreen extends StatelessWidget {
     );
   }
 
-  _onSubmitted(String userInput) {
-    print(userInput);
-    // TODO: _onSubmitted
-    // - Save userInput to Firestore.
-    // - Show snackbar confirming operation.
-    // - Wait two seconds and return to FavoritesScreen.
+  _onSubmitted(BuildContext context, String userInput) async {
+    final Favorite favorite = Favorite(
+      lawNumber: searchState.articleToComment["lawNumber"],
+      articleNumber: searchState.articleToComment["articleNumber"],
+      articleText: searchState.articleToComment["articleText"],
+    );
+
+    await dbService.addCommentToFavorite(favorite, userInput);
+    _showSnackBar(favorite, context);
+    // sleep(Duration(seconds: 2));
+  }
+
+  _showSnackBar(
+    Favorite favorite,
+    BuildContext context,
+  ) {
+    String snackBarText =
+        "Comentario agregado al art. ${favorite.articleNumber}";
+
+    final snackBar = SnackBar(
+      duration: Duration(seconds: 1),
+      content: Row(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(right: 15.0),
+            child: Icon(MdiIcons.star),
+          ),
+          Text(
+            snackBarText,
+            style: TextStyle(fontSize: 18.0),
+          )
+        ],
+      ),
+    );
+
+    Scaffold.of(context).showSnackBar(snackBar).closed.then((reason) {
+      _textEditingController.clear();
+      searchState.transitionHorizontallyTo(Screen.favorites);
+    });
   }
 }

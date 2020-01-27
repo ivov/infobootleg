@@ -46,17 +46,17 @@ class DatabaseService {
     });
   }
 
-  /// Adds a `comment` field to, or edits the `comment` field in, a favorite field in the current user's document.
+  /// Adds a `comment` field to, or edits the `comment` field in, a favorite in the current user's document.
   /// ```
   /// {
-  ///   "20.305&33": {"text": "Lorem ipsum...", "comment": "It's great"}, // favorite 1
-  ///   "11.723&13": {"text": "Sit amet...", "comment": "It's terrible"} // favorite 2
+  ///   "20305&33": {"articleText": "Lorem ipsum...", "comment": "It's great"}, // favorite 1
+  ///   "11723&13": {"articleText": "Sit amet...", "comment": "It's terrible"} // favorite 2
   /// };
   /// ```
   Future<void> addCommentToFavorite(Favorite favorite, String comment) {
     return currentUserDoc.updateData({
       favorite.lawAndArticle: {
-        "text": favorite.articleText,
+        "articleText": favorite.articleText,
         "comment": comment,
       }
     });
@@ -65,7 +65,7 @@ class DatabaseService {
   Future<void> deleteCommentFromFavorite(Favorite favorite, String comment) {
     return currentUserDoc.updateData({
       favorite.lawAndArticle: {
-        "text": favorite.articleText,
+        "articleText": favorite.articleText,
         "comment": FieldValue.delete(),
       }
     });

@@ -151,8 +151,10 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       favoriteText: favoriteText,
       onCommentPressed: () {
         widget.searchState.updateArticleToComment({
+          "lawNumber": lawNumber,
           "articleNumber": articleNumber,
-          "favoriteText": favoriteText,
+          "articleText": articleText,
+          "favoriteText": favoriteText, // ← RichText
         });
         widget.searchState.transitionHorizontallyTo(Screen.comment);
       },

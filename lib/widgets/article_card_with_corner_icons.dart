@@ -62,7 +62,7 @@ class _ArticleCardWithCornerIconsState
     ).show(context);
 
     if (answer == true) {
-      Favorite favorite = Favorite(
+      final Favorite favorite = Favorite(
         lawNumber: widget.lawNumber,
         articleNumber: widget.articleNumber,
         articleText: widget.articleText,
@@ -79,7 +79,7 @@ class _ArticleCardWithCornerIconsState
     ).show(context);
 
     if (answer == true) {
-      Favorite favorite = Favorite(
+      final Favorite favorite = Favorite(
         lawNumber: widget.lawNumber,
         articleNumber: widget.articleNumber,
         articleText: widget.articleText,

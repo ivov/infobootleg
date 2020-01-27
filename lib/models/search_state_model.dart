@@ -10,7 +10,12 @@ class SearchStateModel extends ChangeNotifier {
   final PageController _horizontalPageViewController = PageController();
   final ScrollController _scrollController = ScrollController();
   bool _isLoading = false;
-  Map<String, dynamic> _articleToComment;
+  Map<String, dynamic> _articleToComment = {
+    "lawNumber": "",
+    "articleNumber": "",
+    "articleText": "",
+    "favoriteText": RichText,
+  };
 
   // vertical navigation: search, summary, text
 
