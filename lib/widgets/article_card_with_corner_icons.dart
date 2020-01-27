@@ -20,6 +20,7 @@ class ArticleCardWithCornerIcons extends StatefulWidget {
     this.forFavoritesScreen = false,
     this.favoriteText,
     this.onCommentPressed,
+    this.comment,
   });
 
   final int position;
@@ -34,6 +35,7 @@ class ArticleCardWithCornerIcons extends StatefulWidget {
   final bool forFavoritesScreen;
   final RichText favoriteText;
   final Function onCommentPressed;
+  final String comment;
 
   @override
   _ArticleCardWithCornerIconsState createState() =>
@@ -107,6 +109,7 @@ class _ArticleCardWithCornerIconsState
               articleText: widget.articleText,
               isFavorite: widget.forFavoritesScreen,
               favoriteText: widget.favoriteText,
+              comment: widget.comment,
             ),
           ),
           _buildStarIcon(),
@@ -138,6 +141,7 @@ class _ArticleCardWithCornerIconsState
         onTap: widget.onCommentPressed,
         child: Icon(
           MdiIcons.pen,
+          size: 28.0,
           color: Theme.of(context).primaryColor,
         ),
       ),

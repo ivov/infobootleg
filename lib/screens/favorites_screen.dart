@@ -38,6 +38,15 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       builder: (context, snapshot) {
         if (!snapshot.hasData) return CircularProgressIndicator();
         Map<String, dynamic> userFavorites = snapshot.data.data;
+
+        /// Example of `userFavorites`
+        /// ```
+        /// {
+        ///   "11723&3": { articleText: "Lorem ipsum...", comment: "Great!"},
+        ///   "20305&5": { articleText: "Dolor sit amit..."},
+        /// }
+        /// ```
+
         Map<String, dynamic> flattenedFavorites =
             _flattenFavorites(userFavorites);
         List<String> sortedKeys = _sortFavorites(flattenedFavorites);
@@ -118,12 +127,12 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       itemScrollController: _scrollController,
       itemCount: userFavorites.length + 1,
       itemBuilder: (context, index) {
-        return _buildListItem(index, context, userFavorites, sortedKeys);
+        return _buildListItem(context, index, userFavorites, sortedKeys);
       },
     );
   }
 
-  Widget _buildListItem(int index, BuildContext context,
+  Widget _buildListItem(BuildContext context, int index,
       Map<String, dynamic> userFavorites, List<String> sortedKeys) {
     if (index == 0) return ShortTitleCard(title: "Favoritos");
 
@@ -136,12 +145,12 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     String articleText = userFavorites[lawAndArticle]["articleText"];
     RichText favoriteText = _buildFavoriteText(articleText, lawNumber);
 
-    // TODO: Show comment if applicable.
     return ArticleCardWithCornerIcons(
       position: articleIndex,
       lawNumber: lawNumber,
       articleNumber: articleNumber,
       articleText: articleText,
+      comment: userFavorites[lawAndArticle]["comment"],
       isStarred: true,
       onArticleSelected: _scrollToListItem,
       onSave: (favorite) => widget.dbService.saveFavorite(favorite),

@@ -62,11 +62,11 @@ class DatabaseService {
     });
   }
 
-  Future<void> deleteCommentFromFavorite(Favorite favorite, String comment) {
+  /// Deletes comment by overwriting favorite with a new copy lacking the comment. This workaround is necessary because `FieldValue.delete()` can only appear at the top level of the update data.
+  Future<void> deleteCommentFromFavorite(Favorite favorite) {
     return currentUserDoc.updateData({
       favorite.lawAndArticle: {
         "articleText": favorite.articleText,
-        "comment": FieldValue.delete(),
       }
     });
   }
