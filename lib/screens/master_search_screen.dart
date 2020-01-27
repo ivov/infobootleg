@@ -1,14 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:infobootleg/screens/comment_screen.dart';
 import 'package:provider/provider.dart';
 
-import 'package:infobootleg/screens/favorites_screen.dart';
 import 'package:infobootleg/services/database_service.dart';
 import 'package:infobootleg/models/search_state_model.dart';
 import 'package:infobootleg/screens/law_search_screen.dart';
 import 'package:infobootleg/screens/law_summary_screen.dart';
 import 'package:infobootleg/screens/law_text_screen.dart';
+import 'package:infobootleg/screens/favorites_screen.dart';
+import 'package:infobootleg/screens/comment_screen.dart';
 
 class MasterSearchScreen extends StatelessWidget {
   static createWithMultiProvider(BuildContext context, FirebaseUser user) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:infobootleg/models/law_model.dart';
 import 'package:infobootleg/widgets/basic_card.dart';
 

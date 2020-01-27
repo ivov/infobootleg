@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:infobootleg/widgets/sign_in_button.dart';
 import 'package:provider/provider.dart';
 
+import 'package:infobootleg/widgets/sign_in_button.dart';
 import 'package:infobootleg/screens/sign_in_with_email_screen.dart';
 import 'package:infobootleg/services/auth_service.dart';
 import 'package:infobootleg/helpers/hex_color.dart';
@@ -28,7 +28,7 @@ class SignInScreen extends StatelessWidget {
       };
       signInMethods[selectedMethod]();
     } catch (error) {
-      // ERROR_ABORTED_BY_USER is not an actual error, so it is not shown to the user.
+      // `ERROR_ABORTED_BY_USER` is not an actual error, so it is not shown to the user.
       if (error.code != "ERROR_ABORTED_BY_USER") {
         SignInAlertBox(title: "Error en ingreso", exception: error);
       }

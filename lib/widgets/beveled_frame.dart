@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+// Not currently in use.
+
 class BeveledFrame extends StatelessWidget {
   final List<Widget> children;
   final bool scrollable;

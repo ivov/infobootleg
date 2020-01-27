@@ -42,7 +42,6 @@ class LawSearchScreen extends StatelessWidget {
     return FlatButton.icon(
       icon: Transform.rotate(angle: 180 * 3.14 / 180, child: Icon(Icons.close)),
       textColor: Colors.white,
-      // color: hexColor("5b5656"),
       label: Text("Salir",
           style: TextStyle(
             fontSize: 18.0,
@@ -56,7 +55,6 @@ class LawSearchScreen extends StatelessWidget {
     return FlatButton.icon(
       icon: Icon(Icons.star),
       textColor: Colors.white,
-      // color: hexColor("5b5656"),
       label: Text("Favoritos",
           style: TextStyle(
             fontSize: 18.0,

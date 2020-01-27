@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:infobootleg/helpers/hex_color.dart';
 
 final themeData = ThemeData(
-  primaryColor: hexColor("2c7873"), // appbar, modifbutton, modifbox header
-  canvasColor: hexColor("f5eaea"), // background
+  primaryColor: hexColor("2c7873"),
+  canvasColor: hexColor("f5eaea"),
   fontFamily: "Lusitana",
   textTheme: TextTheme(
     title: TextStyle(

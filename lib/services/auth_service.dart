@@ -5,8 +5,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 /// Service for signing in a user with Google, Facebook, Email or Anonymously, and signing them out.
 class AuthService {
-  /// Getter for Stream of sign-in/out events.
   Stream<FirebaseUser> get onAuthStateChanged {
+    // stream of sign-in/out events
     return FirebaseAuth.instance.onAuthStateChanged;
   }
 
