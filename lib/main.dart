@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:infobootleg/screens/redirection_screen.dart';
-import 'helpers/theme_data.dart';
+import 'utils/theme_data.dart';
 import 'services/auth_service.dart';
 
 void main() => runApp(Infobootleg());

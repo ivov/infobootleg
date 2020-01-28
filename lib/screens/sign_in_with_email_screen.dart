@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-import 'package:infobootleg/helpers/validators.dart';
+import 'package:infobootleg/utils/validators.dart';
 import 'package:infobootleg/services/auth_service.dart';
 import 'package:infobootleg/widgets/sign_in_alert_box.dart';
 

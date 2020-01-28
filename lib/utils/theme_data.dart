@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:infobootleg/helpers/hex_color.dart';
+import 'package:infobootleg/utils/hex_color.dart';
 
 final themeData = ThemeData(
   primaryColor: hexColor("2c7873"),

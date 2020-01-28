@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
-import 'package:infobootleg/helpers/retriever.dart';
+
+import 'package:infobootleg/services/infoleg_retrieval_service.dart';
 import 'package:infobootleg/models/law_model.dart';
 
 enum Screen { search, summary, text, favorites, comment }
@@ -78,7 +79,7 @@ class SearchStateModel extends ChangeNotifier {
 
   Future<void> updateLawContents() async {
     Map<String, String> retrievedlawContents =
-        await Retriever.retrieveLawText(url: activeLaw.link);
+        await InfolegRetrievalService.retrieveLawText(url: activeLaw.link);
     _lawContents = retrievedlawContents;
 
     notifyListeners();

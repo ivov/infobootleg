@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_widgets/flutter_widgets.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-import 'package:infobootleg/services/database_service.dart';
+import 'package:infobootleg/services/firestore_database_service.dart';
 import 'package:infobootleg/models/search_state_model.dart';
 import 'package:infobootleg/widgets/short_title_card.dart';
 import 'package:infobootleg/models/favorite_model.dart';
@@ -15,7 +15,7 @@ class FavoritesScreen extends StatefulWidget {
   FavoritesScreen(this.searchState, this.dbService);
 
   final SearchStateModel searchState;
-  final DatabaseService dbService;
+  final FirestoreDatabaseService dbService;
 
   @override
   _FavoritesScreenState createState() => _FavoritesScreenState();

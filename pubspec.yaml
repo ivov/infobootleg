@@ -33,6 +33,7 @@ flutter:
     - assets/images/facebook.svg
     - assets/images/email.svg
     - assets/images/user.svg
+    - assets/secrets.json
   fonts:
     - family: Lusitana
       fonts:

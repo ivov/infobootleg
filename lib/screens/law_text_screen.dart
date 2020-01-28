@@ -4,7 +4,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 
 import 'package:infobootleg/models/favorite_model.dart';
 import 'package:infobootleg/models/search_state_model.dart';
-import 'package:infobootleg/services/database_service.dart';
+import 'package:infobootleg/services/firestore_database_service.dart';
 import 'package:infobootleg/widgets/article_card_with_corner_icons.dart';
 import 'package:infobootleg/widgets/law_title_card.dart';
 import 'package:infobootleg/widgets/table_of_contents.dart';
@@ -13,7 +13,7 @@ class LawTextScreen extends StatelessWidget {
   LawTextScreen(this.searchState, this.dbService);
 
   final SearchStateModel searchState;
-  final DatabaseService dbService;
+  final FirestoreDatabaseService dbService;
   final ItemScrollController _scrollController = ItemScrollController();
 
   @override
@@ -80,22 +80,16 @@ class LawTextScreen extends StatelessWidget {
 
     String articleNumber = searchState.lawContents.keys.toList()[articleIndex];
 
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        vertical: 7.5,
-        horizontal: 10.0,
-      ),
-      child: ArticleCardWithCornerIcons(
-        position: articleIndex,
-        lawNumber: searchState.activeLaw.number,
-        articleNumber: articleNumber,
-        articleText: searchState.lawContents[articleNumber],
-        isStarred: _getStarredStatus(articleNumber, userFavorites),
-        onArticleSelected: scrollToListItem,
-        onSave: (favorite) => dbService.saveFavorite(favorite),
-        onDelete: (favorite) => dbService.deleteFavorite(favorite),
-        onSaveOrDeleteCompleted: _showSnackBar,
-      ),
+    return ArticleCardWithCornerIcons(
+      position: articleIndex,
+      lawNumber: searchState.activeLaw.number,
+      articleNumber: articleNumber,
+      articleText: searchState.lawContents[articleNumber],
+      isStarred: _getStarredStatus(articleNumber, userFavorites),
+      onArticleSelected: scrollToListItem,
+      onSave: (favorite) => dbService.saveFavorite(favorite),
+      onDelete: (favorite) => dbService.deleteFavorite(favorite),
+      onSaveOrDeleteCompleted: _showSnackBar,
     );
   }
 

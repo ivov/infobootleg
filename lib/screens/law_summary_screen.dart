@@ -2,20 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-import 'package:infobootleg/helpers/retriever.dart';
+import 'package:infobootleg/services/infoleg_retrieval_service.dart';
 import 'package:infobootleg/widgets/basic_card.dart';
 import 'package:infobootleg/widgets/law_title_card.dart';
 import 'package:infobootleg/widgets/modif_relations_box.dart';
 import 'package:infobootleg/models/search_state_model.dart';
-import 'package:infobootleg/helpers/hex_color.dart';
+import 'package:infobootleg/utils/hex_color.dart';
 import 'package:infobootleg/models/law_model.dart';
 import 'package:infobootleg/widgets/alert_box.dart';
+import 'package:infobootleg/utils/exceptions.dart';
 
 enum ModificationType { modifies, isModifiedBy }
-
-class NoPatternMatchException implements Exception {
-  NoPatternMatchException();
-}
 
 class LawSummaryScreen extends StatelessWidget {
   LawSummaryScreen(this.searchState);
@@ -111,7 +108,7 @@ class LawSummaryScreen extends StatelessWidget {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
-      throw 'Could not launch $url';
+      throw Exception('Could not launch $url');
     }
   }
 
@@ -120,7 +117,7 @@ class LawSummaryScreen extends StatelessWidget {
     try {
       await searchState.updateLawContents();
       searchState.transitionVerticallyTo(Screen.text);
-    } on NoPatternMatchException {
+    } on NoLawTextPatternMatchException {
       final bool answer = await AlertBox(
         title: "Formato desconocido",
         content:
@@ -313,7 +310,7 @@ class LawSummaryScreen extends StatelessWidget {
   void _onModificationRelationsButtonPressed(
       BuildContext context, ModificationType modificationType) async {
     Map<int, Map<String, String>> allRows =
-        await Retriever.retrieveModificationRelations(
+        await InfolegRetrievalService.retrieveModificationRelations(
       fullTextUrl: searchState.activeLaw.link,
       modificationType: modificationType,
     );

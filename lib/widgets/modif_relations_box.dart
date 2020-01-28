@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:infobootleg/helpers/hex_color.dart';
+import 'package:infobootleg/utils/hex_color.dart';
 import 'package:infobootleg/models/law_model.dart';
 import 'package:infobootleg/screens/law_summary_screen.dart';
 

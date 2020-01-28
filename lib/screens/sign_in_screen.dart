@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:infobootleg/widgets/sign_in_button.dart';
 import 'package:infobootleg/screens/sign_in_with_email_screen.dart';
 import 'package:infobootleg/services/auth_service.dart';
-import 'package:infobootleg/helpers/hex_color.dart';
+import 'package:infobootleg/utils/hex_color.dart';
 import 'package:infobootleg/widgets/header.dart';
 import 'package:infobootleg/widgets/sign_in_alert_box.dart';
 

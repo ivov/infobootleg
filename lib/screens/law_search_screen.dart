@@ -1,17 +1,19 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'package:infobootleg/utils/exceptions.dart';
+import 'package:infobootleg/services/google_search_service.dart';
 import 'package:infobootleg/models/law_model.dart';
 import 'package:infobootleg/models/search_state_model.dart';
-import 'package:infobootleg/helpers/left_pad.dart';
 import 'package:infobootleg/services/auth_service.dart';
-import 'package:infobootleg/services/database_service.dart';
+import 'package:infobootleg/services/firestore_database_service.dart';
 import 'package:infobootleg/widgets/alert_box.dart';
 
 class LawSearchScreen extends StatelessWidget {
   LawSearchScreen(this.searchState, this.dbService);
   final SearchStateModel searchState;
-  final DatabaseService dbService;
+  final FirestoreDatabaseService dbService;
   final TextEditingController _textController = TextEditingController();
 
   @override
@@ -34,7 +36,11 @@ class LawSearchScreen extends StatelessWidget {
         ],
       ),
       backgroundColor: Theme.of(context).canvasColor,
-      body: Center(child: _buildSearchCard(context)),
+      body: FractionallySizedBox(
+          heightFactor: 0.9,
+          child: Center(
+            child: _buildSearchCard(context),
+          )),
     );
   }
 
@@ -90,7 +96,8 @@ class LawSearchScreen extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // TODO: Search by title using Bing
+            Text("Infobootleg", style: Theme.of(context).textTheme.title),
+            SizedBox(height: 20),
             Text("Buscar ley por número o título",
                 style: Theme.of(context).textTheme.subtitle),
             SizedBox(height: 20),
@@ -107,7 +114,7 @@ class LawSearchScreen extends StatelessWidget {
       alignment: Alignment.center,
       child: TextField(
         controller: _textController,
-        onSubmitted: (userInput) => _onSubmitted(context, userInput),
+        onSubmitted: (userInput) => _onSubmitted(userInput, context),
         style: TextStyle(fontSize: 25.0),
         keyboardType: TextInputType.number,
         decoration: InputDecoration(
@@ -122,10 +129,45 @@ class LawSearchScreen extends StatelessWidget {
     );
   }
 
-  _onSubmitted(BuildContext context, String userInput) async {
-    final dbService = Provider.of<DatabaseService>(context);
+  _onSubmitted(String userInput, BuildContext context) async {
+    bool isAlphabeticInput = RegExp(r'[a-zA-Z]+').hasMatch(userInput);
+    bool isNumericInput = RegExp(r'[0-9]+').hasMatch(userInput);
+
+    if (isAlphabeticInput) {
+      _processAlphabeticInput(userInput, context);
+    } else if (isNumericInput) {
+      _processNumericInput(userInput, context);
+    }
+  }
+
+  _processAlphabeticInput(String userInput, BuildContext context) async {
     try {
-      final snapshot = await dbService.readLaw(id: leftPad(userInput));
+      String lawId = await GoogleSearchService.fetchLawId(userInput);
+      DocumentSnapshot snapshot =
+          await dbService.retrieveLawDocumentById(lawId);
+      searchState.updateActiveLaw(Law(snapshot.data));
+      searchState.transitionVerticallyTo(Screen.summary);
+    } on NoResultsFromGoogleSearchAPIException {
+      AlertBox(
+        title: "Sin datos",
+        content: "No hay una ley referida a «$userInput» en la base de datos.",
+        confirmActionText: "Buscar otra ley",
+      ).show(context);
+    }
+  }
+
+  _processNumericInput(String userInput, BuildContext context) async {
+    String _leftPad(userInput) {
+      while (userInput.length < 5) {
+        userInput = "0" + userInput;
+      }
+      return userInput;
+    }
+
+    String lawNumber = _leftPad(userInput);
+
+    try {
+      final snapshot = await dbService.retrieveLawDocumentByNumber(lawNumber);
       searchState.updateActiveLaw(Law(snapshot.data));
       searchState.transitionVerticallyTo(Screen.summary);
     } catch (e) {

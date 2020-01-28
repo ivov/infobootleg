@@ -1,11 +1,13 @@
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' show parse;
 import 'package:html/dom.dart';
+
+import 'package:infobootleg/utils/exceptions.dart';
 import 'package:infobootleg/screens/law_summary_screen.dart';
 
-/// Various laws have different formatting, so these are various templates for parsing laws.
-/// Each template has two regexes: for most articles (initial) and for final article (final).
-/// In both regexes, match group 3 is article number and match group 4 is article text.
+/// Different laws have different formatting, so these are various templates for parsing laws.
+/// Each template has two regexes: for most articles (`initial`) and for the final article (`final`).
+/// In both regexes, match group 3 is the article number and match group 4 is the article text.
 Map<String, Map<String, RegExp>> lawRegexes = {
   "law20305": {
     "initial": RegExp(r"(Art(\.|ículo)?\s(\d*)º?.?\s-\s)(.+?)(?=\s+Art.\s)"),
@@ -18,8 +20,8 @@ Map<String, Map<String, RegExp>> lawRegexes = {
   },
 };
 
-/// Retrieves the full text of a law and its modification relations from Infoleg.gob.ar.
-class Retriever {
+/// Retrieves the full text of a law and its modification relations from `www.infoleg.gob.ar`
+class InfolegRetrievalService {
   static String lawTextString;
   static Map<String, String> lawContents = {};
   static String lawPattern = "";
@@ -52,7 +54,7 @@ class Retriever {
     } else if (isLaw11723) {
       lawPattern = "law11723";
     } else if (lawPattern == "") {
-      throw NoPatternMatchException();
+      throw NoLawTextPatternMatchException();
     }
   }
 
@@ -93,7 +95,7 @@ class Retriever {
   ///   2: { ... }
   /// }
   /// ```
-  /// The "\_\_DIVIDER__" string is inserted to allow for proper division of the cell into two lines later on.
+  /// Note: The `__DIVIDER__` string is inserted to allow for proper division of the cell into two lines later on.
   static Future<Map<int, Map<String, String>>> retrieveModificationRelations(
       {String fullTextUrl, ModificationType modificationType}) async {
     // Example law: number 17319, ID 16078 -- DELETE LATER

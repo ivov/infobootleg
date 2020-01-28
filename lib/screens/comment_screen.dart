@@ -4,7 +4,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 
 import 'package:infobootleg/models/search_state_model.dart';
 import 'package:infobootleg/models/favorite_model.dart';
-import 'package:infobootleg/services/database_service.dart';
+import 'package:infobootleg/services/firestore_database_service.dart';
 import 'package:infobootleg/widgets/basic_card.dart';
 import 'package:infobootleg/widgets/article_card_with_comment_box.dart';
 import 'package:infobootleg/widgets/short_title_card.dart';
@@ -18,7 +18,7 @@ class CommentScreen extends StatelessWidget {
         );
 
   final SearchStateModel searchState;
-  final DatabaseService dbService;
+  final FirestoreDatabaseService dbService;
   final Favorite favorite;
   final TextEditingController _textEditingController = TextEditingController();
 

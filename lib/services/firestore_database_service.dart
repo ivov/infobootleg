@@ -3,8 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:infobootleg/models/favorite_model.dart';
 
-class DatabaseService {
-  DatabaseService({@required this.currentUserID})
+class FirestoreDatabaseService {
+  FirestoreDatabaseService({@required this.currentUserID})
       : currentUserDoc = usersColl.document(currentUserID);
 
   String currentUserID;
@@ -22,8 +22,15 @@ class DatabaseService {
     return lawsColl.getDocuments();
   }
 
-  Future<DocumentSnapshot> readLaw({@required String id}) async {
-    return lawsColl.document(id).get();
+  Future<DocumentSnapshot> retrieveLawDocumentByNumber(number) async {
+    return lawsColl.document(number).get();
+  }
+
+  Future<DocumentSnapshot> retrieveLawDocumentById(String id) async {
+    QuerySnapshot querySnapshot =
+        await lawsColl.where("id", isEqualTo: id).getDocuments();
+    List<DocumentSnapshot> documentSnapshots = querySnapshot.documents;
+    return documentSnapshots[0];
   }
 
   // users (favorited articles)
