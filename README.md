@@ -37,7 +37,6 @@ Features:
 1. Clone repo
 2. Get dependencies: `flutter pub get`
 3. Run: `flutter run`
-4. Test: `flutter test`
 
 ## Operation
 
@@ -73,15 +72,11 @@ At the main search screen, the user may search for a law by name or by number (v
 
 Searching for a law leads to the law summary screen, with Firestore's metadata for the queried law: official title, publication date, originating entity, summary text, etc.
 
+**Modification relations** The laws and regulations that the query modifies and the laws and regulations that are modified by the query are accessed by tapping on the bottom icons.
+
 <p align="center">
     <img src="demo/law_summary_screen.gif">
-<p>
-
-### Modification relations
-
-Modification relations (i.e., which laws and regulations the query modifies, and which laws and regulations are modified by the query) are accessed by tapping on the bottom icons.
-
-<p align="center">
+    &nbsp;&nbsp;&nbsp;&nbsp;
     <img src="demo/modification_relations_dialog.gif">
 <p>
 
@@ -89,15 +84,11 @@ Modification relations (i.e., which laws and regulations the query modifies, and
 
 At the law summary screen, pressing the big green button brings up the law text screen, with InfoLeg's full text of the law parsed into articles, including a table of contents for ease of navigation.
 
+**Favoriting articles** Long-pressing an article triggers a prompt for saving it as a user's favorite. Long-pressing a favorited article prompts for removal of the favorite.
+
 <p align="center">
     <img src="demo/law_text_screen.gif">
-<p>
-
-### Favoriting articles
-
-Long-pressing an article triggers a prompt for saving it as a user's favorite. Long-pressing a favorited article prompts for removal of the favorite.
-
-<p align="center">
+    &nbsp;&nbsp;&nbsp;&nbsp;
     <img src="demo/article_favoriting.gif">
 <p>
 
@@ -105,19 +96,15 @@ Long-pressing an article triggers a prompt for saving it as a user's favorite. L
 
 Back at the main search screen, the favorites button leads to the favorites list, which displays every article favorited by the user, including any comments added, also with a table of contents.
 
+**Commenting on favorites** Tapping on the pen icon of a favorite leads to the comment screen, for commenting on the favorite. Save the comment using the keyboard; delete it using the cross icon. Since the favorites list is stream-based, any changes are reflected immediately.
+
 <p align="center">
     <img src="demo/favorites_list.gif">
-<p>
-
-### Commenting on favorites
-
-Tapping on the pen icon of a favorite leads to the comment screen, for commenting on the favorite. Save the comment using the keyboard; delete it using the cross icon. Since the favorites list is stream-based, any changes are reflected immediately.
-
-<p align="center">
+    &nbsp;&nbsp;&nbsp;&nbsp;
     <img src="demo/commenting_favorites.gif">
 <p>
 
-### Exception handling
+### RegEx exceptions
 
 Given InfoLeg's inconsistent formatting, it is expected that RegEx parsing may fail with a number of laws, in which case the native mobile browser is launched.
 
