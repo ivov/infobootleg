@@ -7,7 +7,7 @@ Mobile app for playing around with data from InfoLeg, Argentina's legislative in
 Built with Dart/Flutter and Firebase, for Android.
 
 <p align="center">
-    <img src="demo/dart.png" width="162">
+    <img src="demo/dart.png" width="156">
     &nbsp;&nbsp;&nbsp;&nbsp;
     <img src="demo/flutter.png" width="160">
     &nbsp;&nbsp;&nbsp;&nbsp;
@@ -18,7 +18,9 @@ Built with Dart/Flutter and Firebase, for Android.
 
 Android app for retrieving laws from Argentina's [official legislative service](infoleg.gob.ar/) and displaying its data in a user-friendly format, with article-by-article navigation, user authentication and support for favoriting articles and commenting.
 
-OVERVIEW_GIF
+<p align="center">
+    <img src="demo/overview.gif">
+<p>
 
 Features:
 
@@ -44,15 +46,15 @@ Features:
 Sign in using a Google or Facebook account, e-mail/password or anonymously. In all cases, a user doc is created at Firestore to record the articles favorited by the user.
 
 <p align="center">
-    <img src="demo/sign_in.png" style="height:500px;">
+    <img src="demo/sign_in.png" height="500px">
 </p>
 
 <p align="center">
-    <img src="demo/sign_in_google.png" style="height:500px;">
+    <img src="demo/sign_in_google.png" height="500px">
     &nbsp;&nbsp;&nbsp;&nbsp;
-    <img src="demo/sign_in_facebook.png" style="height:500px;">
+    <img src="demo/sign_in_facebook.png" height="500px">
     &nbsp;&nbsp;&nbsp;&nbsp;
-    <img src="demo/sign_in_email.png" style="height:500px;">
+    <img src="demo/sign_in_email.png" height="500px">
     &nbsp;&nbsp;&nbsp;&nbsp;
 </p>
 
@@ -121,9 +123,9 @@ Tapping on the pen icon of a favorite leads to the comment screen, for commentin
 Given InfoLeg's inconsistent formatting, it is expected that RegEx parsing may fail with a number of laws, in which case the native mobile browser is launched. Certain exceptions from Google Search API and Firestore are also handled.
 
 <p align="center">
-    <img src="demo/formatting_exception1.png" style="height:500px;">
+    <img src="demo/formatting_exception1.png" height="500px">
     &nbsp;&nbsp;&nbsp;&nbsp;
-    <img src="demo/formatting_exception2.png" style="height:500px;">
+    <img src="demo/formatting_exception2.png" height="500px">
 </p>
 
 ## Author
