@@ -119,13 +119,20 @@ Tapping on the pen icon of a favorite leads to the comment screen, for commentin
 
 ### Exception handling
 
-Given InfoLeg's inconsistent formatting, it is expected that RegEx parsing may fail with a number of laws, in which case the native mobile browser is launched. Certain exceptions from Google Search API and Firestore are also handled.
+Given InfoLeg's inconsistent formatting, it is expected that RegEx parsing may fail with a number of laws, in which case the native mobile browser is launched. Certain exceptions from Google Custom Search API and Firestore are also handled.
 
 <p align="center">
     <img src="demo/formatting_exception1.png" height="500px">
     &nbsp;&nbsp;&nbsp;&nbsp;
     <img src="demo/formatting_exception2.png" height="500px">
 </p>
+
+## TODOs
+
+- Add tests!
+- More exception handling.
+- More RegEx patterns.
+- Maybe favoriting entire laws.
 
 ## Author
 
