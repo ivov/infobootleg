@@ -16,7 +16,7 @@ Built with Dart/Flutter and Firebase, for Android.
 
 ## Overview
 
-Android app for retrieving laws from Argentina's [official legislative service](infoleg.gob.ar/) and displaying its data in a user-friendly format, with article-by-article navigation, user authentication and support for favoriting articles and commenting.
+Android app for retrieving laws from Argentina's [official legislative service](www.infoleg.gob.ar/) and displaying their data in a user-friendly format, with article-by-article navigation, user authentication and support for favoriting articles and commenting.
 
 <p align="center">
     <img src="demo/overview.gif">
@@ -55,7 +55,6 @@ Sign in using a Google or Facebook account, e-mail/password or anonymously. In a
     <img src="demo/sign_in_google.png" height="500px">
     &nbsp;&nbsp;&nbsp;&nbsp;
     <img src="demo/sign_in_facebook.png" height="500px">
-    &nbsp;&nbsp;&nbsp;&nbsp;
 </p>
 
 Based on Firestore's auth stream, the app redirects a signed-in user to the home screen and a signed-out user to the sign-in page. Signed-in status is preserved.
