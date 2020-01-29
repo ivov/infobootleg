@@ -47,14 +47,14 @@ Sign in using a Google or Facebook account, e-mail/password or anonymously. In a
 
 <p align="center">
     <img src="demo/sign_in.png" height="500px">
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <img src="demo/sign_in_email.png" height="500px">
 </p>
 
 <p align="center">
     <img src="demo/sign_in_google.png" height="500px">
     &nbsp;&nbsp;&nbsp;&nbsp;
     <img src="demo/sign_in_facebook.png" height="500px">
-    &nbsp;&nbsp;&nbsp;&nbsp;
-    <img src="demo/sign_in_email.png" height="500px">
     &nbsp;&nbsp;&nbsp;&nbsp;
 </p>
 

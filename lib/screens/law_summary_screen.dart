@@ -10,7 +10,6 @@ import 'package:infobootleg/models/search_state_model.dart';
 import 'package:infobootleg/utils/hex_color.dart';
 import 'package:infobootleg/models/law_model.dart';
 import 'package:infobootleg/widgets/alert_box.dart';
-import 'package:infobootleg/utils/exceptions.dart';
 
 enum ModificationType { modifies, isModifiedBy }
 
@@ -121,7 +120,7 @@ class LawSummaryScreen extends StatelessWidget {
       final bool answer = await AlertBox(
         title: "Formato desconocido",
         content:
-            "La Ley ${searchState.activeLaw.number} tiene formato desconocido y la aplicación no puede procesarla.\n¿Abrir esta ley en InfoLeg en el navagador?",
+            "La Ley ${searchState.activeLaw.number} tiene formato desconocido y la aplicación no puede procesarla.\n\n¿Abrir esta ley en InfoLeg en el navagador?",
         confirmActionText: "Sí",
         cancelActionText: "No",
       ).show(context);
