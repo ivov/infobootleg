@@ -51,9 +51,9 @@ Sign in using a Google or Facebook account, e-mail/password or anonymously. In a
 </p>
 
 <p align="center">
-    <img src="demo/sign_in_google.png" height="500px">
+    <img src="demo/sign_in_with_google.png" height="500px">
     &nbsp;&nbsp;&nbsp;&nbsp;
-    <img src="demo/sign_in_facebook.png" height="500px">
+    <img src="demo/sign_in_with_facebook.png" height="500px">
 </p>
 
 Based on Firestore's auth stream, the app redirects a signed-in user to the home screen and a signed-out user to the sign-in page. Signed-in status is preserved.
