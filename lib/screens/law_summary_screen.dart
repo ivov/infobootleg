@@ -117,11 +117,11 @@ class LawSummaryScreen extends StatelessWidget {
     try {
       await searchState.updateLawContents();
       searchState.transitionVerticallyTo(Screen.text);
-    } on NoLawTextPatternMatchException {
+    } catch (e) {
       final bool answer = await AlertBox(
         title: "Formato desconocido",
         content:
-            "La Ley ${searchState.activeLaw.number} tiene formato desconocido y la aplicación no puede procesarla. ¿Abrir esta ley en Infoleg en el navagador?",
+            "La Ley ${searchState.activeLaw.number} tiene formato desconocido y la aplicación no puede procesarla.\n¿Abrir esta ley en InfoLeg en el navagador?",
         confirmActionText: "Sí",
         cancelActionText: "No",
       ).show(context);
