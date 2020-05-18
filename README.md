@@ -16,7 +16,7 @@ Built with Dart/Flutter and Firebase, for Android.
 
 ## Overview
 
-Android app for retrieving laws from Argentina's [official legislative service](www.infoleg.gob.ar/) and displaying their data in a user-friendly format, with article-by-article navigation, user authentication and support for favoriting articles and commenting.
+Android app for retrieving laws from Argentina's [official legislative service](http://www.infoleg.gob.ar) and displaying their data in a user-friendly format, with article-by-article navigation, user authentication and support for favoriting articles and commenting.
 
 <p align="center">
     <img src="demo/overview.gif">
